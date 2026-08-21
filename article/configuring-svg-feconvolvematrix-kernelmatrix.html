@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuring SVG feConvolveMatrix kernelMatrix - svg</title>
+    <meta name="description" content="The SVG <feConvolveMatrix> filter primitive applies matrix convolution effects—such as blurring, sharpening, edge detection, and embossing—by combining neighboring pixels based on a mathematical grid. The kernelMatrix attribute defines this grid of t">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/configuring-svg-feconvolvematrix-kernelmatrix">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Configuring SVG feConvolveMatrix kernelMatrix - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/configuring-svg-feconvolvematrix-kernelmatrix" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The SVG <feConvolveMatrix> filter primitive applies matrix convolution effects—such as blurring, sharpening, edge detection, and embossing—by combining neighboring pixels based on a mathematical grid. The kernelMatrix attribute defines this grid of t" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="configuring-svg-feconvolvematrix-kernelmatrix">Configuring SVG
+feConvolveMatrix kernelMatrix</h1>
+<p>The SVG <code>&lt;feConvolveMatrix&gt;</code> filter primitive
+applies matrix convolution effects—such as blurring, sharpening, edge
+detection, and embossing—by combining neighboring pixels based on a
+mathematical grid. The <code>kernelMatrix</code> attribute defines this
+grid of transformation values, but its behavior, dimensions, and visual
+outcome depend on several key companion attributes. This guide details
+the essential parameters that directly configure and control the
+<code>kernelMatrix</code>.</p>
+<hr />
+<h3 id="core-attributes-that-configure-kernelmatrix">Core Attributes
+that Configure <code>kernelMatrix</code></h3>
+<h4 id="1-kernelmatrix">1. <code>kernelMatrix</code></h4>
+<ul>
+<li><strong>Type:</strong> <code>&lt;list of numbers&gt;</code></li>
+<li><strong>Description:</strong> The actual matrix of numbers applied
+to the pixel values. The number of values provided must equal the
+product of the dimensions defined in the <code>order</code> attribute
+(<span class="math inline">\(orderX \times orderY\)</span>).</li>
+</ul>
+<h4 id="2-order">2. <code>order</code></h4>
+<ul>
+<li><strong>Type:</strong>
+<code>&lt;number-optional-number&gt;</code></li>
+<li><strong>Default:</strong> <code>3</code> (a <span
+class="math inline">\(3 \times 3\)</span> matrix)</li>
+<li><strong>Description:</strong> Defines the grid size (columns and
+rows) of the <code>kernelMatrix</code>.
+<ul>
+<li>A single value (e.g., <code>order="3"</code>) sets a square matrix
+(<span class="math inline">\(3 \times 3\)</span>, requiring 9
+values).</li>
+<li>Two values (e.g., <code>order="3 5"</code>) set the width and height
+respectively (3 columns by 5 rows, requiring 15 values).</li>
+</ul></li>
+</ul>
+<h4 id="3-targetx-and-targety">3. <code>targetX</code> and
+<code>targetY</code></h4>
+<ul>
+<li><strong>Type:</strong> <code>&lt;integer&gt;</code></li>
+<li><strong>Default:</strong> <span class="math inline">\(\lfloor orderX
+/ 2 \rfloor\)</span> and <span class="math inline">\(\lfloor orderY / 2
+\rfloor\)</span> (the center of the matrix)</li>
+<li><strong>Description:</strong> Determines the X and Y coordinates
+(0-indexed) of the target pixel within the kernel matrix. This defines
+which cell in the kernel corresponds to the current pixel being
+processed.</li>
+</ul>
+<h4 id="4-divisor">4. <code>divisor</code></h4>
+<ul>
+<li><strong>Type:</strong> <code>&lt;number&gt;</code></li>
+<li><strong>Default:</strong> The sum of all values in
+<code>kernelMatrix</code> (or <code>1</code> if the sum is
+<code>0</code>).</li>
+<li><strong>Description:</strong> Divides the sum of the matrix
+multiplication results before applying the bias. Setting a custom
+divisor normalizes brightness and prevents the output colors from
+blowing out or clipping.</li>
+</ul>
+<h4 id="5-bias">5. <code>bias</code></h4>
+<ul>
+<li><strong>Type:</strong> <code>&lt;number&gt;</code></li>
+<li><strong>Default:</strong> <code>0</code></li>
+<li><strong>Description:</strong> Adds a fixed offset value to the final
+color result after the matrix multiplication and divisor step. This is
+commonly used in edge detection or embossing effects to shift
+neutral/gray areas into visible color ranges.</li>
+</ul>
+<h4 id="6-edgemode">6. <code>edgeMode</code></h4>
+<ul>
+<li><strong>Type:</strong> <code>duplicate</code> | <code>wrap</code> |
+<code>none</code></li>
+<li><strong>Default:</strong> <code>duplicate</code></li>
+<li><strong>Description:</strong> Determines how input image boundaries
+are sampled when a kernel extends beyond the edges of the image:
+<ul>
+<li><code>duplicate</code>: Extends the nearest edge pixel values
+outward.</li>
+<li><code>wrap</code>: Samples pixels from the opposite side of the
+image.</li>
+<li><code>none</code>: Treats pixels outside the boundary as transparent
+black (zeros).</li>
+</ul></li>
+</ul>
+<h4 id="7-preservealpha">7. <code>preserveAlpha</code></h4>
+<ul>
+<li><strong>Type:</strong> <code>true</code> | <code>false</code></li>
+<li><strong>Default:</strong> <code>false</code></li>
+<li><strong>Description:</strong> Specifies whether the convolution
+matrix applies only to the color channels (<code>true</code>) while
+preserving the original alpha channel, or processes both color and alpha
+channels identically (<code>false</code>).</li>
+</ul>
+<h4 id="8-kernelunitlength">8. <code>kernelUnitLength</code></h4>
+<ul>
+<li><strong>Type:</strong>
+<code>&lt;number-optional-number&gt;</code></li>
+<li><strong>Default:</strong> Direct 1:1 mapping with the current
+coordinate system.</li>
+<li><strong>Description:</strong> Defines the intended distance between
+successive columns and rows in the kernel grid, enabling
+resolution-independent convolution effects.</li>
+</ul>
+<hr />
+<h3 id="example-configuration">Example Configuration</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">filter</span> <span class="ot">id=</span><span class="st">&quot;sharpen&quot;</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">feConvolveMatrix</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="ot">order=</span><span class="st">&quot;3 3&quot;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="ot">kernelMatrix=</span><span class="st">&quot;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="st">       0 -1  0</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="st">      -1  5 -1</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="st">       0 -1  0&quot;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="ot">divisor=</span><span class="st">&quot;1&quot;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    <span class="ot">bias=</span><span class="st">&quot;0&quot;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    <span class="ot">targetX=</span><span class="st">&quot;1&quot;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    <span class="ot">targetY=</span><span class="st">&quot;1&quot;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    <span class="ot">edgeMode=</span><span class="st">&quot;duplicate&quot;</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="ot">preserveAlpha=</span><span class="st">&quot;true&quot;</span> /&gt;</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">filter</span>&gt;</span></code></pre></div></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

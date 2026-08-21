@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How MathJax Renders Crisp Math with Inline SVG - svg</title>
+    <meta name="description" content="MathJax delivers sharp, high-resolution mathematical formulas across all modern web browsers by converting LaTeX, MathML, or AsciiMath markup directly into inline Scalable Vector Graphics (SVG). This article explains the underlying mechanism of MathJax's">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-mathjax-renders-crisp-math-with-inline-svg">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How MathJax Renders Crisp Math with Inline SVG - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-mathjax-renders-crisp-math-with-inline-svg" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MathJax delivers sharp, high-resolution mathematical formulas across all modern web browsers by converting LaTeX, MathML, or AsciiMath markup directly into inline Scalable Vector Graphics (SVG). This article explains the underlying mechanism of MathJax's" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-mathjax-renders-crisp-math-with-inline-svg">How MathJax
+Renders Crisp Math with Inline SVG</h1>
+<p>MathJax delivers sharp, high-resolution mathematical formulas across
+all modern web browsers by converting LaTeX, MathML, or AsciiMath markup
+directly into inline Scalable Vector Graphics (SVG). This article
+explains the underlying mechanism of MathJax's SVG rendering pipeline,
+detailing how it parses mathematical syntax, converts characters into
+precise vector paths, calculates typography metrics, and injects
+self-contained SVG DOM elements that scale infinitely on any
+display.</p>
+<h3 id="input-parsing-and-internal-tree-construction">Input Parsing and
+Internal Tree Construction</h3>
+<p>The rendering process begins when MathJax identifies mathematical
+notation within a web page. MathJax passes this raw input through an
+input processor specific to the syntax used (such as LaTeX or
+MathML).</p>
+<p>The processor converts the markup into an internal Abstract Syntax
+Tree (AST) called the Math Item format. This tree structure represents
+the semantic hierarchy and spatial relationships of the formula,
+defining operations, fractions, radicals, superscripts, subscripts, and
+matrices as connected nodes.</p>
+<h3 id="vector-path-mapping-and-font-independence">Vector Path Mapping
+and Font Independence</h3>
+<p>Unlike traditional web typography that relies on system fonts or
+external web font files (WOFF/WOFF2) to render characters as text,
+MathJax's SVG output mode bypasses browser font-rendering engines
+entirely.</p>
+<p>MathJax includes pre-compiled vector definitions for every
+mathematical glyph across its supported font sets (such as MathJax TeX,
+STIX, or Neo Euler). When generating an equation:</p>
+<ol type="1">
+<li>MathJax references its internal glyph database.</li>
+<li>It translates each symbol, variable, and delimiter into an SVG
+<code>&lt;path&gt;</code> element composed of explicit bezier curves and
+coordinate points.</li>
+<li>Common glyphs are stored in a hidden <code>&lt;defs&gt;</code> block
+within the SVG and referenced via <code>&lt;use&gt;</code> tags,
+optimizing memory usage and DOM size.</li>
+</ol>
+<p>Because the glyphs are drawn as explicit vector paths, the
+mathematical symbols are immune to missing local fonts, browser-level
+font-substitution bugs, and cross-platform font-smoothing
+differences.</p>
+<h3 id="geometric-layout-and-positioning-engine">Geometric Layout and
+Positioning Engine</h3>
+<p>Mathematical typesetting requires precise spatial alignment that
+standard HTML and CSS layout models cannot natively achieve. MathJax
+uses an internal layout engine to compute exact dimensions:</p>
+<ul>
+<li><strong>Bounding Box Calculation:</strong> MathJax calculates the
+width, height, and depth (distance below the baseline) of every glyph
+and sub-expression.</li>
+<li><strong>Coordinate Mapping:</strong> Using a virtual coordinate
+system (typically 1000 units per em), the engine computes exact
+<code>(x, y)</code> coordinates for accents, limits, fraction bars, and
+radical signs.</li>
+<li><strong>Transform Groups:</strong> Elements are positioned inside
+nested SVG <code>&lt;g&gt;</code> (group) elements with
+<code>transform="matrix(...)"</code> or
+<code>transform="translate(x, y)"</code> attributes, ensuring that
+complex structures like matrices and nested fractions align
+correctly.</li>
+</ul>
+<h3 id="inline-svg-dom-injection-and-browser-scaling">Inline SVG DOM
+Injection and Browser Scaling</h3>
+<p>Once the geometry is calculated, MathJax generates an inline
+<code>&lt;svg&gt;</code> element and inserts it directly into the HTML
+document at the equation's location.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">mjx-container</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;MathJax&quot;</span><span class="ot"> jax</span><span class="op">=</span><span class="st">&quot;SVG&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">svg</span><span class="ot"> xmlns</span><span class="op">=</span><span class="st">&quot;http://www.w3.org/2000/svg&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;4.5ex&quot;</span><span class="ot"> height</span><span class="op">=</span><span class="st">&quot;2.2ex&quot;</span><span class="ot"> viewBox</span><span class="op">=</span><span class="st">&quot;0 -750 2000 1000&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">defs</span><span class="dt">&gt;</span> ... <span class="dt">&lt;/</span><span class="kw">defs</span><span class="dt">&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">g</span><span class="ot"> stroke</span><span class="op">=</span><span class="st">&quot;currentColor&quot;</span><span class="ot"> fill</span><span class="op">=</span><span class="st">&quot;currentColor&quot;</span><span class="ot"> </span><span class="er">...</span><span class="dt">&gt;</span> ... <span class="dt">&lt;/</span><span class="kw">g</span><span class="dt">&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">svg</span><span class="dt">&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">mjx-container</span><span class="dt">&gt;</span></span></code></pre></div>
+<p>Using inline SVG provides several rendering advantages:</p>
+<ul>
+<li><strong>Infinite Scalability:</strong> Because SVGs are
+vector-based, the browser calculates rendering paths dynamically.
+Equations remain crisp and pixel-perfect at any zoom level, high-DPI
+(Retina) display, or print resolution.</li>
+<li><strong>CSS Integration:</strong> The root SVG inherits surrounding
+font sizes using relative CSS units (<code>ex</code> and
+<code>em</code>) and uses <code>currentColor</code> for fills and
+strokes, allowing formulas to match adjacent text size and color
+automatically.</li>
+<li><strong>Layout Stability:</strong> MathJax sets explicit
+<code>width</code>, <code>height</code>, and <code>viewBox</code>
+attributes on the SVG container, preventing layout shifts (Content
+Layout Shift) while the page renders.</li>
+</ul>
+<p>Through this combination of AST parsing, standalone vector path
+extraction, and inline SVG construction, MathJax ensures uniform, crisp
+mathematical rendering across every browser and operating system without
+external rendering dependencies.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How SVG Differs From PNG and JPEG Formats - svg</title>
+    <meta name="description" content="This article explores the fundamental architectural differences between Scalable Vector Graphics (SVG) and raster formats such as PNG and JPEG. While PNG and JPEG store visual information as static grids of colored pixels, SVG files rely on mathematical">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-svg-differs-from-png-and-jpeg-formats">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How SVG Differs From PNG and JPEG Formats - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-svg-differs-from-png-and-jpeg-formats" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores the fundamental architectural differences between Scalable Vector Graphics (SVG) and raster formats such as PNG and JPEG. While PNG and JPEG store visual information as static grids of colored pixels, SVG files rely on mathematical" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-svg-differs-from-png-and-jpeg-formats">How SVG Differs From
+PNG and JPEG Formats</h1>
+<p>This article explores the fundamental architectural differences
+between Scalable Vector Graphics (SVG) and raster formats such as PNG
+and JPEG. While PNG and JPEG store visual information as static grids of
+colored pixels, SVG files rely on mathematical formulas and XML code to
+define shapes, lines, and colors. Understanding this distinction
+explains why SVGs offer infinite scalability, smaller file sizes for UI
+graphics, and dynamic code-level manipulation, while raster formats
+remain the standard for complex, continuous-tone imagery like
+photographs.</p>
+<h2 id="1-underlying-architecture-vectors-vs-pixels">1. Underlying
+Architecture: Vectors vs. Pixels</h2>
+<p>The core distinction lies in how each format stores graphic data:</p>
+<ul>
+<li><strong>Raster Formats (PNG &amp; JPEG):</strong> These formats
+represent an image as a fixed two-dimensional grid of pixels (bitmaps).
+Each pixel contains specific color and brightness data. Once the pixel
+dimensions (e.g., 1920x1080) are set, the total amount of detail is
+fixed.</li>
+<li><strong>Vector Format (SVG):</strong> SVG does not use pixels.
+Instead, it is written in XML-based text that defines geometric
+primitives—such as paths, points, polygons, curves, and text—using
+mathematical formulas. An SVG file contains instructions telling the
+browser or software <em>how</em> to draw the image rather than what
+every individual pixel looks like.</li>
+</ul>
+<h2 id="2-scalability-and-resolution-independence">2. Scalability and
+Resolution Independence</h2>
+<p>Because of their different architectures, these formats behave
+differently when resized:</p>
+<ul>
+<li><strong>SVGs are resolution-independent:</strong> An SVG can be
+scaled down to the size of a favicon or enlarged to the size of a
+billboard without any loss of clarity. The rendering engine simply
+recalculates the mathematical equations at the new display resolution,
+ensuring crisp edges on any display density (such as Retina or 4K
+screens).</li>
+<li><strong>PNG and JPEG are resolution-dependent:</strong> Enlarging a
+raster image forces the software to stretch existing pixels or
+interpolate new ones, leading to visible pixelation, blurriness, and
+artifacting. Shrinking a raster image can cause fine details to blend
+together or disappear.</li>
+</ul>
+<h2 id="3-code-based-structure-and-interactivity">3. Code-Based
+Structure and Interactivity</h2>
+<p>Unlike traditional image files, an SVG is essentially a text document
+containing XML code. This unlocks capabilities impossible with raster
+formats:</p>
+<ul>
+<li><strong>Styling with CSS:</strong> Individual elements within an SVG
+(such as changing the color of a specific path on hover) can be targeted
+and styled directly with CSS.</li>
+<li><strong>Animation and Scripting:</strong> SVGs can be manipulated
+dynamically using JavaScript to create interactive charts, animated UI
+components, or responsive graphics.</li>
+<li><strong>Accessibility and SEO:</strong> Text within an SVG remains
+real, selectable text that search engine crawlers can index and screen
+readers can interpret.</li>
+<li><strong>Binary Nature of Raster:</strong> PNG and JPEG files are
+compiled binary files. Their internal elements cannot be selected,
+animated, or styled via web code without modifying the entire image in
+an external editor.</li>
+</ul>
+<h2 id="4-file-size-and-compression-dynamics">4. File Size and
+Compression Dynamics</h2>
+<p>File sizes between these formats depend heavily on visual
+complexity:</p>
+<ul>
+<li><strong>SVG File Size:</strong> Scales with the number of vectors,
+paths, and points in the artwork, not its physical display dimensions. A
+basic geometric logo will have an identical, tiny file size whether
+displayed at 50px or 5000px wide. However, applying vector data to
+intricate images like photographs creates massive, unoptimized SVG
+files.</li>
+<li><strong>PNG File Size:</strong> Uses lossless compression,
+preserving exact pixel values and supporting full alpha transparency. It
+is optimal for detailed screenshots and graphics with sharp lines where
+vectors cannot be used, but file sizes grow significantly with higher
+pixel resolutions.</li>
+<li><strong>JPEG File Size:</strong> Uses lossy compression specifically
+designed for photographs. It discards imperceptible color data to
+achieve small file sizes across complex scenes, but it does not support
+transparency and produces visible compression artifacts around
+high-contrast graphic edges.</li>
+</ul>
+<h2 id="5-ideal-use-cases">5. Ideal Use Cases</h2>
+<p>Choosing the right format depends on the nature of the graphic:</p>
+<ul>
+<li><strong>Use SVG for:</strong> Logos, icons, UI elements, typographic
+artwork, data visualizations, and simple illustrations that must adapt
+across various screen sizes.</li>
+<li><strong>Use JPEG for:</strong> Photographs, realistic digital
+paintings, and high-detail scenes with gradients and complex
+textures.</li>
+<li><strong>Use PNG for:</strong> Photographs requiring transparency,
+complex digital mockups, or detailed raster images where compression
+artifacts must be avoided.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

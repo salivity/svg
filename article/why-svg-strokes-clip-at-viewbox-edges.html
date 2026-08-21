@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why SVG Strokes Clip at ViewBox Edges - svg</title>
+    <meta name="description" content="SVG strokes often appear cut off along the edges of a graphic when an element is positioned directly against the perimeter of the coordinate canvas. This issue occurs because of how SVG rendering engines calculate stroke geometry relative to the viewBox">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/why-svg-strokes-clip-at-viewbox-edges">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why SVG Strokes Clip at ViewBox Edges - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/why-svg-strokes-clip-at-viewbox-edges" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="SVG strokes often appear cut off along the edges of a graphic when an element is positioned directly against the perimeter of the coordinate canvas. This issue occurs because of how SVG rendering engines calculate stroke geometry relative to the viewBox" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="why-svg-strokes-clip-at-viewbox-edges">Why SVG Strokes Clip at
+ViewBox Edges</h1>
+<p>SVG strokes often appear cut off along the edges of a graphic when an
+element is positioned directly against the perimeter of the coordinate
+canvas. This issue occurs because of how SVG rendering engines calculate
+stroke geometry relative to the <code>viewBox</code> boundaries and
+default clipping rules. Understanding the interaction between stroke
+alignment, coordinate systems, and viewport bounds makes it easy to
+diagnose and resolve this common rendering glitch.</p>
+<h2 id="the-mechanics-of-svg-stroke-alignment">The Mechanics of SVG
+Stroke Alignment</h2>
+<p>The primary cause of stroke clipping is that standard SVG strokes are
+centered along the path's vector line by default. When you define an
+element with a stroke width, the rendering engine places half of that
+stroke thickness on the inside of the path coordinates and the other
+half on the outside.</p>
+<p>For example, if a rectangle has a <code>stroke-width</code> of
+<code>4px</code> and is positioned at <code>x="0"</code> and
+<code>y="0"</code>, the center of the stroke line sits exactly at
+<code>0</code>. This means:</p>
+<ul>
+<li>2 pixels of the stroke extend into the positive coordinate space
+(<code>0</code> to <code>2</code>).</li>
+<li>2 pixels of the stroke extend into the negative coordinate space
+(<code>-2</code> to <code>0</code>).</li>
+</ul>
+<p>Because standard SVG specifications (SVG 1.1 and current
+implementations) do not widely support inside or outside stroke
+alignment, the stroke must expand symmetrically outward in both
+directions from the path edge.</p>
+<h2 id="how-the-viewbox-enforces-clipping">How the viewBox Enforces
+Clipping</h2>
+<p>The <code>viewBox</code> attribute defines the visible coordinate
+system and aspect ratio of the SVG canvas. Anything drawn outside the
+defined <code>min-x</code>, <code>min-y</code>, <code>width</code>, and
+<code>height</code> parameters falls outside the designated rendering
+area.</p>
+<p>When an SVG root element renders in a browser, it applies default
+clipping behavior:</p>
+<ul>
+<li><strong>Coordinate Bounds:</strong> Geometry rendered at negative
+coordinates (or beyond the maximum <code>width</code> and
+<code>height</code> defined by the <code>viewBox</code>) exists outside
+the visible frame.</li>
+<li><strong>Default Overflow:</strong> Most web browsers apply
+<code>overflow: hidden</code> to root <code>&lt;svg&gt;</code> elements
+by default. This automatically cuts off any visual pixel data that
+extends beyond the canvas boundaries.</li>
+</ul>
+<p>When half of a stroke extends past the <code>viewBox</code> edge into
+negative coordinates or beyond the maximum dimensions, the browser
+simply does not render that outer half, leading to uneven or flattened
+edges.</p>
+<h2 id="how-to-prevent-svg-stroke-clipping">How to Prevent SVG Stroke
+Clipping</h2>
+<p>There are three primary ways to resolve stroke clipping:</p>
+<h3 id="1-expand-the-viewbox">1. Expand the viewBox</h3>
+<p>The most reliable solution is to add padding directly to the
+<code>viewBox</code> to account for half of the stroke width on all
+sides. If an icon uses a <code>4px</code> stroke and has a native size
+of <code>24x24</code>, adjusting the <code>viewBox</code> to
+<code>"-2 -2 28 28"</code> ensures the entire stroke remains
+visible.</p>
+<h3 id="2-inset-the-path-coordinates">2. Inset the Path Coordinates</h3>
+<p>Instead of changing the coordinate bounds, you can inset the artwork
+geometry. Offsetting path coordinates inward by half the
+<code>stroke-width</code> keeps all vector edges within the visible
+area. For example, a rectangle on a <code>100x100</code> canvas with a
+<code>4px</code> stroke should be drawn at <code>x="2"</code>,
+<code>y="2"</code>, <code>width="96"</code>, and
+<code>height="96"</code>.</p>
+<h3 id="3-adjust-the-css-overflow-property">3. Adjust the CSS Overflow
+Property</h3>
+<p>Setting <code>overflow: visible;</code> on the
+<code>&lt;svg&gt;</code> element in CSS allows strokes that fall outside
+the <code>viewBox</code> to remain visible. While effective for simple
+layouts, this approach can cause overlapping issues if the SVG is placed
+inside constrained containers or tightly packed UI components.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

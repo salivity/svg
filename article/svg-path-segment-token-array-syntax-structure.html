@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Path Segment Token Array Syntax Structure - svg</title>
+    <meta name="description" content="This article provides an overview of the syntax structure used for SVG path segment token arrays, which represent parsed SVG path data (d attribute) in programmatic environments. You will learn how commands and parameters are tokenized, the standard arra">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-path-segment-token-array-syntax-structure">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG Path Segment Token Array Syntax Structure - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-path-segment-token-array-syntax-structure" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview of the syntax structure used for SVG path segment token arrays, which represent parsed SVG path data (d attribute) in programmatic environments. You will learn how commands and parameters are tokenized, the standard arra" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-path-segment-token-array-syntax-structure">SVG Path Segment
+Token Array Syntax Structure</h1>
+<p>This article provides an overview of the syntax structure used for
+SVG path segment token arrays, which represent parsed SVG path data
+(<code>d</code> attribute) in programmatic environments. You will learn
+how commands and parameters are tokenized, the standard array schema
+used by modern parsers and graphical libraries, and the exact parameter
+orders required for every standard SVG path command type.</p>
+<h2 id="definition-of-an-svg-path-segment-token-array">Definition of an
+SVG Path Segment Token Array</h2>
+<p>An SVG path segment token array is a two-dimensional array (or list
+of tuples) where an entire SVG path string is broken down into
+individual, ordered commands. Each sub-array represents a single path
+segment consisting of a command identifier followed by its corresponding
+numeric arguments.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>[</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  [<span class="st">&#39;M&#39;</span><span class="op">,</span> x<span class="op">,</span> y]<span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  [<span class="st">&#39;C&#39;</span><span class="op">,</span> x1<span class="op">,</span> y1<span class="op">,</span> x2<span class="op">,</span> y2<span class="op">,</span> x<span class="op">,</span> y]<span class="op">,</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  [<span class="st">&#39;Z&#39;</span>]</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<p>In this structure:</p>
+<ul>
+<li>The first element (index <code>0</code>) is always a
+single-character string representing the SVG command.</li>
+<li>The remaining elements are numeric values representing coordinate
+points, control points, angles, or binary flags.</li>
+</ul>
+<h2 id="command-token-case-sensitivity">Command Token Case
+Sensitivity</h2>
+<p>The command token indicates whether coordinates are interpreted as
+absolute or relative values:</p>
+<ul>
+<li><strong>Uppercase tokens</strong> (<code>M</code>, <code>L</code>,
+<code>C</code>, etc.) denote <strong>absolute coordinates</strong>,
+positioning points directly within the current SVG user coordinate
+system.</li>
+<li><strong>Lowercase tokens</strong> (<code>m</code>, <code>l</code>,
+<code>c</code>, etc.) denote <strong>relative coordinates</strong>,
+positioning points relative to the end point of the previous
+command.</li>
+</ul>
+<h2 id="segment-token-structure-by-command-type">Segment Token Structure
+by Command Type</h2>
+<p>Each SVG command enforces a strict sequence and number of parameter
+tokens within its segment array.</p>
+<h3 id="1-moveto-m--m">1. MoveTo (<code>M</code> / <code>m</code>)</h3>
+<p>Sets a new current point without drawing a line.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>['M', x, y]</code> or
+<code>['m', dx, dy]</code></li>
+<li><strong>Length:</strong> 3 items</li>
+</ul>
+<h3 id="2-lineto-l--l">2. LineTo (<code>L</code> / <code>l</code>)</h3>
+<p>Draws a straight line from the current point to the target point.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>['L', x, y]</code> or
+<code>['l', dx, dy]</code></li>
+<li><strong>Length:</strong> 3 items</li>
+</ul>
+<h3 id="3-horizontal-lineto-h--h">3. Horizontal LineTo (<code>H</code> /
+<code>h</code>)</h3>
+<p>Draws a horizontal line from the current point along the X-axis.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>['H', x]</code> or
+<code>['h', dx]</code></li>
+<li><strong>Length:</strong> 2 items</li>
+</ul>
+<h3 id="4-vertical-lineto-v--v">4. Vertical LineTo (<code>V</code> /
+<code>v</code>)</h3>
+<p>Draws a vertical line from the current point along the Y-axis.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>['V', y]</code> or
+<code>['v', dy]</code></li>
+<li><strong>Length:</strong> 2 items</li>
+</ul>
+<h3 id="5-cubic-bézier-curve-c--c">5. Cubic Bézier Curve (<code>C</code>
+/ <code>c</code>)</h3>
+<p>Draws a cubic Bézier curve using two control points and an end
+point.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>['C', x1, y1, x2, y2, x, y]</code> or
+<code>['c', dx1, dy1, dx2, dy2, dx, dy]</code></li>
+<li><strong>Length:</strong> 7 items</li>
+</ul>
+<h3 id="6-smooth-cubic-bézier-curve-s--s">6. Smooth Cubic Bézier Curve
+(<code>S</code> / <code>s</code>)</h3>
+<p>Draws a cubic Bézier curve where the first control point is a
+reflection of the previous command's second control point.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>['S', x2, y2, x, y]</code> or
+<code>['s', dx2, dy2, dx, dy]</code></li>
+<li><strong>Length:</strong> 5 items</li>
+</ul>
+<h3 id="7-quadratic-bézier-curve-q--q">7. Quadratic Bézier Curve
+(<code>Q</code> / <code>q</code>)</h3>
+<p>Draws a quadratic Bézier curve using a single control point and an
+end point.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>['Q', x1, y1, x, y]</code> or
+<code>['q', dx1, dy1, dx, dy]</code></li>
+<li><strong>Length:</strong> 5 items</li>
+</ul>
+<h3 id="8-smooth-quadratic-bézier-curve-t--t">8. Smooth Quadratic Bézier
+Curve (<code>T</code> / <code>t</code>)</h3>
+<p>Draws a quadratic Bézier curve where the control point is a
+reflection of the previous command's control point.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>['T', x, y]</code> or
+<code>['t', dx, dy]</code></li>
+<li><strong>Length:</strong> 3 items</li>
+</ul>
+<h3 id="9-elliptical-arc-a--a">9. Elliptical Arc (<code>A</code> /
+<code>a</code>)</h3>
+<p>Draws an elliptical arc segment based on radii, rotation, flags, and
+an end point.</p>
+<ul>
+<li><strong>Syntax:</strong>
+<code>['A', rx, ry, xAxisRotation, largeArcFlag, sweepFlag, x, y]</code>
+or
+<code>['a', rx, ry, xAxisRotation, largeArcFlag, sweepFlag, dx, dy]</code></li>
+<li><strong>Parameters:</strong>
+<ul>
+<li><code>rx</code>, <code>ry</code> (Number): Major and minor
+radii.</li>
+<li><code>xAxisRotation</code> (Number): Angle of the ellipse in
+degrees.</li>
+<li><code>largeArcFlag</code> (0 or 1): Determines if the arc drawn is
+greater than or less than 180 degrees.</li>
+<li><code>sweepFlag</code> (0 or 1): Determines the direction (positive
+or negative angle) the arc is drawn.</li>
+<li><code>x</code>, <code>y</code> (Number): End coordinates.</li>
+</ul></li>
+<li><strong>Length:</strong> 8 items</li>
+</ul>
+<h3 id="10-closepath-z--z">10. ClosePath (<code>Z</code> /
+<code>z</code>)</h3>
+<p>Closes the current sub-path by drawing a straight line back to the
+start of the current sub-path.</p>
+<ul>
+<li><strong>Syntax:</strong> <code>['Z']</code> or
+<code>['z']</code></li>
+<li><strong>Length:</strong> 1 item</li>
+</ul>
+<h2 id="example-of-a-complete-segment-token-array">Example of a Complete
+Segment Token Array</h2>
+<p>Given the raw SVG path string
+<code>d="M 10 20 L 30 40 A 5 5 0 0 1 50 60 Z"</code>, the normalized
+segment token array structure is:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>[</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  [<span class="st">&#39;M&#39;</span><span class="op">,</span> <span class="dv">10</span><span class="op">,</span> <span class="dv">20</span>]<span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  [<span class="st">&#39;L&#39;</span><span class="op">,</span> <span class="dv">30</span><span class="op">,</span> <span class="dv">40</span>]<span class="op">,</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  [<span class="st">&#39;A&#39;</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">5</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">1</span><span class="op">,</span> <span class="dv">50</span><span class="op">,</span> <span class="dv">60</span>]<span class="op">,</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  [<span class="st">&#39;Z&#39;</span>]</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

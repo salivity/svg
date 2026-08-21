@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mathematical Curves You Can Create with SVG Paths - svg</title>
+    <meta name="description" content="Scalable Vector Graphics (SVG) paths provide a robust set of drawing commands capable of rendering precise mathematical geometries directly in the browser. This article covers the fundamental mathematical curve types natively supported by the SVG <path>">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/mathematical-curves-you-can-create-with-svg-paths">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mathematical Curves You Can Create with SVG Paths - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/mathematical-curves-you-can-create-with-svg-paths" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Scalable Vector Graphics (SVG) paths provide a robust set of drawing commands capable of rendering precise mathematical geometries directly in the browser. This article covers the fundamental mathematical curve types natively supported by the SVG <path>" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="mathematical-curves-you-can-create-with-svg-paths">Mathematical
+Curves You Can Create with SVG Paths</h1>
+<p>Scalable Vector Graphics (SVG) paths provide a robust set of drawing
+commands capable of rendering precise mathematical geometries directly
+in the browser. This article covers the fundamental mathematical curve
+types natively supported by the SVG <code>&lt;path&gt;</code>
+specification—including linear functions, quadratic Béziers, cubic
+Béziers, and elliptical arcs—as well as advanced mathematical curves
+that can be synthesized by chaining these base commands together.</p>
+<h2 id="natively-supported-mathematical-curves">Natively Supported
+Mathematical Curves</h2>
+<p>The SVG path specification directly supports three primary families
+of parametric and geometric curves using dedicated path data
+commands:</p>
+<h3 id="1-linear-curves-first-degree-polynomials">1. Linear Curves
+(First-Degree Polynomials)</h3>
+<p>Linear curves represent straight line segments between two points in
+a two-dimensional Cartesian plane. While not curved in the traditional
+sense, they represent degree-1 polynomial curves defined by the linear
+equation <span class="math inline">\(y = mx + b\)</span> or parametric
+form <span class="math inline">\(P(t) = (1 - t)P_0 + tP_1\)</span>.</p>
+<ul>
+<li><strong>SVG Commands:</strong> <code>L</code> (Line To),
+<code>H</code> (Horizontal Line To), <code>V</code> (Vertical Line To),
+and <code>Z</code> (Close Path).</li>
+</ul>
+<h3 id="2-quadratic-bézier-curves-second-degree-polynomials">2.
+Quadratic Bézier Curves (Second-Degree Polynomials)</h3>
+<p>A quadratic Bézier curve is a second-order parametric polynomial
+curve determined by three points: a start point, a single control point,
+and an end point. The control point dictates the direction and curvature
+of the curve without the path actually passing through it.
+Mathematically, it is defined as:</p>
+<p><span class="math display">\[B(t) = (1 - t)^2 P_0 + 2(1 - t)t P_1 +
+t^2 P_2 \quad \text{for } t \in [0, 1]\]</span></p>
+<p>Geometrically, every quadratic Bézier curve is an exact segment of a
+parabola.</p>
+<ul>
+<li><strong>SVG Commands:</strong>
+<ul>
+<li><code>Q (x1, y1, x, y)</code>: Draws a standard quadratic curve
+using the explicit control point <code>(x1, y1)</code>.</li>
+<li><code>T (x, y)</code>: Smooth quadratic curve that automatically
+reflects the previous control point across the current start point,
+ensuring <span class="math inline">\(C^1\)</span> continuity (tangent
+continuity).</li>
+</ul></li>
+</ul>
+<h3 id="3-cubic-bézier-curves-third-degree-polynomials">3. Cubic Bézier
+Curves (Third-Degree Polynomials)</h3>
+<p>Cubic Bézier curves are third-order parametric curves defined by four
+points: a start point, two independent control points, and an end point.
+These curves allow for inflection points, meaning the curve can change
+its concavity (e.g., forming S-curves or loops). Mathematically, it is
+defined as:</p>
+<p><span class="math display">\[B(t) = (1 - t)^3 P_0 + 3(1 - t)^2 t P_1
++ 3(1 - t)t^2 P_2 + t^3 P_3 \quad \text{for } t \in [0, 1]\]</span></p>
+<ul>
+<li><strong>SVG Commands:</strong>
+<ul>
+<li><code>C (x1, y1, x2, y2, x, y)</code>: Draws a cubic curve using two
+explicit control points <code>(x1, y1)</code> and
+<code>(x2, y2)</code>.</li>
+<li><code>S (x2, y2, x, y)</code>: Smooth cubic curve that automatically
+computes the first control point as a reflection of the preceding
+control point, maintaining <span class="math inline">\(C^1\)</span>
+smoothness.</li>
+</ul></li>
+</ul>
+<h3 id="4-elliptical-and-circular-arcs-conic-sections">4. Elliptical and
+Circular Arcs (Conic Sections)</h3>
+<p>SVG includes native support for arcs, which are segments of an
+ellipse or circle. An elliptical arc is defined by the semi-major axis,
+semi-minor axis, an x-axis rotation angle, and boolean flags determining
+whether to traverse the large arc and the sweep direction.</p>
+<ul>
+<li><strong>SVG Command:</strong>
+<code>A (rx, ry, x-axis-rotation, large-arc-flag, sweep-flag, x, y)</code></li>
+</ul>
+<h2
+id="derived-mathematical-curves-constructible-with-svg-paths">Derived
+Mathematical Curves Constructible with SVG Paths</h2>
+<p>Curves that do not have dedicated single-letter commands can still be
+constructed or closely approximated by combining native SVG path
+primitives:</p>
+<h3 id="composite-splines-b-splines-catmull-rom-hermite">Composite
+Splines (B-Splines, Catmull-Rom, Hermite)</h3>
+<p>By chaining multiple <code>C</code> (cubic) or <code>Q</code>
+(quadratic) commands together, you can construct piecewise polynomial
+splines. Non-uniform rational B-splines (NURBS), Hermite splines, and
+Catmull-Rom splines can be analytically converted into equivalent cubic
+Bézier segments with matching control points and knots.</p>
+<h3 id="conic-sections-parabolas-hyperbolas-ellipses">Conic Sections
+(Parabolas, Hyperbolas, Ellipses)</h3>
+<ul>
+<li><strong>Parabolas:</strong> Constructed exactly using single
+Quadratic Bézier (<code>Q</code>) commands.</li>
+<li><strong>Ellipses and Circles:</strong> Constructed exactly using two
+or more Elliptical Arc (<code>A</code>) commands, or approximated within
+less than 0.03% error using four Cubic Bézier (<code>C</code>)
+segments.</li>
+<li><strong>Hyperbolas:</strong> Constructed piecewise by mapping
+hyperbolic parametric functions to cubic Bézier approximations.</li>
+</ul>
+<h3 id="transcendental-and-trigonometric-curves">Transcendental and
+Trigonometric Curves</h3>
+<p>Transcendental curves cannot be represented as single polynomial
+equations, but they are constructed in SVG by dividing the curve domain
+into segments and fitting cubic Bézier segments:</p>
+<ul>
+<li><strong>Sinusoidal Waves:</strong> Sine and cosine curves are
+approximated via piecewise cubic Béziers, where each half-period is
+fitted using control points at <span class="math inline">\(4(\sqrt{2} -
+1)/3\)</span> times the amplitude.</li>
+<li><strong>Spirals (Archimedean, Logarithmic,
+Euler/Clothoids):</strong> Generated by calculating curvature and
+tangent vectors at discrete intervals and generating a continuous
+sequence of connecting cubic or arc segments.</li>
+<li><strong>Lissajous and Epitrochoid Curves:</strong> Complex
+parametric harmonic curves rendered by sampling parametric coordinates
+<span class="math inline">\((x(t), y(t))\)</span> and linking them with
+linear segments (<code>L</code>) or smooth Bézier approximations
+(<code>S</code>/<code>T</code>).</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configure CORS for External SVG Symbols - svg</title>
+    <meta name="description" content="Loading external SVG sprites and symbols across different domains using the <use> element often fails due to browser Same-Origin Policy restrictions. To permit external SVG symbol loading, the hosting server must deliver the SVG files with appropriate Cr">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/configure-cors-for-external-svg-symbols">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Configure CORS for External SVG Symbols - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/configure-cors-for-external-svg-symbols" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Loading external SVG sprites and symbols across different domains using the <use> element often fails due to browser Same-Origin Policy restrictions. To permit external SVG symbol loading, the hosting server must deliver the SVG files with appropriate Cr" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="configure-cors-for-external-svg-symbols">Configure CORS for
+External SVG Symbols</h1>
+<p>Loading external SVG sprites and symbols across different domains
+using the <code>&lt;use&gt;</code> element often fails due to browser
+Same-Origin Policy restrictions. To permit external SVG symbol loading,
+the hosting server must deliver the SVG files with appropriate
+Cross-Origin Resource Sharing (CORS) headers and the correct MIME type.
+This guide details the exact HTTP headers required and demonstrates how
+to configure them across popular web servers and cloud platforms.</p>
+<h2 id="required-http-response-headers">Required HTTP Response
+Headers</h2>
+<p>To allow cross-origin fetching of SVG assets, the server hosting the
+<code>.svg</code> files must include the following headers in its
+response:</p>
+<ul>
+<li><strong><code>Access-Control-Allow-Origin</code></strong>: Specifies
+which origins are allowed to access the resource. Set to <code>*</code>
+to allow any domain, or specify your exact origin (e.g.,
+<code>https://example.com</code>).</li>
+<li><strong><code>Access-Control-Allow-Methods</code></strong>: Should
+include <code>GET</code> and <code>OPTIONS</code>.</li>
+<li><strong><code>Content-Type</code></strong>: Must be set to
+<code>image/svg+xml</code>. Browsers may reject external SVG definitions
+if served with an incorrect MIME type such as <code>text/plain</code> or
+<code>application/octet-stream</code>.</li>
+</ul>
+<hr />
+<h2 id="web-server-configurations">Web Server Configurations</h2>
+<h3 id="1-nginx-configuration">1. Nginx Configuration</h3>
+<p>In your Nginx server block or configuration file
+(<code>nginx.conf</code>), add a <code>location</code> directive
+matching <code>.svg</code> files to append the CORS headers:</p>
+<pre class="nginx"><code>location ~* \.svg$ {
+    # Specify allowed origin or use wildcard
+    add_header Access-Control-Allow-Origin &quot;*&quot;;
+    add_header Access-Control-Allow-Methods &quot;GET, OPTIONS&quot;;
+    add_header Access-Control-Allow-Headers &quot;Origin, X-Requested-With, Content-Type, Accept&quot;;
+
+    # Ensure correct MIME type
+    types {
+        image/svg+xml svg;
+    }
+
+    # Optional: Cache control for static assets
+    expires 30d;
+    add_header Cache-Control &quot;public, no-transform&quot;;
+}</code></pre>
+<p>Reload Nginx after saving changes:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> nginx <span class="at">-s</span> reload</span></code></pre></div>
+<hr />
+<h3 id="2-apache-configuration">2. Apache Configuration</h3>
+<p>Ensure that Apache's <code>mod_headers</code> module is enabled
+(<code>sudo a2enmod headers</code>). Then, add the configuration to your
+<code>.htaccess</code> file or inside the
+<code>&lt;VirtualHost&gt;</code> / <code>&lt;Directory&gt;</code>
+block:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode apache"><code class="sourceCode apache"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;IfModule</span><span class="at"> mod_headers.c</span><span class="fu">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">&lt;FilesMatch</span><span class="at"> &quot;\.(svg|svgz)$&quot;</span><span class="fu">&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>        Header<span class="st"> set Access-Control-Allow-Origin &quot;*&quot;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>        Header<span class="st"> set Access-Control-Allow-Methods &quot;GET, OPTIONS&quot;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>        Header<span class="st"> set Access-Control-Allow-Headers &quot;Origin, X-Requested-With, Content-Type, Accept&quot;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    <span class="fu">&lt;/FilesMatch&gt;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;/IfModule&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="co"># Ensure correct MIME type</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>AddType<span class="st"> image/svg+xml .svg .svgz</span></span></code></pre></div>
+<p>Reload Apache to apply changes:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu">sudo</span> systemctl reload apache2</span></code></pre></div>
+<hr />
+<h3 id="3-caddy-server">3. Caddy Server</h3>
+<p>If you use Caddy, use the <code>header</code> directive inside your
+<code>Caddyfile</code>:</p>
+<pre class="caddy"><code>example.com {
+    @svg path *.svg
+    header @svg {
+        Access-Control-Allow-Origin &quot;*&quot;
+        Access-Control-Allow-Methods &quot;GET, OPTIONS&quot;
+    }
+}</code></pre>
+<hr />
+<h3 id="4-amazon-web-services-aws-s3">4. Amazon Web Services (AWS)
+S3</h3>
+<p>If your SVG assets are hosted on an Amazon S3 bucket, configure the
+bucket's CORS permissions:</p>
+<ol type="1">
+<li>Open the <strong>AWS S3 Console</strong> and select your
+bucket.</li>
+<li>Navigate to the <strong>Permissions</strong> tab and scroll to
+<strong>Cross-origin resource sharing (CORS)</strong>.</li>
+<li>Click <strong>Edit</strong> and insert the following JSON
+configuration:</li>
+</ol>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode json"><code class="sourceCode json"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="ot">[</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">{</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;AllowedHeaders&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;*&quot;</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;AllowedMethods&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;GET&quot;</span></span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;AllowedOrigins&quot;</span><span class="fu">:</span> <span class="ot">[</span></span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>            <span class="st">&quot;*&quot;</span></span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a>        <span class="ot">]</span><span class="fu">,</span></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&quot;ExposeHeaders&quot;</span><span class="fu">:</span> <span class="ot">[]</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>    <span class="fu">}</span></span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a><span class="ot">]</span></span></code></pre></div>
+<p><em>Note: If using AWS CloudFront in front of S3, ensure your
+CloudFront distribution is configured to forward the <code>Origin</code>
+header to the S3 origin and cache based on it.</em></p>
+<hr />
+<h3 id="5-nodejs-express">5. Node.js (Express)</h3>
+<p>For an Express-based static server, apply headers specifically to SVG
+requests using <code>express.static</code>:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> express <span class="op">=</span> <span class="pp">require</span>(<span class="st">&#39;express&#39;</span>)<span class="op">;</span></span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> app <span class="op">=</span> <span class="fu">express</span>()<span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>app<span class="op">.</span><span class="fu">use</span>(express<span class="op">.</span><span class="fu">static</span>(<span class="st">&#39;public&#39;</span><span class="op">,</span> {</span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>    <span class="dt">setHeaders</span><span class="op">:</span> (res<span class="op">,</span> path) <span class="kw">=&gt;</span> {</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (path<span class="op">.</span><span class="fu">endsWith</span>(<span class="st">&#39;.svg&#39;</span>)) {</span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>            res<span class="op">.</span><span class="fu">set</span>(<span class="st">&#39;Access-Control-Allow-Origin&#39;</span><span class="op">,</span> <span class="st">&#39;*&#39;</span>)<span class="op">;</span></span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a>            res<span class="op">.</span><span class="fu">set</span>(<span class="st">&#39;Access-Control-Allow-Methods&#39;</span><span class="op">,</span> <span class="st">&#39;GET, OPTIONS&#39;</span>)<span class="op">;</span></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a>            res<span class="op">.</span><span class="fu">set</span>(<span class="st">&#39;Content-Type&#39;</span><span class="op">,</span> <span class="st">&#39;image/svg+xml&#39;</span>)<span class="op">;</span></span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>}))<span class="op">;</span></span></code></pre></div>
+<hr />
+<h2 id="verifying-the-cors-configuration">Verifying the CORS
+Configuration</h2>
+<p>To verify that your server is properly returning the headers, test
+the SVG URL using <code>curl</code> from the command line:</p>
+<div class="sourceCode" id="cb8"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="ex">curl</span> <span class="at">-I</span> <span class="at">-H</span> <span class="st">&quot;Origin: https://example.com&quot;</span> https://cdn.example.com/icons/sprite.svg</span></code></pre></div>
+<p>Look for the following lines in the output:</p>
+<pre class="http"><code>HTTP/1.1 200 OK
+Content-Type: image/svg+xml
+Access-Control-Allow-Origin: *
+Access-Control-Allow-Methods: GET, OPTIONS</code></pre>
+<p>Once these headers are present, modern browsers will load and render
+external SVG symbols via
+<code>&lt;svg&gt;&lt;use href="https://cdn.example.com/sprite.svg#icon-name"&gt;&lt;/use&gt;&lt;/svg&gt;</code>
+without cross-origin security errors.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

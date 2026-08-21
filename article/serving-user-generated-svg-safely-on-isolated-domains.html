@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Serving User-Generated SVG Safely on Isolated Domains - svg</title>
+    <meta name="description" content="User-generated Scalable Vector Graphics (SVG) present severe security challenges because they are XML-based files capable of executing JavaScript, triggering cross-site scripting (XSS) attacks, and loading malicious external entities. Serving untrusted S">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/serving-user-generated-svg-safely-on-isolated-domains">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Serving User-Generated SVG Safely on Isolated Domains - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/serving-user-generated-svg-safely-on-isolated-domains" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="User-generated Scalable Vector Graphics (SVG) present severe security challenges because they are XML-based files capable of executing JavaScript, triggering cross-site scripting (XSS) attacks, and loading malicious external entities. Serving untrusted S" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="serving-user-generated-svg-safely-on-isolated-domains">Serving
+User-Generated SVG Safely on Isolated Domains</h1>
+<p>User-generated Scalable Vector Graphics (SVG) present severe security
+challenges because they are XML-based files capable of executing
+JavaScript, triggering cross-site scripting (XSS) attacks, and loading
+malicious external entities. Serving untrusted SVGs from an isolated
+domain separates user-uploaded files from your main application's
+origin, protecting session tokens, cookies, and sensitive APIs from
+compromise. This article covers the essential architectural patterns,
+HTTP headers, sanitization steps, and rendering controls required to
+host user-uploaded SVGs securely.</p>
+<h2 id="why-user-generated-svgs-are-risky">Why User-Generated SVGs Are
+Risky</h2>
+<p>Unlike raster images (such as JPEG or PNG), SVGs are dynamic
+documents that support scripting and interactivity. An SVG file can
+contain:</p>
+<ul>
+<li><code>&lt;script&gt;</code> tags that execute arbitrary JavaScript
+when the file is viewed directly in a browser.</li>
+<li>Inline event handlers (such as <code>onload</code> or
+<code>onerror</code>) embedded in standard SVG shapes.</li>
+<li><code>&lt;a&gt;</code> links with <code>javascript:</code>
+URIs.</li>
+<li>External resource references (via <code>&lt;image&gt;</code>,
+<code>&lt;use&gt;</code>, or XML external entities) that can lead to
+Server-Side Request Forgery (SSRF) or XML External Entity (XXE)
+vulnerabilities during server-side processing.</li>
+</ul>
+<h2 id="best-practices-for-domain-isolation">Best Practices for Domain
+Isolation</h2>
+<h3 id="1-use-a-separate-cookie-free-origin">1. Use a Separate,
+Cookie-Free Origin</h3>
+<p>Host all user-uploaded content on a completely distinct apex domain
+or a non-shared subdomain that does not share cookies with your primary
+domain.</p>
+<ul>
+<li><strong>Preferred:</strong> Use a completely different domain (e.g.,
+<code>example-usercontent.com</code> instead of
+<code>example.com</code>). This ensures total isolation from
+<code>localStorage</code>, <code>sessionStorage</code>, and
+parent-domain session cookies.</li>
+<li><strong>Alternative:</strong> If using a subdomain (e.g.,
+<code>uploads.example.com</code>), ensure your authentication cookies on
+<code>example.com</code> are scoped strictly without the
+<code>Domain=.example.com</code> attribute.</li>
+</ul>
+<h3 id="2-configure-strict-content-security-policy-csp">2. Configure
+Strict Content Security Policy (CSP)</h3>
+<p>When serving the SVG from the isolated domain, enforce a restrictive
+CSP header to prevent any script execution in the event a user opens the
+SVG link directly.</p>
+<pre class="http"><code>Content-Security-Policy: default-src &#39;none&#39;; style-src &#39;self&#39; &#39;unsafe-inline&#39;; img-src &#39;self&#39; data:; sandbox</code></pre>
+<p>The <code>sandbox</code> directive disables script execution, form
+submissions, and popups within the SVG context.</p>
+<h3 id="3-set-crucial-http-security-headers">3. Set Crucial HTTP
+Security Headers</h3>
+<p>Accompany every SVG response with security headers to enforce the
+correct content type and prevent MIME-sniffing:</p>
+<ul>
+<li><strong><code>Content-Type: image/svg+xml; charset=utf-8</code></strong>:
+Explicitly defines the MIME type.</li>
+<li><strong><code>X-Content-Type-Options: nosniff</code></strong>:
+Prevents browsers from attempting to execute the payload as HTML if
+content sniffing occurs.</li>
+<li><strong><code>Cross-Origin-Resource-Policy: same-site</code></strong>
+(or <code>cross-origin</code> depending on embed needs): Controls which
+origins can read the file.</li>
+<li><strong><code>Access-Control-Allow-Origin</code></strong>:
+Explicitly restrict which domains can fetch the SVG via
+<code>fetch()</code> or <code>XMLHttpRequest</code>.</li>
+</ul>
+<h2 id="file-processing-and-sanitization">File Processing and
+Sanitization</h2>
+<h3 id="server-side-sanitization">Server-Side Sanitization</h3>
+<p>Never store or serve raw user-submitted SVG files without cleaning
+them first:</p>
+<ol type="1">
+<li><strong>Parse with a Hardened XML Parser:</strong> Disable DTD
+parsing, external entity resolution (XXE prevention), and XInclude
+processing.</li>
+<li><strong>Strip Executable Nodes:</strong> Remove all
+<code>&lt;script&gt;</code>, <code>&lt;foreignObject&gt;</code>,
+<code>&lt;iframe&gt;</code>, and <code>&lt;object&gt;</code>
+elements.</li>
+<li><strong>Sanitize Attributes:</strong> Strip all event handlers
+(<code>onload</code>, <code>onclick</code>, <code>onerror</code>, etc.)
+and ensure <code>href</code> or <code>xlink:href</code> attributes only
+use safe protocols (<code>http</code>, <code>https</code>, or relative
+paths), explicitly blocking <code>javascript:</code> or
+<code>data:</code> URIs.</li>
+<li><strong>Use Dedicated Libraries:</strong> Use battle-tested tools
+such as DOMPurify (configured specifically for SVG/XML) or SVG-specific
+sanitizers in your backend language.</li>
+</ol>
+<h3 id="optional-raster-conversion">Optional Raster Conversion</h3>
+<p>If full vector scalability is not strictly required by your
+application (for example, profile pictures or document previews),
+convert uploaded SVGs into static raster formats like WebP or PNG on
+upload. This eliminates the vector attack surface entirely.</p>
+<h2 id="safe-rendering-in-the-client-application">Safe Rendering in the
+Client Application</h2>
+<p>How your main application displays the SVG matters just as much as
+where it is hosted:</p>
+<ul>
+<li><strong>Safe: <code>&lt;img&gt;</code> tags or CSS
+<code>background-image</code>:</strong> When loaded via
+<code>&lt;img src="https://isolated-domain.com/file.svg"&gt;</code>,
+modern browsers automatically disable JavaScript execution, external
+network requests, and DOM interaction inside the SVG.</li>
+<li><strong>Dangerous: Inline <code>&lt;svg&gt;</code>:</strong> Never
+inject user-generated SVG markup directly into your main document's DOM
+using <code>innerHTML</code> or framework-equivalent methods, as scripts
+will execute directly in the context of your main origin.</li>
+<li><strong>Dangerous: <code>&lt;iframe&gt;</code>,
+<code>&lt;object&gt;</code>, or <code>&lt;embed&gt;</code>:</strong>
+These elements render the SVG as an independent document context and can
+run embedded scripts if the CSP on the hosting domain is
+misconfigured.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

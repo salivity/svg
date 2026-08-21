@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Changing SVG Stroke-Width Affects Elements - svg</title>
+    <meta name="description" content="The stroke-width property in SVG directly controls the thickness of the outline applied to a shape or path. Adjusting this value alters the visual weight of the element by expanding the stroke symmetrically outward and inward from the path's center line.">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-changing-svg-stroke-width-affects-elements">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Changing SVG Stroke-Width Affects Elements - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-changing-svg-stroke-width-affects-elements" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The stroke-width property in SVG directly controls the thickness of the outline applied to a shape or path. Adjusting this value alters the visual weight of the element by expanding the stroke symmetrically outward and inward from the path's center line." />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-changing-svg-stroke-width-affects-elements">How Changing SVG
+Stroke-Width Affects Elements</h1>
+<p>The <code>stroke-width</code> property in SVG directly controls the
+thickness of the outline applied to a shape or path. Adjusting this
+value alters the visual weight of the element by expanding the stroke
+symmetrically outward and inward from the path's center line. Changing
+the <code>stroke-width</code> impacts element boundaries, potential
+clipping within the SVG <code>viewBox</code>, interactions with scaling
+transformations, and the visual prominence of corner joins and line
+caps.</p>
+<h3 id="center-aligned-stroke-expansion">Center-Aligned Stroke
+Expansion</h3>
+<p>By default, SVG renders strokes centered directly on the coordinate
+path. When you increase the <code>stroke-width</code>, half of the added
+width expands outward, and the other half expands inward. For example,
+applying a <code>stroke-width="10"</code> to a <code>&lt;rect&gt;</code>
+places 5 pixels of the stroke outside the rectangle's defined
+<code>x</code>, <code>y</code>, <code>width</code>, and
+<code>height</code> coordinates, and 5 pixels inside.</p>
+<h3 id="visual-dimensions-and-viewbox-clipping">Visual Dimensions and
+ViewBox Clipping</h3>
+<p>Because strokes expand beyond the defined geometry of a shape,
+increasing <code>stroke-width</code> enlarges the overall visual
+footprint of the element without changing its underlying coordinate
+data. If a shape is positioned close to the edge of the SVG canvas, a
+large <code>stroke-width</code> can push the outer half of the stroke
+outside the defined <code>viewBox</code>, causing the edges of the
+stroke to be cut off unless the <code>viewBox</code> is expanded or
+<code>overflow: visible</code> is set.</p>
+<h3 id="scaling-and-resolution-independence">Scaling and Resolution
+Independence</h3>
+<p>SVG elements scale vector graphics proportionally. When an entire SVG
+or a specific element is scaled via CSS or the <code>transform</code>
+attribute, the stroke width scales proportionally with it by
+default.</p>
+<p>To keep the stroke thickness constant regardless of scaling, you can
+apply the <code>vector-effect="non-scaling-stroke"</code> attribute to
+the element. This ensures the stroke maintains its defined pixel width
+even when the shape shrinks or enlarges.</p>
+<h3 id="interaction-with-caps-joins-and-dashes">Interaction with Caps,
+Joins, and Dashes</h3>
+<p>Changing the <code>stroke-width</code> amplifies the effects of other
+stroke properties:</p>
+<ul>
+<li><strong><code>stroke-linecap</code>:</strong> Properties like
+<code>round</code> or <code>square</code> add extensions to the ends of
+open paths, and their visual size scales directly with the
+<code>stroke-width</code>.</li>
+<li><strong><code>stroke-linejoin</code> and
+<code>stroke-miterlimit</code>:</strong> Corner styles
+(<code>miter</code>, <code>round</code>, <code>bevel</code>) become
+significantly more pronounced as the stroke thickens. Thick miter joins
+can create long, sharp spikes unless constrained by
+<code>stroke-miterlimit</code>.</li>
+<li><strong><code>stroke-dasharray</code>:</strong> The gaps and dashes
+defined in a dash pattern remain the same length, but a thicker stroke
+alters the aspect ratio of each dash, turning thin lines into block-like
+shapes.</li>
+</ul>
+<h3 id="units-and-supported-values">Units and Supported Values</h3>
+<p>The <code>stroke-width</code> property accepts:</p>
+<ul>
+<li><strong>Unitless values:</strong> Interpreted in the current SVG
+user coordinate system (e.g., <code>stroke-width="4"</code>).</li>
+<li><strong>Length units:</strong> Standard CSS units like
+<code>px</code>, <code>em</code>, or <code>rem</code> (e.g.,
+<code>stroke-width="2px"</code>).</li>
+<li><strong>Percentages:</strong> Relative to the diagonal size of the
+current SVG viewport (e.g., <code>stroke-width="1%"</code>).</li>
+<li><strong>Zero or None:</strong> Setting <code>stroke-width="0"</code>
+effectively hides the outline, leaving only the fill visible. Negative
+values are invalid and treated as <code>0</code>.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

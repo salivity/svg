@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using SVG getBBox to Extract Bounding Box Coordinates - svg</title>
+    <meta name="description" content="The getBBox() method is a built-in DOM interface on SVG elements that enables developers to calculate and extract the precise geometric bounding box of a target element in its local user coordinate system. This article covers how to call getBBox(), extra">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/using-svg-getbbox-to-extract-bounding-box-coordinates">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Using SVG getBBox to Extract Bounding Box Coordinates - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/using-svg-getbbox-to-extract-bounding-box-coordinates" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The getBBox() method is a built-in DOM interface on SVG elements that enables developers to calculate and extract the precise geometric bounding box of a target element in its local user coordinate system. This article covers how to call getBBox(), extra" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="using-svg-getbbox-to-extract-bounding-box-coordinates">Using SVG
+getBBox to Extract Bounding Box Coordinates</h1>
+<p>The <code>getBBox()</code> method is a built-in DOM interface on SVG
+elements that enables developers to calculate and extract the precise
+geometric bounding box of a target element in its local user coordinate
+system. This article covers how to call <code>getBBox()</code>, extract
+standard positional and dimension properties, utilize modern
+configuration options, calculate derived boundary coordinates, and map
+local bounding box values to global screen space.</p>
+<h3 id="basic-coordinate-extraction">Basic Coordinate Extraction</h3>
+<p>The <code>getBBox()</code> method is available on any instance of
+<code>SVGGraphicsElement</code> (such as <code>&lt;path&gt;</code>,
+<code>&lt;rect&gt;</code>, <code>&lt;circle&gt;</code>,
+<code>&lt;g&gt;</code>, and <code>&lt;text&gt;</code>). Calling this
+method returns an <code>SVGRect</code> or <code>DOMRect</code> object
+that describes the smallest rectangle enclosing the geometry of the
+target element.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> svgElement <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;#myElement&#39;</span>)<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> bbox <span class="op">=</span> svgElement<span class="op">.</span><span class="fu">getBBox</span>()<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> x <span class="op">=</span> bbox<span class="op">.</span><span class="at">x</span><span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> y <span class="op">=</span> bbox<span class="op">.</span><span class="at">y</span><span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> width <span class="op">=</span> bbox<span class="op">.</span><span class="at">width</span><span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> height <span class="op">=</span> bbox<span class="op">.</span><span class="at">height</span><span class="op">;</span></span></code></pre></div>
+<ul>
+<li><strong><code>x</code></strong>: The minimum x-coordinate of the
+element's bounding box.</li>
+<li><strong><code>y</code></strong>: The minimum y-coordinate of the
+element's bounding box.</li>
+<li><strong><code>width</code></strong>: The horizontal dimension of the
+bounding box.</li>
+<li><strong><code>height</code></strong>: The vertical dimension of the
+bounding box.</li>
+</ul>
+<h3 id="calculating-derived-boundary-points">Calculating Derived
+Boundary Points</h3>
+<p>Because <code>getBBox()</code> provides only the top-left origin
+(<code>x</code>, <code>y</code>) and dimensions, developers commonly
+compute boundary extremes and center points using basic arithmetic:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> bbox <span class="op">=</span> element<span class="op">.</span><span class="fu">getBBox</span>()<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> top <span class="op">=</span> bbox<span class="op">.</span><span class="at">y</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> left <span class="op">=</span> bbox<span class="op">.</span><span class="at">x</span><span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> right <span class="op">=</span> bbox<span class="op">.</span><span class="at">x</span> <span class="op">+</span> bbox<span class="op">.</span><span class="at">width</span><span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> bottom <span class="op">=</span> bbox<span class="op">.</span><span class="at">y</span> <span class="op">+</span> bbox<span class="op">.</span><span class="at">height</span><span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> centerX <span class="op">=</span> bbox<span class="op">.</span><span class="at">x</span> <span class="op">+</span> bbox<span class="op">.</span><span class="at">width</span> <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> centerY <span class="op">=</span> bbox<span class="op">.</span><span class="at">y</span> <span class="op">+</span> bbox<span class="op">.</span><span class="at">height</span> <span class="op">/</span> <span class="dv">2</span><span class="op">;</span></span></code></pre></div>
+<h3 id="passing-options-to-refine-measurements">Passing Options to
+Refine Measurements</h3>
+<p>Modern SVG 2 implementations allow passing an
+<code>SVGBoundingBoxOptions</code> dictionary to <code>getBBox()</code>
+to dictate what geometry features should be included in the
+measurement:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> bboxWithOptions <span class="op">=</span> element<span class="op">.</span><span class="fu">getBBox</span>({</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">fill</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span>      <span class="co">// Include the fill area (default: true)</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">stroke</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span>    <span class="co">// Include stroke outlines in calculation (default: false)</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">markers</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span>   <span class="co">// Include marker graphics (default: false)</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">clipped</span><span class="op">:</span> <span class="kw">false</span>   <span class="co">// Include or ignore clipping paths (default: false)</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<p>By passing <code>{ stroke: true }</code>, developers can retrieve the
+true visual bounds of stroked shapes, which standard
+<code>getBBox()</code> calls often exclude.</p>
+<h3 id="mapping-getbbox-coordinates-to-screen-coordinates">Mapping
+getBBox Coordinates to Screen Coordinates</h3>
+<p>The coordinates returned by <code>getBBox()</code> exist strictly
+within the element's local coordinate system and do not account for
+external transforms or parent scaling. To convert these local
+coordinates to viewport-relative or screen-relative space,
+<code>getBBox()</code> coordinates can be multiplied by the element's
+Current Transformation Matrix (<code>getScreenCTM()</code>):</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> svg <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;svg&#39;</span>)<span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> element <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;#myElement&#39;</span>)<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> bbox <span class="op">=</span> element<span class="op">.</span><span class="fu">getBBox</span>()<span class="op">;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ctm <span class="op">=</span> element<span class="op">.</span><span class="fu">getScreenCTM</span>()<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="co">// Create an SVGPoint for the top-left coordinate</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> point <span class="op">=</span> svg<span class="op">.</span><span class="fu">createSVGPoint</span>()<span class="op">;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>point<span class="op">.</span><span class="at">x</span> <span class="op">=</span> bbox<span class="op">.</span><span class="at">x</span><span class="op">;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>point<span class="op">.</span><span class="at">y</span> <span class="op">=</span> bbox<span class="op">.</span><span class="at">y</span><span class="op">;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a><span class="co">// Transform the point to screen coordinates</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> screenCoordinates <span class="op">=</span> point<span class="op">.</span><span class="fu">matrixTransform</span>(ctm)<span class="op">;</span></span></code></pre></div>
+<h3 id="important-usage-considerations">Important Usage
+Considerations</h3>
+<ul>
+<li><strong>Render Tree Dependency</strong>: <code>getBBox()</code>
+requires the element to be attached to the active DOM tree. Calling
+<code>getBBox()</code> on elements with <code>display: none</code> or
+elements not yet mounted to the document will throw an error or return
+zeroed properties.</li>
+<li><strong>Groups and Hierarchies</strong>: Calling
+<code>getBBox()</code> on a <code>&lt;g&gt;</code> container calculates
+the union of the bounding boxes of all contained child elements.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

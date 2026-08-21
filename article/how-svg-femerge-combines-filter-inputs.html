@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How SVG feMerge Combines Filter Inputs - svg</title>
+    <meta name="description" content="In Scalable Vector Graphics (SVG), the <feMerge> element acts as a visual compositor that aggregates multiple filter stages into a single output layer. By utilizing child <feMergeNode> elements, it stacks various intermediate graphical results and source">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-svg-femerge-combines-filter-inputs">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How SVG feMerge Combines Filter Inputs - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-svg-femerge-combines-filter-inputs" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In Scalable Vector Graphics (SVG), the <feMerge> element acts as a visual compositor that aggregates multiple filter stages into a single output layer. By utilizing child <feMergeNode> elements, it stacks various intermediate graphical results and source" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-svg-femerge-combines-filter-inputs">How SVG feMerge Combines
+Filter Inputs</h1>
+<p>In Scalable Vector Graphics (SVG), the <code>&lt;feMerge&gt;</code>
+element acts as a visual compositor that aggregates multiple filter
+stages into a single output layer. By utilizing child
+<code>&lt;feMergeNode&gt;</code> elements, it stacks various
+intermediate graphical results and source graphics on top of one another
+in a precise sequence. This article explains how
+<code>&lt;feMerge&gt;</code> processes inputs within an SVG filter
+pipeline, how it uses the painter's model to layer visuals, and when to
+use it over other compositing primitives.</p>
+<h2 id="the-role-of-femerge-in-filter-pipelines">The Role of feMerge in
+Filter Pipelines</h2>
+<p>SVG filters process graphics through a pipeline of filter primitives.
+Most primitives take one or two inputs, apply an operation (such as
+blurring, offsetting, or lighting), and output a transformed result.</p>
+<p>Because filter effects often require the original graphic to remain
+visible over or under the modified layers—such as in drop shadows,
+glows, or bevels—you need a way to combine these distinct graphics. The
+<code>&lt;feMerge&gt;</code> element serves this exact purpose by
+collecting multiple visual layers and rendering them together as the
+final output.</p>
+<h2 id="the-painters-model-and-layer-ordering">The Painter's Model and
+Layer Ordering</h2>
+<p>The <code>&lt;feMerge&gt;</code> primitive operates strictly on the
+SVG "painter's model," where graphics are painted onto the canvas
+sequentially from back to front.</p>
+<p>Inside an <code>&lt;feMerge&gt;</code> container, each layer is
+declared using a <code>&lt;feMergeNode&gt;</code> child element:</p>
+<ul>
+<li><strong>Bottom Layer:</strong> The first
+<code>&lt;feMergeNode&gt;</code> declared represents the background or
+bottom-most layer.</li>
+<li><strong>Intermediate Layers:</strong> Each subsequent
+<code>&lt;feMergeNode&gt;</code> is rendered directly over the preceding
+layers.</li>
+<li><strong>Top Layer:</strong> The final
+<code>&lt;feMergeNode&gt;</code> in the list forms the foreground or
+top-most visible layer.</li>
+</ul>
+<h2 id="referencing-inputs-with-the-in-attribute">Referencing Inputs
+with the <code>in</code> Attribute</h2>
+<p>Each <code>&lt;feMergeNode&gt;</code> uses an <code>in</code>
+attribute to specify which visual data it should render. These inputs
+can be:</p>
+<ol type="1">
+<li><strong>Standard Source Inputs:</strong> Built-in keywords such as
+<code>SourceGraphic</code> (the original unfiltered element) or
+<code>SourceAlpha</code> (only the alpha channel of the original
+element).</li>
+<li><strong>Intermediate Pipeline Results:</strong> The named identifier
+assigned to the <code>result</code> attribute of any prior filter
+primitive in the <code>&lt;filter&gt;</code> definition (e.g.,
+<code>&lt;feGaussianBlur result="blurredEffect"&gt;</code>).</li>
+</ol>
+<p>If an <code>in</code> attribute is omitted on a
+<code>&lt;feMergeNode&gt;</code>, it defaults to the output of the
+immediately preceding filter primitive.</p>
+<h2 id="how-femerge-executes-in-practice">How feMerge Executes in
+Practice</h2>
+<p>A classic example of <code>&lt;feMerge&gt;</code> in an SVG pipeline
+is creating a drop shadow beneath an element:</p>
+<ol type="1">
+<li>An <code>&lt;feGaussianBlur&gt;</code> primitive takes
+<code>SourceAlpha</code> and produces a blurred shadow, assigned the
+result name <code>blurOut</code>.</li>
+<li>An <code>&lt;feOffset&gt;</code> primitive takes
+<code>blurOut</code>, shifts it along the X and Y axes, and assigns the
+result name <code>shadow</code>.</li>
+<li>The <code>&lt;feMerge&gt;</code> primitive is declared with two
+child nodes:
+<ul>
+<li><code>&lt;feMergeNode in="shadow" /&gt;</code> renders the offset
+blur in the background.</li>
+<li><code>&lt;feMergeNode in="SourceGraphic" /&gt;</code> renders the
+original, sharp graphic directly on top of the shadow.</li>
+</ul></li>
+</ol>
+<h2 id="femerge-vs-fecomposite">feMerge vs. feComposite</h2>
+<p>While both <code>&lt;feMerge&gt;</code> and
+<code>&lt;feComposite&gt;</code> combine visual inputs, they serve
+different functions:</p>
+<ul>
+<li><strong><code>&lt;feMerge&gt;</code>:</strong> Designed specifically
+for simple "over" layering of an arbitrary number of inputs (two or
+more). It stacks layers without performing mathematical blend
+calculations between pixels.</li>
+<li><strong><code>&lt;feComposite&gt;</code>:</strong> Limited to
+exactly two inputs (<code>in</code> and <code>in2</code>), but allows
+advanced Porter-Duff compositing operations (<code>over</code>,
+<code>in</code>, <code>out</code>, <code>atop</code>, <code>xor</code>)
+and arithmetic pixel calculations.</li>
+</ul>
+<p>When the goal is simply to flatten and display multiple processed
+layers together without mathematical masking or blending,
+<code>&lt;feMerge&gt;</code> provides the cleanest and most efficient
+solution in an SVG pipeline.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

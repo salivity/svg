@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Path Simplification Algorithms in Digital Whiteboards - svg</title>
+    <meta name="description" content="Digital whiteboards rely on geometric and mathematical algorithms to transform erratic, high-frequency pointer input into clean, performant SVG vector paths. When a user draws on an interactive canvas, input hardware produces hundreds of raw coordinate p">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-path-simplification-algorithms-in-digital-whiteboards">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG Path Simplification Algorithms in Digital Whiteboards - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-path-simplification-algorithms-in-digital-whiteboards" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Digital whiteboards rely on geometric and mathematical algorithms to transform erratic, high-frequency pointer input into clean, performant SVG vector paths. When a user draws on an interactive canvas, input hardware produces hundreds of raw coordinate p" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-path-simplification-algorithms-in-digital-whiteboards">SVG
+Path Simplification Algorithms in Digital Whiteboards</h1>
+<p>Digital whiteboards rely on geometric and mathematical algorithms to
+transform erratic, high-frequency pointer input into clean, performant
+SVG vector paths. When a user draws on an interactive canvas, input
+hardware produces hundreds of raw coordinate points per second that are
+noisy, visually jagged, and computationally expensive to render. To
+produce clean vector strokes without sacrificing visual fidelity, modern
+whiteboards implement a combination of point decimation, noise
+filtering, and parametric curve fitting algorithms.</p>
+<h3 id="1-point-decimation-ramer-douglas-peucker-rdp">1. Point
+Decimation: Ramer-Douglas-Peucker (RDP)</h3>
+<p>The Ramer-Douglas-Peucker algorithm is the most widely adopted method
+for reducing the number of points in a polyline.</p>
+<ul>
+<li><strong>How it works:</strong> It takes a polyline and a distance
+threshold parameter (<span class="math inline">\(\epsilon\)</span>). It
+draws a line between the first and last points of the stroke and finds
+the point farthest from this line. If the maximum distance is greater
+than <span class="math inline">\(\epsilon\)</span>, that point is marked
+to be kept, and the algorithm recursively splits the line into two
+sub-segments. If the maximum distance is less than <span
+class="math inline">\(\epsilon\)</span>, all intermediate points are
+discarded.</li>
+<li><strong>Why it is used:</strong> RDP drastically reduces SVG DOM
+complexity (often removing 70% to 90% of points) while preserving the
+overall visual geometry and sharp corners of the stroke.</li>
+</ul>
+<h3 id="2-area-based-simplification-visvalingam-whyatt">2. Area-Based
+Simplification: Visvalingam-Whyatt</h3>
+<p>While RDP focuses on perpendicular distance, the Visvalingam-Whyatt
+algorithm simplifies paths based on triangular area.</p>
+<ul>
+<li><strong>How it works:</strong> It computes the area of the triangle
+formed by every set of three consecutive points along the path. The
+point associated with the smallest triangular area is repeatedly
+removed, and the areas of adjacent triangles are recalculated. The
+process stops when all remaining triangles exceed a predefined area
+threshold or when a target vertex count is reached.</li>
+<li><strong>Why it is used:</strong> It excels at retaining the
+perceived visual weight of a stroke and avoids the harsh, localized
+flattening that RDP can sometimes introduce on gradual curves.</li>
+</ul>
+<h3
+id="3-real-time-stream-smoothing-moving-averages-and-kalman-filters">3.
+Real-Time Stream Smoothing: Moving Averages and Kalman Filters</h3>
+<p>Before points are permanently recorded to an SVG path, real-time
+smoothing is applied during the active drawing event stream.</p>
+<ul>
+<li><strong>Exponential Moving Average (EMA):</strong> Computes a
+weighted average between the current hardware point and previous
+smoothed points. This dampens hardware micro-jitter without adding
+noticeable input lag.</li>
+<li><strong>Kalman Filtering:</strong> Predicts the next expected
+position based on velocity and acceleration, effectively filtering out
+sensor noise from styluses or low-polling touchscreens.</li>
+</ul>
+<h3 id="4-spline-and-bézier-curve-fitting-schneiders-algorithm">4.
+Spline and Bézier Curve Fitting: Schneider’s Algorithm</h3>
+<p>Raw simplified points still result in segmented lines rather than
+organic curves. Whiteboards use curve-fitting algorithms to generate
+native SVG cubic Bézier paths
+(<code>&lt;path d="M... C..."&gt;</code>).</p>
+<ul>
+<li><strong>Schneider's Algorithm (Philip J. Schneider):</strong> Fits a
+sequence of piecewise cubic Bézier curves to a set of digitized points.
+It estimates tangents at the endpoints, generates control points using
+least-squares optimization, and measures the maximum deviation error
+between the original points and the curve. If the error exceeds an
+acceptable tolerance, the curve is split at the point of maximum error,
+and the process repeats recursively.</li>
+<li><strong>Catmull-Rom to Cubic Bézier Conversion:</strong> Some
+systems first interpolate points using a Catmull-Rom spline (which
+naturally passes through all control points) and mathematically map the
+tangent vectors directly to standard SVG cubic Bézier control points for
+deterministic, smooth paths.</li>
+</ul>
+<h3 id="5-iterative-subdivision-chaikins-algorithm">5. Iterative
+Subdivision: Chaikin’s Algorithm</h3>
+<p>For lightweight implementations where high-order polynomial math is
+too expensive, Chaikin’s corner-cutting algorithm is used.</p>
+<ul>
+<li><strong>How it works:</strong> Chaikin's algorithm takes a rough
+polygon and generates a smoother one by cutting off each corner. For
+every line segment, it creates two new points at 25% and 75% along the
+length and discards the original vertices.</li>
+<li><strong>Why it is used:</strong> It is computationally inexpensive
+and converges rapidly to a smooth B-spline curve after only two or three
+iterations.</li>
+</ul>
+<h3 id="practical-implementation-pipeline">Practical Implementation
+Pipeline</h3>
+<p>Modern digital whiteboards typically execute these algorithms in a
+unified pipeline:</p>
+<ol type="1">
+<li><strong>Capture Phase:</strong> Hardware input is captured and
+smoothed in real time via an exponential moving average.</li>
+<li><strong>Post-Draw Simplification:</strong> Once the user releases
+the pointer, the stroke undergoes RDP or Visvalingam-Whyatt reduction to
+remove redundant data.</li>
+<li><strong>Curve Generation:</strong> The decimated polyline is
+converted into optimized cubic Bézier segments via Schneider's
+algorithm, producing the final clean SVG string.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using SVG Assets as Textures in WebGL - svg</title>
+    <meta name="description" content="Scalable Vector Graphics (SVG) provide crisp, resolution-independent visuals, but WebGL rendering pipelines inherently rely on rasterized bitmap data for 2D textures. To use SVG assets inside a 3D WebGL environment, developers must rasterize the vector d">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/using-svg-assets-as-textures-in-webgl">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Using SVG Assets as Textures in WebGL - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/using-svg-assets-as-textures-in-webgl" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Scalable Vector Graphics (SVG) provide crisp, resolution-independent visuals, but WebGL rendering pipelines inherently rely on rasterized bitmap data for 2D textures. To use SVG assets inside a 3D WebGL environment, developers must rasterize the vector d" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="using-svg-assets-as-textures-in-webgl">Using SVG Assets as
+Textures in WebGL</h1>
+<p>Scalable Vector Graphics (SVG) provide crisp, resolution-independent
+visuals, but WebGL rendering pipelines inherently rely on rasterized
+bitmap data for 2D textures. To use SVG assets inside a 3D WebGL
+environment, developers must rasterize the vector data into pixel
+arrays—either ahead of time or dynamically at runtime using browser
+APIs. This article details how to convert SVG assets into
+WebGL-compatible textures using standard HTML5 APIs and higher-level 3D
+frameworks, along with key performance best practices.</p>
+<h2 id="the-rasterization-requirement">The Rasterization
+Requirement</h2>
+<p>WebGL operates directly with the GPU, which requires texture data
+formatted as pixel arrays (such as RGBA buffers). Because SVGs are
+XML-based mathematical descriptions of shapes, curves, and colors, they
+cannot be sampled directly by WebGL shader programs. The SVG must first
+be drawn and converted into a bitmap buffer via the DOM before being
+uploaded to GPU memory with <code>gl.texImage2D()</code>.</p>
+<h2 id="method-1-loading-svgs-via-the-image-object">Method 1: Loading
+SVGs via the Image Object</h2>
+<p>The most straightforward approach is loading the SVG into a standard
+HTML <code>Image</code> element. Once loaded, the browser's internal
+engine rasterizes the SVG, allowing it to be bound directly to a WebGL
+texture.</p>
+<ol type="1">
+<li><strong>Create an Image Instance</strong>: Instantiate an
+<code>Image</code> object and configure its source with the SVG path or
+an inline SVG Data URI (Base64 or URL-encoded).</li>
+<li><strong>Handle Asynchronous Loading</strong>: Wait for the
+<code>onload</code> event to ensure the browser has finished parsing and
+rasterizing the vector graphic.</li>
+<li><strong>Upload to GPU</strong>: Bind the WebGL texture and pass the
+loaded image directly to the GPU context.</li>
+</ol>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> texture <span class="op">=</span> gl<span class="op">.</span><span class="fu">createTexture</span>()<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> image <span class="op">=</span> <span class="kw">new</span> <span class="fu">Image</span>()<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>image<span class="op">.</span><span class="at">onload</span> <span class="op">=</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    gl<span class="op">.</span><span class="fu">bindTexture</span>(gl<span class="op">.</span><span class="at">TEXTURE_2D</span><span class="op">,</span> texture)<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    gl<span class="op">.</span><span class="fu">texImage2D</span>(gl<span class="op">.</span><span class="at">TEXTURE_2D</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> gl<span class="op">.</span><span class="at">RGBA</span><span class="op">,</span> gl<span class="op">.</span><span class="at">RGBA</span><span class="op">,</span> gl<span class="op">.</span><span class="at">UNSIGNED_BYTE</span><span class="op">,</span> image)<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    gl<span class="op">.</span><span class="fu">generateMipmap</span>(gl<span class="op">.</span><span class="at">TEXTURE_2D</span>)<span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>image<span class="op">.</span><span class="at">src</span> <span class="op">=</span> <span class="st">&#39;path/to/asset.svg&#39;</span><span class="op">;</span></span></code></pre></div>
+<h2
+id="method-2-offscreen-canvas-for-dynamic-and-high-dpi-textures">Method
+2: Offscreen Canvas for Dynamic and High-DPI Textures</h2>
+<p>When SVGs must be styled dynamically, scaled to specific resolutions,
+or updated at runtime, rendering through an offscreen HTML5
+<code>&lt;canvas&gt;</code> provides maximum control.</p>
+<ol type="1">
+<li><strong>Define Canvas Resolution</strong>: Create an offscreen
+canvas element scaled to the required texture resolution (ideally
+power-of-two dimensions, such as 512x512 or 1024x1024).</li>
+<li><strong>Draw the SVG</strong>: Render the SVG image onto the 2D
+context using <code>ctx.drawImage()</code>.</li>
+<li><strong>Bind to WebGL</strong>: Use the canvas element directly as
+the data source for <code>gl.texImage2D()</code>.</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> canvas <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">&#39;canvas&#39;</span>)<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>canvas<span class="op">.</span><span class="at">width</span> <span class="op">=</span> <span class="dv">1024</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>canvas<span class="op">.</span><span class="at">height</span> <span class="op">=</span> <span class="dv">1024</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> ctx <span class="op">=</span> canvas<span class="op">.</span><span class="fu">getContext</span>(<span class="st">&#39;2d&#39;</span>)<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> svgImage <span class="op">=</span> <span class="kw">new</span> <span class="fu">Image</span>()<span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>svgImage<span class="op">.</span><span class="at">onload</span> <span class="op">=</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>    ctx<span class="op">.</span><span class="fu">clearRect</span>(<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> canvas<span class="op">.</span><span class="at">width</span><span class="op">,</span> canvas<span class="op">.</span><span class="at">height</span>)<span class="op">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    ctx<span class="op">.</span><span class="fu">drawImage</span>(svgImage<span class="op">,</span> <span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> canvas<span class="op">.</span><span class="at">width</span><span class="op">,</span> canvas<span class="op">.</span><span class="at">height</span>)<span class="op">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>    gl<span class="op">.</span><span class="fu">bindTexture</span>(gl<span class="op">.</span><span class="at">TEXTURE_2D</span><span class="op">,</span> texture)<span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>    gl<span class="op">.</span><span class="fu">texImage2D</span>(gl<span class="op">.</span><span class="at">TEXTURE_2D</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> gl<span class="op">.</span><span class="at">RGBA</span><span class="op">,</span> gl<span class="op">.</span><span class="at">RGBA</span><span class="op">,</span> gl<span class="op">.</span><span class="at">UNSIGNED_BYTE</span><span class="op">,</span> canvas)<span class="op">;</span></span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>    gl<span class="op">.</span><span class="fu">generateMipmap</span>(gl<span class="op">.</span><span class="at">TEXTURE_2D</span>)<span class="op">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>}<span class="op">;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>svgImage<span class="op">.</span><span class="at">src</span> <span class="op">=</span> <span class="st">&#39;data:image/svg+xml;charset=utf-8,&#39;</span> <span class="op">+</span> <span class="pp">encodeURIComponent</span>(svgString)<span class="op">;</span></span></code></pre></div>
+<p>This approach allows runtime modification of colors, stroke widths,
+and text before passing the result to WebGL.</p>
+<h2 id="using-svg-textures-in-3d-libraries">Using SVG Textures in 3D
+Libraries</h2>
+<p>High-level 3D WebGL frameworks simplify this workflow through
+built-in abstraction layers:</p>
+<ul>
+<li><strong>Three.js</strong>: Use <code>CanvasTexture</code> when
+drawing dynamically via an intermediate canvas, or pass the SVG path to
+<code>TextureLoader</code>, which automatically loads it onto an
+internal <code>Image</code> element.</li>
+<li><strong>Babylon.js</strong>: Use <code>DynamicTexture</code>, which
+wraps an internal HTML5 canvas, allowing direct SVG drawing and
+automatic GPU texture updates via
+<code>dynamicTexture.update()</code>.</li>
+</ul>
+<h2 id="optimization-and-best-practices">Optimization and Best
+Practices</h2>
+<ul>
+<li><strong>Texture Dimensions</strong>: Specify explicit
+<code>width</code> and <code>height</code> attributes on the root
+<code>&lt;svg&gt;</code> tag. Without explicit dimensions, browsers may
+fail to rasterize the SVG or assign fallback default sizes (such as
+300x150).</li>
+<li><strong>Power-of-Two (POT) Scaling</strong>: Render SVGs onto
+POT-sized canvases (e.g., 256, 512, 1024, 2048) to ensure compatibility
+with WebGL 1.0 mipmapping and texture wrapping modes
+(<code>REPEAT</code>, <code>MIRRORED_REPEAT</code>).</li>
+<li><strong>GPU Memory Overhead</strong>: Rasterizing high-resolution
+textures consumes video memory. Only render SVGs at the resolution
+needed for the targeted 3D mesh display size.</li>
+<li><strong>Avoid Continuous Re-rasterization</strong>: Rasterizing
+vector shapes via the CPU and uploading them to the GPU via
+<code>texImage2D</code> is computationally expensive. Static SVGs should
+be uploaded once; dynamic SVGs should only trigger texture updates when
+their visual state changes.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

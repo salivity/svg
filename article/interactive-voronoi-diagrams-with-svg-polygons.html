@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Voronoi Diagrams with SVG Polygons - svg</title>
+    <meta name="description" content="This guide outlines the technical process for building interactive Voronoi diagrams on the web using Scalable Vector Graphics (SVG). You will learn how to generate seed points, calculate cell vertices using mathematical algorithms, render individual poly">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/interactive-voronoi-diagrams-with-svg-polygons">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Interactive Voronoi Diagrams with SVG Polygons - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/interactive-voronoi-diagrams-with-svg-polygons" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This guide outlines the technical process for building interactive Voronoi diagrams on the web using Scalable Vector Graphics (SVG). You will learn how to generate seed points, calculate cell vertices using mathematical algorithms, render individual poly" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="interactive-voronoi-diagrams-with-svg-polygons">Interactive
+Voronoi Diagrams with SVG Polygons</h1>
+<p>This guide outlines the technical process for building interactive
+Voronoi diagrams on the web using Scalable Vector Graphics (SVG). You
+will learn how to generate seed points, calculate cell vertices using
+mathematical algorithms, render individual polygons in the DOM, attach
+event listeners for real-time interactivity, and optimize rendering
+performance for smooth visual experiences.</p>
+<h3 id="1-generating-the-seed-points">1. Generating the Seed Points</h3>
+<p>The foundation of any Voronoi diagram is a set of 2D coordinates
+known as seeds or sites. To start, establish an array of coordinate
+objects <code>[{x, y}, ...]</code> within a defined width and height.
+These coordinates can be generated randomly, arranged in a structured
+grid, or derived dynamically from user mouse and touch interactions.</p>
+<h3 id="2-computing-the-voronoi-tessellation">2. Computing the Voronoi
+Tessellation</h3>
+<p>Once the points are established, you must compute the boundaries of
+each cell:</p>
+<ul>
+<li><strong>The Math:</strong> Every cell represents a region of space
+closer to its corresponding seed point than to any other. This is
+mathematically derived by computing the Delaunay triangulation of the
+points and connecting the circumcenters of adjacent triangles (often
+using Fortune's algorithm).</li>
+<li><strong>Implementation:</strong> Rather than writing a tessellation
+algorithm from scratch, standard implementations use libraries like
+<code>d3-delaunay</code> or <code>voronoi.js</code>. Provide your
+bounding box <code>[xmin, ymin, xmax, ymax]</code> and points array to
+compute the polygon vertex paths for each cell.</li>
+</ul>
+<h3 id="3-rendering-svg-polygons">3. Rendering SVG Polygons</h3>
+<p>Once the vertices for each cell are calculated, translate the
+coordinates into SVG elements:</p>
+<ul>
+<li>Create a root <code>&lt;svg&gt;</code> container configured with a
+dynamic <code>viewBox</code>.</li>
+<li>For each cell returned by the algorithm, create an SVG
+<code>&lt;polygon&gt;</code> element.</li>
+<li>Map the computed <code>[x, y]</code> vertex pairs of the cell to the
+SVG <code>points</code> attribute in the format
+<code>"x1,y1 x2,y2 x3,y3 ..."</code>.</li>
+<li>Apply styling via CSS or inline SVG attributes such as
+<code>fill</code>, <code>stroke</code>, and
+<code>stroke-width</code>.</li>
+</ul>
+<h3 id="4-implementing-interactivity">4. Implementing Interactivity</h3>
+<p>To make the diagram interactive, bind JavaScript event handlers
+directly to the SVG elements or the parent container:</p>
+<ul>
+<li><strong>Hover and Selection States:</strong> Add
+<code>mouseenter</code> and <code>mouseleave</code> listeners to each
+<code>&lt;polygon&gt;</code> to dynamically update fill colors, trigger
+animations, or display context tooltips based on the underlying seed
+data.</li>
+<li><strong>Dynamic Point Generation:</strong> Listen for
+<code>pointermove</code> or <code>click</code> events on the
+<code>&lt;svg&gt;</code> container. When the cursor moves, update a
+specific seed's coordinates (or append a new point) and trigger a
+re-render.</li>
+<li><strong>Recomputation Loop:</strong> On state changes, recompute the
+Voronoi cells using the updated point set and refresh the
+<code>points</code> attribute of the corresponding
+<code>&lt;polygon&gt;</code> nodes.</li>
+</ul>
+<h3 id="5-performance-optimization">5. Performance Optimization</h3>
+<p>Real-time interaction requires fast rendering loops:</p>
+<ul>
+<li><strong>Direct DOM Updates:</strong> Instead of destroying and
+recreating SVG nodes on every frame, reuse existing
+<code>&lt;polygon&gt;</code> elements and mutate their
+<code>points</code> attributes directly.</li>
+<li><strong>Frame Throttling:</strong> Wrap recomputation and rendering
+calls inside <code>requestAnimationFrame</code> to ensure updates
+synchronize with the browser's refresh rate and avoid layout
+thrashing.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

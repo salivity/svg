@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dynamic Dark Mode in Standalone SVG Files - svg</title>
+    <meta name="description" content="This article explains how standalone Scalable Vector Graphics (SVG) can dynamically adapt to dark mode using internal CSS media queries and transitions. Because standalone SVGs cannot rely on external JavaScript or parent DOM manipulation when loaded via">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/dynamic-dark-mode-in-standalone-svg-files">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Dynamic Dark Mode in Standalone SVG Files - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/dynamic-dark-mode-in-standalone-svg-files" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how standalone Scalable Vector Graphics (SVG) can dynamically adapt to dark mode using internal CSS media queries and transitions. Because standalone SVGs cannot rely on external JavaScript or parent DOM manipulation when loaded via" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="dynamic-dark-mode-in-standalone-svg-files">Dynamic Dark Mode in
+Standalone SVG Files</h1>
+<p>This article explains how standalone Scalable Vector Graphics (SVG)
+can dynamically adapt to dark mode using internal CSS media queries and
+transitions. Because standalone SVGs cannot rely on external JavaScript
+or parent DOM manipulation when loaded via standard image contexts,
+styling must be entirely self-contained. By leveraging embedded styles,
+system-level color scheme queries, and CSS custom properties, designers
+and developers can create responsive, theme-aware vector assets that
+automatically adjust to user preferences.</p>
+<h2 id="embedded-css-and-prefers-color-scheme">Embedded CSS and
+<code>prefers-color-scheme</code></h2>
+<p>The core mechanism for enabling dynamic dark mode in a standalone SVG
+is the <code>@media (prefers-color-scheme: dark)</code> media query
+placed inside an internal <code>&lt;style&gt;</code> block. Standalone
+SVG files loaded in modern web browsers evaluate system media queries
+independently.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">xmlns=</span><span class="st">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="ot">viewBox=</span><span class="st">&quot;0 0 100 100&quot;</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">style</span>&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    :root {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      --primary-color: #1a1a1a;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      --bg-color: #ffffff;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    @media (prefers-color-scheme: dark) {</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      :root {</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>        --primary-color: #ffffff;</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>        --bg-color: #121212;</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    .background { fill: var(--bg-color); }</span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    .icon { fill: var(--primary-color); }</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">style</span>&gt;</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">rect</span> <span class="ot">class=</span><span class="st">&quot;background&quot;</span> <span class="ot">width=</span><span class="st">&quot;100&quot;</span> <span class="ot">height=</span><span class="st">&quot;100&quot;</span> /&gt;</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">circle</span> <span class="ot">class=</span><span class="st">&quot;icon&quot;</span> <span class="ot">cx=</span><span class="st">&quot;50&quot;</span> <span class="ot">cy=</span><span class="st">&quot;50&quot;</span> <span class="ot">r=</span><span class="st">&quot;30&quot;</span> /&gt;</span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<p>When a user switches their operating system or browser theme, the SVG
+automatically re-evaluates the media query and applies the corresponding
+color values.</p>
+<h2 id="implementing-smooth-css-transitions">Implementing Smooth CSS
+Transitions</h2>
+<p>To prevent abrupt color snapping during a theme switch, standard CSS
+transition properties can be applied directly to SVG presentation
+attributes like <code>fill</code>, <code>stroke</code>, and
+<code>stop-color</code>.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.background</span><span class="op">,</span> <span class="fu">.icon</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">transition</span><span class="ch">:</span> <span class="dv">fill</span> <span class="dv">0.3</span><span class="dt">s</span> <span class="dv">ease-in-out</span><span class="op">,</span> <span class="dv">stroke</span> <span class="dv">0.3</span><span class="dt">s</span> <span class="dv">ease-in-out</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Adding transitions ensures that changes between light and dark themes
+animate smoothly in environments where live switching occurs.</p>
+<h2 id="dynamic-gradients-and-complex-elements">Dynamic Gradients and
+Complex Elements</h2>
+<p>Dark mode adjustments are not limited to solid fills. Dynamic
+transitions can also manipulate SVG gradients by updating the
+<code>&lt;stop&gt;</code> element colors inside the embedded
+stylesheet:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">xmlns=</span><span class="st">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="ot">viewBox=</span><span class="st">&quot;0 0 100 100&quot;</span>&gt;</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">defs</span>&gt;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">linearGradient</span> <span class="ot">id=</span><span class="st">&quot;dynamicGradient&quot;</span> <span class="ot">x1=</span><span class="st">&quot;0%&quot;</span> <span class="ot">y1=</span><span class="st">&quot;0%&quot;</span> <span class="ot">x2=</span><span class="st">&quot;100%&quot;</span> <span class="ot">y2=</span><span class="st">&quot;100%&quot;</span>&gt;</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">stop</span> <span class="ot">offset=</span><span class="st">&quot;0%&quot;</span> <span class="ot">class=</span><span class="st">&quot;gradient-start&quot;</span> /&gt;</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">stop</span> <span class="ot">offset=</span><span class="st">&quot;100%&quot;</span> <span class="ot">class=</span><span class="st">&quot;gradient-end&quot;</span> /&gt;</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">linearGradient</span>&gt;</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">defs</span>&gt;</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">style</span>&gt;</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    .gradient-start { stop-color: #ff7e5f; transition: stop-color 0.4s ease; }</span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>    .gradient-end { stop-color: #feb47b; transition: stop-color 0.4s ease; }</span>
+<span id="cb3-11"><a href="#cb3-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-12"><a href="#cb3-12" aria-hidden="true" tabindex="-1"></a>    @media (prefers-color-scheme: dark) {</span>
+<span id="cb3-13"><a href="#cb3-13" aria-hidden="true" tabindex="-1"></a>      .gradient-start { stop-color: #2c3e50; }</span>
+<span id="cb3-14"><a href="#cb3-14" aria-hidden="true" tabindex="-1"></a>      .gradient-end { stop-color: #3498db; }</span>
+<span id="cb3-15"><a href="#cb3-15" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb3-16"><a href="#cb3-16" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">style</span>&gt;</span>
+<span id="cb3-17"><a href="#cb3-17" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">rect</span> <span class="ot">width=</span><span class="st">&quot;100&quot;</span> <span class="ot">height=</span><span class="st">&quot;100&quot;</span> <span class="ot">fill=</span><span class="st">&quot;url(#dynamicGradient)&quot;</span> /&gt;</span>
+<span id="cb3-18"><a href="#cb3-18" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<h2 id="contextual-constraints-and-browser-support">Contextual
+Constraints and Browser Support</h2>
+<p>When designing standalone SVGs for dynamic themes, several technical
+constraints must be observed:</p>
+<ul>
+<li><strong>No JavaScript Execution:</strong> Standalone SVGs loaded via
+<code>&lt;img&gt;</code> tags or CSS <code>background-image</code>
+properties run in an isolated security context where JavaScript
+execution is disabled. All theme-switching logic must be strictly
+declarative CSS.</li>
+<li><strong>Property Specificity:</strong> Direct presentation
+attributes (e.g., <code>&lt;circle fill="#fff"&gt;</code>) can override
+stylesheet definitions depending on selector specificity. It is best
+practice to define styling via CSS classes or use presentation
+attributes only as fallbacks.</li>
+<li><strong>Rendering Support:</strong> Modern Chromium, WebKit, and
+Gecko engines support <code>@media (prefers-color-scheme)</code> inside
+image contexts, ensuring consistent dynamic rendering across modern web
+platforms.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

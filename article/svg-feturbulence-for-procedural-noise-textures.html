@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG feTurbulence for Procedural Noise Textures - svg</title>
+    <meta name="description" content="The SVG <feTurbulence> filter primitive is the foundational tool for generating mathematical noise and organic, procedural textures natively in the browser without relying on external raster images. By synthesizing Perlin noise or fractal noise directly">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-feturbulence-for-procedural-noise-textures">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG feTurbulence for Procedural Noise Textures - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-feturbulence-for-procedural-noise-textures" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The SVG <feTurbulence> filter primitive is the foundational tool for generating mathematical noise and organic, procedural textures natively in the browser without relying on external raster images. By synthesizing Perlin noise or fractal noise directly" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-feturbulence-for-procedural-noise-textures">SVG feTurbulence
+for Procedural Noise Textures</h1>
+<p>The SVG <code>&lt;feTurbulence&gt;</code> filter primitive is the
+foundational tool for generating mathematical noise and organic,
+procedural textures natively in the browser without relying on external
+raster images. By synthesizing Perlin noise or fractal noise directly
+via vector math, this element allows web designers and developers to
+generate dynamic, resolution-independent textures such as clouds, paper
+grain, smoke, water ripples, and stone surfaces. This article covers how
+<code>&lt;feTurbulence&gt;</code> operates, breaks down its core
+attributes, and explains how it combines with other SVG filter
+primitives to create complex graphical effects.</p>
+<h2 id="how-feturbulence-generates-noise">How feTurbulence Generates
+Noise</h2>
+<p>At its core, <code>&lt;feTurbulence&gt;</code> uses the Perlin noise
+algorithm to calculate pseudo-random visual patterns based on
+mathematical functions rather than pre-rendered image files. Because the
+pattern is generated on the fly by the rendering engine, it produces
+infinitely scalable graphics with zero network overhead.</p>
+<p>The filter produces pixel values where the RGB and Alpha channels are
+filled with noise data, which can either be rendered directly as a
+background or used as an input map for downstream filter operations.</p>
+<h2 id="core-attributes-of-feturbulence">Core Attributes of
+feTurbulence</h2>
+<p>The appearance and structure of the generated noise are controlled
+through five primary attributes:</p>
+<ul>
+<li><strong><code>type</code></strong>: Determines the underlying noise
+algorithm.
+<ul>
+<li><code>fractalNoise</code>: Computes smooth, cloud-like transitions
+where low frequencies blend gradually, ideal for soft surfaces, fog, and
+paper textures.</li>
+<li><code>turbulence</code>: Uses absolute values of noise frequencies,
+resulting in sharp, high-contrast, creased transitions suited for water
+currents, flames, or bark.</li>
+</ul></li>
+<li><strong><code>baseFrequency</code></strong>: Governs the granularity
+and density of the noise. It accepts one or two values (e.g.,
+<code>0.05</code> or <code>0.01 0.1</code>) corresponding to the X and Y
+axes. Lower values yield large, sprawling patterns, while higher values
+create fine, tight grain.</li>
+<li><strong><code>numOctaves</code></strong>: Controls the level of
+detail by layering multiple frequencies of noise on top of each other. A
+value of <code>1</code> produces basic, low-detail noise, whereas values
+between <code>3</code> and <code>6</code> generate rich, natural
+variations. Increasing octaves beyond necessary levels increases GPU/CPU
+rendering overhead.</li>
+<li><strong><code>seed</code></strong>: Defines the initial
+pseudo-random starting state. Changing the seed alters the layout of the
+noise without changing its frequency or style.</li>
+<li><strong><code>stitchTiles</code></strong>: Accepts
+<code>stitch</code> or <code>noStitch</code>. Setting this to
+<code>stitch</code> ensures the noise repeats seamlessly at the
+boundaries of the filter region, making it ideal for tiling
+backgrounds.</li>
+</ul>
+<h2 id="combining-feturbulence-with-other-filters">Combining
+feTurbulence with Other Filters</h2>
+<p>While raw noise is useful on its own, the primary role of
+<code>&lt;feTurbulence&gt;</code> in modern UI design is serving as an
+engine for composite effects through filter chaining:</p>
+<ol type="1">
+<li><strong>Vector and Image Distortion
+(<code>&lt;feDisplacementMap&gt;</code>)</strong>: By piping
+<code>&lt;feTurbulence&gt;</code> into
+<code>&lt;feDisplacementMap&gt;</code>, the noise values shift the pixel
+coordinates of another graphic. This generates realistic glass
+refraction, fluid simulations, heat hazes, and hand-drawn sketch borders
+on clean vector paths.</li>
+<li><strong>Shading and Surface Depth
+(<code>&lt;feDiffuseLighting&gt;</code> and
+<code>&lt;feSpecularLighting&gt;</code>)</strong>: Noise generated by
+<code>&lt;feTurbulence&gt;</code> can act as an artificial height map
+(bump map). The lighting primitives process the noise luminance to
+simulate directional light, shadows, and reflections, turning flat
+shapes into textured 3D materials like leather, foil, or concrete.</li>
+<li><strong>Color and Contrast Mapping
+(<code>&lt;feColorMatrix&gt;</code>)</strong>: Raw turbulence output can
+be recolored, isolated by channel, or thresholded to produce stark
+patterns like camouflage, lightning bolts, or high-contrast marble
+veins.</li>
+</ol>
+<h2 id="advantages-of-using-feturbulence">Advantages of Using
+feTurbulence</h2>
+<p>Using <code>&lt;feTurbulence&gt;</code> over static raster assets
+offers three major technical benefits:</p>
+<ul>
+<li><strong>Zero Asset Weight</strong>: Textures require only a few
+lines of XML code, drastically reducing HTTP requests and payload
+sizes.</li>
+<li><strong>Infinite Scalability</strong>: As an SVG filter, procedural
+textures adjust dynamically to any screen resolution or viewport size
+without pixelation.</li>
+<li><strong>Animatable</strong>: By animating attributes like
+<code>baseFrequency</code> or <code>seed</code> using CSS or JavaScript,
+developers can create real-time dynamic effects like flowing water,
+drifting smoke, or interactive liquid distortion.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

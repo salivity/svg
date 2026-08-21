@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Raster Images in SVG Blur When Zoomed - svg</title>
+    <meta name="description" content="Embedding raster graphics within a Scalable Vector Graphics (SVG) file does not automatically make those raster assets infinitely scalable. While SVGs inherently scale without quality loss due to their mathematical, vector-based nature, embedded raster f">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/why-raster-images-in-svg-blur-when-zoomed">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Raster Images in SVG Blur When Zoomed - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/why-raster-images-in-svg-blur-when-zoomed" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Embedding raster graphics within a Scalable Vector Graphics (SVG) file does not automatically make those raster assets infinitely scalable. While SVGs inherently scale without quality loss due to their mathematical, vector-based nature, embedded raster f" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="why-raster-images-in-svg-blur-when-zoomed">Why Raster Images in
+SVG Blur When Zoomed</h1>
+<p>Embedding raster graphics within a Scalable Vector Graphics (SVG)
+file does not automatically make those raster assets infinitely
+scalable. While SVGs inherently scale without quality loss due to their
+mathematical, vector-based nature, embedded raster formats—such as PNG,
+JPEG, or WebP—rely on a fixed grid of pixels. When an SVG is enlarged or
+zoomed into, the vector elements remain crisp, but the embedded raster
+images must stretch to fit the larger display area, resulting in
+pixelation and blurry rendering.</p>
+<h3
+id="the-fundamental-difference-between-vector-and-raster-formats">The
+Fundamental Difference Between Vector and Raster Formats</h3>
+<p>SVG files use XML-based code to define shapes, lines, curves, and
+colors mathematically. When you zoom into a vector shape, the browser
+recalculates the mathematical coordinates in real time, rendering sharp
+edges at any resolution.</p>
+<p>In contrast, raster images are composed of a finite matrix of
+individual pixels with static color values. They have a fixed intrinsic
+resolution. When placed inside an SVG using the
+<code>&lt;image&gt;</code> tag, the raster file remains a pixel-based
+asset encapsulated within a vector container. The SVG wrapper does not
+alter the internal structure of the raster image or generate missing
+detail.</p>
+<h3 id="how-upscaling-and-interpolation-create-blur">How Upscaling and
+Interpolation Create Blur</h3>
+<p>When the viewport or scale of an SVG expands beyond the native pixel
+dimensions of the embedded raster image:</p>
+<ol type="1">
+<li><strong>Pixel Stretching:</strong> The browser must map a smaller
+number of source pixels across a larger number of display pixels.</li>
+<li><strong>Image Smoothing (Interpolation):</strong> By default,
+rendering engines apply interpolation algorithms—such as bilinear or
+bicubic filtering—to blend adjacent pixels and prevent hard, jagged
+edges. This smoothing process causes the characteristic "soft" or blurry
+look.</li>
+</ol>
+<h3 id="browser-rendering-attributes">Browser Rendering Attributes</h3>
+<p>CSS and SVG attributes also dictate how browsers handle raster
+magnification:</p>
+<ul>
+<li><strong>Default Smoothing:</strong> Most modern browsers apply
+anti-aliasing to scaled images to soften the transition between
+pixels.</li>
+<li><strong><code>image-rendering</code> Property:</strong> The CSS
+<code>image-rendering</code> property controls whether the browser
+prioritizes smoothness or sharpness. While values like
+<code>pixelated</code> or <code>crisp-edges</code> can stop the blurring
+effect by preserving sharp pixel borders (nearest-neighbor scaling),
+they reveal the blocky, jagged pixel structure instead of generating
+actual high-resolution detail.</li>
+</ul>
+<h3 id="how-to-prevent-blurriness-in-svg-files">How to Prevent
+Blurriness in SVG Files</h3>
+<p>To ensure graphics remain crisp when zoomed, several approaches can
+be taken:</p>
+<ul>
+<li><strong>Trace or Recreate as Pure Vectors:</strong> Convert raster
+artwork into native SVG paths using vector editing software. True paths,
+curves, and fills scale infinitely without losing quality.</li>
+<li><strong>Embed High-Resolution Assets:</strong> If a raster format is
+necessary, embed a higher-resolution version (such as 2x or 4x the
+intended display dimensions) so that zooming into the SVG still displays
+sufficient pixel density.</li>
+<li><strong>Use Native SVG Elements for Text and Simple Shapes:</strong>
+Replace embedded screenshots or flat graphics of UI elements, icons, and
+text with native <code>&lt;text&gt;</code>, <code>&lt;rect&gt;</code>,
+<code>&lt;path&gt;</code>, and <code>&lt;circle&gt;</code> SVG
+elements.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

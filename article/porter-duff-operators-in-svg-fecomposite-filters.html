@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Porter-Duff Operators in SVG feComposite Filters - svg</title>
+    <meta name="description" content="This article explains how the SVG <feComposite> filter primitive uses classical Porter-Duff compositing operators to combine two visual inputs at the pixel level. By manipulating the alpha channels and color values of source and destination graphics, dev">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/porter-duff-operators-in-svg-fecomposite-filters">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Porter-Duff Operators in SVG feComposite Filters - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/porter-duff-operators-in-svg-fecomposite-filters" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how the SVG <feComposite> filter primitive uses classical Porter-Duff compositing operators to combine two visual inputs at the pixel level. By manipulating the alpha channels and color values of source and destination graphics, dev" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="porter-duff-operators-in-svg-fecomposite-filters">Porter-Duff
+Operators in SVG feComposite Filters</h1>
+<p>This article explains how the SVG <code>&lt;feComposite&gt;</code>
+filter primitive uses classical Porter-Duff compositing operators to
+combine two visual inputs at the pixel level. By manipulating the alpha
+channels and color values of source and destination graphics, developers
+can achieve precise masking, clipping, and layering effects natively
+within SVG.</p>
+<h3 id="understanding-inputs-in-fecomposite">Understanding Inputs in
+feComposite</h3>
+<p>The <code>&lt;feComposite&gt;</code> element operates on two image
+inputs defined by the <code>in</code> and <code>in2</code>
+attributes:</p>
+<ul>
+<li><strong><code>in</code> (Source / <span
+class="math inline">\(A\)</span>):</strong> The primary graphic or
+filter result being composited.</li>
+<li><strong><code>in2</code> (Destination / <span
+class="math inline">\(B\)</span>):</strong> The background graphic or
+secondary filter result onto which the source is applied.</li>
+</ul>
+<p>Porter-Duff compositing calculates the output color (<span
+class="math inline">\(C\)</span>) and opacity (<span
+class="math inline">\(\alpha\)</span>) for every pixel based on the
+formula:</p>
+<p><span class="math display">\[\text{Output} = \alpha_A \cdot F_A \cdot
+C_A + \alpha_B \cdot F_B \cdot C_B\]</span></p>
+<p>Where <span class="math inline">\(F_A\)</span> and <span
+class="math inline">\(F_B\)</span> are weighting factors defined by the
+selected operator.</p>
+<hr />
+<h3 id="the-five-porter-duff-operators-in-svg">The Five Porter-Duff
+Operators in SVG</h3>
+<p>SVG defines five standard Porter-Duff operations via the
+<code>operator</code> attribute on <code>&lt;feComposite&gt;</code>:</p>
+<h4 id="1-over-default">1. <code>over</code> (Default)</h4>
+<p>Places the source graphic (<span class="math inline">\(A\)</span>) on
+top of the destination graphic (<span class="math inline">\(B\)</span>).
+Where the source is fully opaque, it completely covers the destination;
+where it is semi-transparent, the destination shows through.</p>
+<ul>
+<li><strong>Weighting:</strong> <span class="math inline">\(F_A =
+1\)</span>, <span class="math inline">\(F_B = 1 - \alpha_A\)</span></li>
+<li><strong>Use case:</strong> Standard visual layering.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">feComposite</span> <span class="ot">in=</span><span class="st">&quot;SourceGraphic&quot;</span> <span class="ot">in2=</span><span class="st">&quot;BackgroundImage&quot;</span> <span class="ot">operator=</span><span class="st">&quot;over&quot;</span> /&gt;</span></code></pre></div>
+<h4 id="2-in">2. <code>in</code></h4>
+<p>Renders only the parts of the source graphic (<span
+class="math inline">\(A\)</span>) that overlap the opaque regions of the
+destination graphic (<span class="math inline">\(B\)</span>). The
+destination graphic itself is not rendered.</p>
+<ul>
+<li><strong>Weighting:</strong> <span class="math inline">\(F_A =
+\alpha_B\)</span>, <span class="math inline">\(F_B = 0\)</span></li>
+<li><strong>Use case:</strong> Alpha masking or constraining a texture
+strictly to the shape of an underlying element.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">feComposite</span> <span class="ot">in=</span><span class="st">&quot;Texture&quot;</span> <span class="ot">in2=</span><span class="st">&quot;SourceGraphic&quot;</span> <span class="ot">operator=</span><span class="st">&quot;in&quot;</span> /&gt;</span></code></pre></div>
+<h4 id="3-out">3. <code>out</code></h4>
+<p>Renders only the parts of the source graphic (<span
+class="math inline">\(A\)</span>) that fall outside the opaque regions
+of the destination graphic (<span class="math inline">\(B\)</span>).
+Everything else, including the destination graphic, becomes
+transparent.</p>
+<ul>
+<li><strong>Weighting:</strong> <span class="math inline">\(F_A = 1 -
+\alpha_B\)</span>, <span class="math inline">\(F_B = 0\)</span></li>
+<li><strong>Use case:</strong> Inverted masking or punching custom
+cutouts into shapes.</li>
+</ul>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">feComposite</span> <span class="ot">in=</span><span class="st">&quot;ShapeA&quot;</span> <span class="ot">in2=</span><span class="st">&quot;ShapeB&quot;</span> <span class="ot">operator=</span><span class="st">&quot;out&quot;</span> /&gt;</span></code></pre></div>
+<h4 id="4-atop">4. <code>atop</code></h4>
+<p>Renders the source graphic (<span class="math inline">\(A\)</span>)
+only where the destination graphic (<span
+class="math inline">\(B\)</span>) is opaque, while keeping the remaining
+non-overlapping parts of the destination graphic visible underneath.</p>
+<ul>
+<li><strong>Weighting:</strong> <span class="math inline">\(F_A =
+\alpha_B\)</span>, <span class="math inline">\(F_B = 1 -
+\alpha_A\)</span></li>
+<li><strong>Use case:</strong> Applying highlights, shadows, or color
+overlays to an existing graphic without spilling over its
+boundaries.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">feComposite</span> <span class="ot">in=</span><span class="st">&quot;Highlight&quot;</span> <span class="ot">in2=</span><span class="st">&quot;BaseShape&quot;</span> <span class="ot">operator=</span><span class="st">&quot;atop&quot;</span> /&gt;</span></code></pre></div>
+<h4 id="5-xor">5. <code>xor</code></h4>
+<p>Renders the regions where either the source (<span
+class="math inline">\(A\)</span>) or destination (<span
+class="math inline">\(B\)</span>) exists, but makes the overlapping
+regions where both are opaque completely transparent.</p>
+<ul>
+<li><strong>Weighting:</strong> <span class="math inline">\(F_A = 1 -
+\alpha_B\)</span>, <span class="math inline">\(F_B = 1 -
+\alpha_A\)</span></li>
+<li><strong>Use case:</strong> Creating mutual exclusion effects, custom
+geometric intersections, and transparency cutouts.</li>
+</ul>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">feComposite</span> <span class="ot">in=</span><span class="st">&quot;ShapeA&quot;</span> <span class="ot">in2=</span><span class="st">&quot;ShapeB&quot;</span> <span class="ot">operator=</span><span class="st">&quot;xor&quot;</span> /&gt;</span></code></pre></div>
+<hr />
+<h3 id="alpha-channel-handling">Alpha Channel Handling</h3>
+<p>Porter-Duff algorithms in <code>&lt;feComposite&gt;</code> rely on
+premultiplied alpha color spaces. Before computing output pixels, color
+channels (<span class="math inline">\(R, G, B\)</span>) are multiplied
+by their respective alpha values. This ensures that anti-aliased edges
+and semi-transparent gradients blend smoothly without producing dark
+borders or color fringing artifacts.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

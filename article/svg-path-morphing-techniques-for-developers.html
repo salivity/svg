@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Path Morphing Techniques for Developers - svg</title>
+    <meta name="description" content="SVG path morphing is the process of smoothly transitioning one vector shape into another by interpolating the coordinate data defined within their path data (d) attributes. This article covers the fundamental mechanics required for vector interpolation a">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-path-morphing-techniques-for-developers">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG Path Morphing Techniques for Developers - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-path-morphing-techniques-for-developers" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="SVG path morphing is the process of smoothly transitioning one vector shape into another by interpolating the coordinate data defined within their path data (d) attributes. This article covers the fundamental mechanics required for vector interpolation a" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-path-morphing-techniques-for-developers">SVG Path Morphing
+Techniques for Developers</h1>
+<p>SVG path morphing is the process of smoothly transitioning one vector
+shape into another by interpolating the coordinate data defined within
+their path data (<code>d</code>) attributes. This article covers the
+fundamental mechanics required for vector interpolation and details the
+primary techniques used to implement morphing animations, including
+native SVG SMIL, modern CSS and the Web Animations API, and specialized
+JavaScript morphing libraries.</p>
+<h2 id="the-core-requirement-coordinate-and-vertex-matching">The Core
+Requirement: Coordinate and Vertex Matching</h2>
+<p>Path morphing works by interpolating numeric values between the
+source path and the target path. For basic native interpolation without
+external libraries, both paths must share:</p>
+<ul>
+<li><strong>The exact same number of path commands and
+vertices:</strong> If Path A has 4 cubic Bézier curves (<code>C</code>
+commands), Path B must also have 4 cubic Bézier curves.</li>
+<li><strong>The same command types in the same sequence:</strong>
+Converting a line segment (<code>L</code>) directly into a curve
+(<code>C</code>) can fail or produce erratic rendering in native
+renderers unless converted to equivalent curve commands.</li>
+<li><strong>Matching sub-paths:</strong> Compound paths with multiple
+sub-paths must have identical counts and winding directions.</li>
+</ul>
+<h2 id="1-native-svg-smil-animate">1. Native SVG SMIL
+(<code>&lt;animate&gt;</code>)</h2>
+<p>Synchronized Multimedia Integration Language (SMIL) is the built-in,
+declarative method for animating SVG elements without external
+dependencies.</p>
+<p>Developers use the <code>&lt;animate&gt;</code> tag nested directly
+inside a <code>&lt;path&gt;</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">viewBox=</span><span class="st">&quot;0 0 100 100&quot;</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">path</span> <span class="ot">d=</span><span class="st">&quot;M10,10 L90,10 L90,90 L10,90 Z&quot;</span>&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">animate</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      <span class="ot">attributeName=</span><span class="st">&quot;d&quot;</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="ot">dur=</span><span class="st">&quot;1s&quot;</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      <span class="ot">repeatCount=</span><span class="st">&quot;indefinite&quot;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="ot">to=</span><span class="st">&quot;M50,10 L90,50 L50,90 L10,50 Z&quot;</span> /&gt;</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">path</span>&gt;</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<ul>
+<li><strong>Pros:</strong> Zero JavaScript required; runs natively
+inside the browser engine.</li>
+<li><strong>Cons:</strong> Strictly requires identical vertex counts and
+structure; limited control over complex easing and interaction.</li>
+</ul>
+<h2 id="2-css-and-the-web-animations-api-waapi">2. CSS and the Web
+Animations API (WAAPI)</h2>
+<p>Modern browsers support animating the <code>d</code> property
+directly using CSS transitions, keyframes, or the Web Animations
+API.</p>
+<h3 id="css-keyframes">CSS Keyframes</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">@keyframes</span> morph {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dv">0%</span> {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    d<span class="ch">:</span> <span class="fu">path(</span><span class="st">&quot;M10,10 L90,10 L90,90 L10,90 Z&quot;</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="dv">100%</span> {</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    d<span class="ch">:</span> <span class="fu">path(</span><span class="st">&quot;M50,10 L90,50 L50,90 L10,50 Z&quot;</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a><span class="fu">.morphing-path</span> {</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">animation</span><span class="ch">:</span> <span class="dv">morph 2</span><span class="dt">s</span> <span class="dv">infinite</span> <span class="dv">alternate</span> <span class="dv">ease-in-out</span><span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="web-animations-api-javascript">Web Animations API
+(JavaScript)</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> pathElement <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&quot;#my-path&quot;</span>)<span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>pathElement<span class="op">.</span><span class="fu">animate</span>([</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">d</span><span class="op">:</span> <span class="st">&#39;path(&quot;M10,10 L90,10 L90,90 L10,90 Z&quot;)&#39;</span> }<span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">d</span><span class="op">:</span> <span class="st">&#39;path(&quot;M50,10 L90,50 L50,90 L10,50 Z&quot;)&#39;</span> }</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>]<span class="op">,</span> {</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">duration</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>  <span class="dt">iterations</span><span class="op">:</span> <span class="kw">Infinity</span><span class="op">,</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>  <span class="dt">direction</span><span class="op">:</span> <span class="st">&#39;alternate&#39;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<ul>
+<li><strong>Pros:</strong> Integrates directly with existing design
+systems and style sheets.</li>
+<li><strong>Cons:</strong> Strict vertex-matching requirements remain;
+cross-browser syntax variations may require fallback handling.</li>
+</ul>
+<h2 id="3-javascript-interpolation-libraries">3. JavaScript
+Interpolation Libraries</h2>
+<p>When morphing between arbitrary shapes with mismatched vertex counts
+(such as transforming a star with 10 points into a circle with hundreds
+of interpolated segments), native methods fail. Dedicated JavaScript
+libraries solve this by automatically subdividing paths and matching
+coordinates.</p>
+<h3 id="gsap-greensock-and-morphsvgplugin">GSAP (GreenSock) and
+MorphSVGPlugin</h3>
+<p>GSAP's MorphSVGPlugin is the industry standard for complex SVG
+morphing. It automatically balances path segments, adds points where
+necessary, and allows targeting different starting points.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>gsap<span class="op">.</span><span class="fu">to</span>(<span class="st">&quot;#shape1&quot;</span><span class="op">,</span> {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">duration</span><span class="op">:</span> <span class="fl">1.5</span><span class="op">,</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">morphSVG</span><span class="op">:</span> <span class="st">&quot;#shape2&quot;</span><span class="op">,</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">ease</span><span class="op">:</span> <span class="st">&quot;power2.inOut&quot;</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<h3 id="flubber">Flubber</h3>
+<p>Flubber is an open-source library designed specifically to
+interpolate between 2D shapes with different numbers of vertices, holes,
+and subpaths. It computes smooth intermediate path strings for use with
+requestAnimationFrame or D3.js.</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { interpolate } <span class="im">from</span> <span class="st">&quot;flubber&quot;</span><span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> interpolator <span class="op">=</span> <span class="fu">interpolate</span>(pathA<span class="op">,</span> pathB<span class="op">,</span> { <span class="dt">maxSegmentLength</span><span class="op">:</span> <span class="dv">2</span> })<span class="op">;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Returns path string for a given progress (0 to 1)</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> currentPath <span class="op">=</span> <span class="fu">interpolator</span>(<span class="fl">0.5</span>)<span class="op">;</span> </span></code></pre></div>
+<h3 id="kutejs">KUTE.js</h3>
+<p>KUTE.js includes an SVG morphing component that normalizes paths by
+equalizing points and computing bezier curves before animating.</p>
+<h2 id="pre-processing-workflow-for-optimal-results">Pre-Processing
+Workflow for Optimal Results</h2>
+<p>To achieve clean morphing animations without visual distortion or
+code bloat:</p>
+<ol type="1">
+<li><strong>Design with Matching Nodes:</strong> When using native CSS
+or SMIL, create shapes in vector tools (like Figma or Illustrator) by
+transforming the original shape rather than drawing a new one from
+scratch.</li>
+<li><strong>Convert Shapes to Paths:</strong> Convert all primitive
+elements (<code>&lt;rect&gt;</code>, <code>&lt;circle&gt;</code>,
+<code>&lt;polygon&gt;</code>) to standardized <code>&lt;path&gt;</code>
+elements using cubic Bézier curves (<code>C</code>) throughout.</li>
+<li><strong>Normalize Starting Points:</strong> Ensure the first point
+(<code>M</code> coordinate) of both shapes starts in a similar relative
+position (e.g., top-left or top-center) to avoid unnatural shape
+rotation during the transition.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

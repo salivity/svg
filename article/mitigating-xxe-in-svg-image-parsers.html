@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mitigating XXE in SVG Image Parsers - svg</title>
+    <meta name="description" content="Scalable Vector Graphics (SVG) are XML-based image files that allow rich, scalable vector visuals, but their underlying XML structure exposes server-side applications to XML External Entity (XXE) injection vulnerabilities. When an application processes u">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/mitigating-xxe-in-svg-image-parsers">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Mitigating XXE in SVG Image Parsers - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/mitigating-xxe-in-svg-image-parsers" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Scalable Vector Graphics (SVG) are XML-based image files that allow rich, scalable vector visuals, but their underlying XML structure exposes server-side applications to XML External Entity (XXE) injection vulnerabilities. When an application processes u" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="mitigating-xxe-in-svg-image-parsers">Mitigating XXE in SVG Image
+Parsers</h1>
+<p>Scalable Vector Graphics (SVG) are XML-based image files that allow
+rich, scalable vector visuals, but their underlying XML structure
+exposes server-side applications to XML External Entity (XXE) injection
+vulnerabilities. When an application processes user-uploaded SVGs
+without proper safeguards, attackers can define custom XML entities to
+read local files, execute Server-Side Request Forgery (SSRF), or cause
+Denial of Service (DoS). This article outlines how server-side image
+processing libraries and parsers defend against XXE attacks through
+parser reconfiguration, entity restriction, sanitization, and sandboxed
+rendering.</p>
+<h2 id="why-svgs-are-vulnerable-to-xxe">Why SVGs Are Vulnerable to
+XXE</h2>
+<p>Unlike binary image formats like JPEG or PNG, an SVG file is plain
+XML text. Default XML parser configurations often support features such
+as Document Type Definitions (DTDs) and external entity resolution:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">&lt;?xml</span> <span class="ot">version=</span><span class="st">&quot;1.0&quot;</span> <span class="ot">encoding=</span><span class="st">&quot;UTF-8&quot;</span><span class="fu">?&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;!DOCTYPE</span> <span class="dt">svg</span> <span class="dt">[</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;!ENTITY</span> <span class="dt">xxe</span> SYSTEM <span class="st">&quot;file:///etc/passwd&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="dt">]&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">xmlns=</span><span class="st">&quot;http://www.w3.org/2000/svg&quot;</span>&gt;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">text</span>&gt;<span class="dv">&amp;xxe;</span>&lt;/<span class="kw">text</span>&gt;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<p>If a server-side parser (such as ImageMagick, Batik, or libxml-based
+tools) attempts to render or extract metadata from this file, it may
+resolve the entity <code>&amp;xxe;</code> and expose sensitive server
+contents or initiate unauthorized outbound network requests.</p>
+<h2 id="key-mitigation-strategies">Key Mitigation Strategies</h2>
+<h3 id="1-disabling-document-type-definitions-dtds">1. Disabling
+Document Type Definitions (DTDs)</h3>
+<p>The most effective way to eliminate XXE vulnerabilities is to
+completely disable DTD parsing in the underlying XML engine. Since
+valid, modern SVGs rarely require custom DTDs for styling or rendering,
+turning off DTD processing completely removes the parsing mechanism
+attackers exploit.</p>
+<ul>
+<li><strong>Java (DOM/SAX/Batik):</strong> Set
+<code>http://apache.org/xml/features/disallow-doctype-decl</code> to
+<code>true</code>.</li>
+<li><strong>Python (<code>defusedxml</code> /
+<code>lxml</code>):</strong> Use <code>defusedxml</code>, which
+automatically forbids DTDs and external entities, or set
+<code>resolve_entities=False</code> and <code>load_dtd=False</code> in
+<code>lxml</code>.</li>
+<li><strong>C/C++ (<code>libxml2</code>):</strong> Avoid setting the
+<code>XML_PARSE_NOENT</code> flag, as it expands entities by default,
+and ensure <code>XML_PARSE_DTDLOAD</code> is disabled.</li>
+</ul>
+<h3 id="2-disabling-external-entity-resolution">2. Disabling External
+Entity Resolution</h3>
+<p>If DTDs cannot be disabled entirely, parsers must be configured to
+prohibit external entity fetching and parameter entities:</p>
+<ul>
+<li>Set <code>external-general-entities</code> and
+<code>external-parameter-entities</code> feature flags to
+<code>false</code>.</li>
+<li>Enable the <code>XML_PARSE_NONET</code> option in
+<code>libxml2</code>-based parsers to block any network access during
+XML parsing, preventing SSRF attacks via remote URLs in
+<code>SYSTEM</code> identifiers.</li>
+<li>Set a custom entity resolver that returns an empty stream or throws
+an exception whenever an external resource is requested.</li>
+</ul>
+<h3 id="3-using-safe-parsing-wrappers">3. Using Safe Parsing
+Wrappers</h3>
+<p>Standard image libraries often delegate XML parsing to underlying
+system packages. Hardening requires using secure library wrappers or
+configurations:</p>
+<ul>
+<li><strong>Python:</strong> Replace standard <code>xml.etree</code> or
+unsafe <code>lxml</code> implementations with the
+<code>defusedxml</code> package when parsing untrusted SVG uploads.</li>
+<li><strong>Node.js:</strong> When using libraries like
+<code>sharp</code> or <code>librsvg</code>, ensure underlying
+dependencies are updated to versions that disable entity expansion by
+default.</li>
+<li><strong>ImageMagick:</strong> Update <code>policy.xml</code> to
+restrict or disable vulnerable coders (<code>MVG</code>,
+<code>MSVG</code>, or <code>HTTPS</code> delegates) and enforce strict
+resource limits to counter XML entity expansion (Billion Laughs)
+attacks.</li>
+</ul>
+<h3 id="4-input-sanitization">4. Input Sanitization</h3>
+<p>Before passing an SVG to an image parser or rasterizer, sanitize the
+raw XML payload to strip dangerous elements and attributes:</p>
+<ul>
+<li>Remove all <code>&lt;!DOCTYPE&gt;</code> declarations and
+<code>&lt;!ENTITY&gt;</code> tags using regular expressions or
+specialized sanitizers (e.g., <code>DOMPurify</code> with SVG profiles
+or <code>svg-sanitizer</code>).</li>
+<li>Strip interactive or scriptable elements such as
+<code>&lt;script&gt;</code>, <code>onload</code>, and
+<code>&lt;foreignObject&gt;</code> tags to prevent Cross-Site Scripting
+(XSS) if the SVG is served back to end-users.</li>
+</ul>
+<h3 id="5-rasterization-and-sandboxing">5. Rasterization and
+Sandboxing</h3>
+<p>When user-uploaded SVGs must be converted to raster images (like PNG
+or JPEG) for storage or display:</p>
+<ul>
+<li><strong>Isolated Execution:</strong> Run conversion utilities (such
+as headless Chrome or Inkscape) in an isolated container or restricted
+execution context with no network access and read-only filesystem
+privileges.</li>
+<li><strong>Resource Limits:</strong> Implement strict memory and CPU
+limits to mitigate DoS attacks caused by nested entity loops (Billion
+Laughs) or recursive XML payloads.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Creating Draggable Physics Diagrams with SVG - svg</title>
+    <meta name="description" content="Interactive educational platforms rely on Scalable Vector Graphics (SVG) to create responsive, high-precision physics simulations that students can manipulate directly in their browsers. By combining the resolution-independent vector rendering of SVG wit">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/creating-draggable-physics-diagrams-with-svg">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Creating Draggable Physics Diagrams with SVG - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/creating-draggable-physics-diagrams-with-svg" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Interactive educational platforms rely on Scalable Vector Graphics (SVG) to create responsive, high-precision physics simulations that students can manipulate directly in their browsers. By combining the resolution-independent vector rendering of SVG wit" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="creating-draggable-physics-diagrams-with-svg">Creating Draggable
+Physics Diagrams with SVG</h1>
+<p>Interactive educational platforms rely on Scalable Vector Graphics
+(SVG) to create responsive, high-precision physics simulations that
+students can manipulate directly in their browsers. By combining the
+resolution-independent vector rendering of SVG with JavaScript event
+handling and physics logic, these platforms allow learners to drag
+components like masses, pulleys, vectors, and charges while dynamically
+recalculating equations and visual states in real time.</p>
+<h3 id="resolution-independence-and-geometric-precision">Resolution
+Independence and Geometric Precision</h3>
+<p>Physics diagrams require exact spatial representations, such as
+alignment along axes, geometric angles, and clear labeling of forces.
+Unlike raster-based formats, SVG renders elements using mathematical
+vectors defined directly in the Document Object Model (DOM).</p>
+<ul>
+<li><strong>Native Shapes:</strong> Platforms use primitives like
+<code>&lt;circle&gt;</code> for point masses, <code>&lt;rect&gt;</code>
+for blocks on inclined planes, and <code>&lt;line&gt;</code> or
+<code>&lt;path&gt;</code> elements with <code>&lt;marker&gt;</code> tags
+to draw directional force vectors.</li>
+<li><strong>Crisp Text and Math:</strong> Labels, measurements, and
+LaTeX-rendered equations scale cleanly across any display density
+without pixelation.</li>
+<li><strong>Coordinate Mapping:</strong> SVG viewports provide a
+dedicated Cartesian coordinate space, making it easy to map real-world
+physical units (such as meters or pixels per second) directly to SVG
+coordinates using the <code>viewBox</code> attribute.</li>
+</ul>
+<h3 id="pointer-event-handling-and-drag-logic">Pointer Event Handling
+and Drag Logic</h3>
+<p>To make SVG elements draggable, platforms bind standard Pointer
+Events (<code>pointerdown</code>, <code>pointermove</code>, and
+<code>pointerup</code>) directly to individual SVG nodes.</p>
+<ol type="1">
+<li><strong>Capture Interaction:</strong> When a user clicks or touches
+a draggable element, a <code>pointerdown</code> listener records the
+initial pointer position and sets a dragging state.</li>
+<li><strong>Coordinate Normalization:</strong> Screen pixel coordinates
+from the mouse or touch event do not automatically match the internal
+SVG coordinate space. Developers use the SVG element’s Current
+Transformation Matrix (<code>getScreenCTM()</code>) to convert global
+client coordinates (<code>clientX</code>, <code>clientY</code>) into the
+local SVG coordinate space: <span class="math display">\[\text{SVG
+Point} = \text{Screen Point} \times (\text{Screen
+CTM})^{-1}\]</span></li>
+<li><strong>Continuous Updates:</strong> As the pointer moves, the
+<code>pointermove</code> event updates the target element’s positional
+attributes (such as <code>cx</code>, <code>cy</code>, or
+<code>transform="translate(x, y)"</code>).</li>
+<li><strong>Release:</strong> The <code>pointerup</code> and
+<code>pointercancel</code> events release the target and finalize the
+physical state.</li>
+</ol>
+<h3 id="real-time-physics-calculation-and-dynamic-constraints">Real-Time
+Physics Calculation and Dynamic Constraints</h3>
+<p>Dragging an element rarely changes only that single object; in
+physics, manipulating one variable influences the entire system.
+Platforms integrate mathematical constraints into the drag loop:</p>
+<ul>
+<li><strong>Kinematic Constraints:</strong> When a user drags a pendulum
+bob, the code restricts movement to a fixed radius arc around the pivot
+point. When dragging a mass on an inclined plane, motion is constrained
+to a single 1D axis along the slope.</li>
+<li><strong>Vector Realignment:</strong> Moving a force vector
+automatically recalculates its magnitude and angle, instantly updating
+the underlying SVG arrow length and any accompanying numerical
+readouts.</li>
+<li><strong>Connected Elements:</strong> Dynamic components such as
+springs or ropes are rendered using dynamic <code>&lt;path&gt;</code>
+elements. As endpoints move, the platform recalculates the Bezier curves
+or zig-zag path coordinates to realistically depict stretching or
+tension.</li>
+</ul>
+<h3 id="reactive-state-management-and-frameworks">Reactive State
+Management and Frameworks</h3>
+<p>Modern educational tools often build these diagrams using reactive UI
+libraries like React, Vue, or Svelte, or visualization engines like
+D3.js. These frameworks bind physical properties—such as mass position,
+velocity, and applied force—directly to the SVG element attributes. When
+a user drags an object, the component updates its state, triggering a
+clean re-render of dependent elements, graphs, and numeric readouts at
+60 frames per second.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

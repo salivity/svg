@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Use Design Tokens to Change SVG Icon Colors - svg</title>
+    <meta name="description" content="Using design tokens to manage SVG icon colors creates a scalable, consistent theming architecture across web and mobile applications. By abstracting color definitions into centralized design tokens and coupling them with CSS custom properties, developers">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-to-use-design-tokens-to-change-svg-icon-colors">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Use Design Tokens to Change SVG Icon Colors - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-to-use-design-tokens-to-change-svg-icon-colors" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Using design tokens to manage SVG icon colors creates a scalable, consistent theming architecture across web and mobile applications. By abstracting color definitions into centralized design tokens and coupling them with CSS custom properties, developers" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-use-design-tokens-to-change-svg-icon-colors">How to Use
+Design Tokens to Change SVG Icon Colors</h1>
+<p>Using design tokens to manage SVG icon colors creates a scalable,
+consistent theming architecture across web and mobile applications. By
+abstracting color definitions into centralized design tokens and
+coupling them with CSS custom properties, developers can dynamically
+update the appearance of shared SVG icon libraries across themes,
+states, and brands without duplicating icon files or hardcoding hex
+codes.</p>
+<h3 id="1-configure-svgs-for-dynamic-inheritance">1. Configure SVGs for
+Dynamic Inheritance</h3>
+<p>To make an SVG responsive to external color definitions, remove any
+hardcoded hex values (<code>#000000</code>, <code>#FFFFFF</code>, etc.)
+from the <code>fill</code> or <code>stroke</code> attributes within the
+SVG code. Replace these values with <code>currentColor</code> or
+reference a CSS variable directly.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Example Icon using currentColor --&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">xmlns=</span><span class="st">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="ot">viewBox=</span><span class="st">&quot;0 0 24 24&quot;</span> <span class="ot">width=</span><span class="st">&quot;24&quot;</span> <span class="ot">height=</span><span class="st">&quot;24&quot;</span>&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">path</span> <span class="ot">fill=</span><span class="st">&quot;currentColor&quot;</span> <span class="ot">d=</span><span class="st">&quot;M12 2L2 22h20L12 2z&quot;</span> /&gt;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<p>When <code>currentColor</code> is used, the SVG automatically
+inherits the CSS <code>color</code> value applied to its container or
+directly to the SVG element.</p>
+<h3 id="2-define-color-tokens-as-css-variables">2. Define Color Tokens
+as CSS Variables</h3>
+<p>Design tokens are typically defined in a design system tool (like
+Figma or Style Dictionary) and exported into platform-specific formats.
+In web environments, export these tokens as CSS custom properties
+defined on the <code>:root</code> or specific scope elements.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="in">:root</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* Global Brand Tokens */</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="va">--token-color-primary</span><span class="ch">:</span> <span class="cn">#0066cc</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="va">--token-color-secondary</span><span class="ch">:</span> <span class="cn">#6c757d</span><span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>  <span class="va">--token-color-interactive</span><span class="ch">:</span> <span class="cn">#0052a3</span><span class="op">;</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="co">/* Semantic Theme Tokens */</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="va">--token-icon-default</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--token-color-primary</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  <span class="va">--token-icon-muted</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--token-color-secondary</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a><span class="ex">[</span><span class="ss">data-theme</span><span class="op">=</span><span class="st">&quot;dark&quot;</span><span class="ex">]</span> {</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  <span class="va">--token-icon-default</span><span class="ch">:</span> <span class="cn">#66b2ff</span><span class="op">;</span></span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>  <span class="va">--token-icon-muted</span><span class="ch">:</span> <span class="cn">#a0aec0</span><span class="op">;</span></span>
+<span id="cb2-15"><a href="#cb2-15" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="3-apply-tokens-to-shared-icon-sets">3. Apply Tokens to Shared
+Icon Sets</h3>
+<p>Depending on how the shared icon set is implemented, apply design
+tokens using one of the following approaches:</p>
+<h4 id="method-a-inline-svgs-or-component-wrappers">Method A: Inline
+SVGs or Component Wrappers</h4>
+<p>If icons are rendered as components (e.g., React, Vue, Web
+Components), bind the design token directly to the component's
+style:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.icon</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--token-icon-default</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">transition</span><span class="ch">:</span> <span class="dv">color</span> <span class="dv">0.2</span><span class="dt">s</span> <span class="dv">ease-in-out</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">.icon--muted</span> {</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--token-icon-muted</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h4 id="method-b-svg-sprite-sheets-with-use">Method B: SVG Sprite Sheets
+with <code>&lt;use&gt;</code></h4>
+<p>When loading icons from an external or inline SVG sprite sheet, CSS
+custom properties penetrate the Shadow DOM/cloned tree boundary created
+by the <code>&lt;use&gt;</code> tag:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- SVG Sprite Instance --&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">svg</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;icon icon-action&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">use</span><span class="ot"> href</span><span class="op">=</span><span class="st">&quot;#icon-star&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">use</span><span class="dt">&gt;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">svg</span><span class="dt">&gt;</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.icon-action</span> {</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--token-color-interactive</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="4-dynamically-altering-tokens-in-real-time">4. Dynamically
+Altering Tokens in Real Time</h3>
+<p>Because design tokens are mapped to CSS custom properties, you can
+change icon colors globally or per context without re-rendering or
+downloading new SVG files:</p>
+<ul>
+<li><strong>Theme Switching:</strong> Changing the
+<code>data-theme</code> attribute on the root document
+(<code>&lt;html data-theme="dark"&gt;</code>) cascades new token values
+to all rendered SVGs immediately.</li>
+<li><strong>Component-Level Overrides:</strong> Scope tokens locally by
+declaring new variable assignments on a specific wrapper:
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.alert-box--danger</span> {</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="va">--token-icon-default</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--token-color-danger</span><span class="op">,</span> <span class="cn">#e53e3e</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div></li>
+<li><strong>Runtime Customization:</strong> Update tokens
+programmatically using JavaScript to support user-selected custom
+themes:
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="bu">document</span><span class="op">.</span><span class="at">documentElement</span><span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="fu">setProperty</span>(<span class="st">&#39;--token-icon-default&#39;</span><span class="op">,</span> <span class="st">&#39;#ff5722&#39;</span>)<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<p>This decoupled architecture keeps the SVG icon set lightweight,
+reusable, and fully synchronized with the design system's overarching
+color palette.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

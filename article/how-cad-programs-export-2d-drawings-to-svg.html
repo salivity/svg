@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How CAD Programs Export 2D Drawings to SVG - svg</title>
+    <meta name="description" content="Exporting 2D technical drawings from Computer-Aided Design (CAD) software to Scalable Vector Graphics (SVG) involves translating precise, mathematically defined engineering geometry into standard XML-based vector code. This process requires reading the i">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-cad-programs-export-2d-drawings-to-svg">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How CAD Programs Export 2D Drawings to SVG - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-cad-programs-export-2d-drawings-to-svg" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Exporting 2D technical drawings from Computer-Aided Design (CAD) software to Scalable Vector Graphics (SVG) involves translating precise, mathematically defined engineering geometry into standard XML-based vector code. This process requires reading the i" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-cad-programs-export-2d-drawings-to-svg">How CAD Programs
+Export 2D Drawings to SVG</h1>
+<p>Exporting 2D technical drawings from Computer-Aided Design (CAD)
+software to Scalable Vector Graphics (SVG) involves translating precise,
+mathematically defined engineering geometry into standard XML-based
+vector code. This process requires reading the internal CAD entities,
+mapping coordinates and unit scales, converting geometric primitives
+into SVG-compatible paths, preserving organizational hierarchies like
+layers and blocks, translating line styles, and formatting text
+elements. The end result is a resolution-independent, web-ready vector
+file that accurately reflects the original engineering drawing.</p>
+<h3 id="1-extraction-of-geometric-entities">1. Extraction of Geometric
+Entities</h3>
+<p>CAD systems store 2D geometry as precise mathematical formulas (such
+as lines, arcs, circles, ellipses, and spline curves). During export,
+the CAD engine traverses the drawing database and extracts these
+entities. Because SVG natively supports basic shapes and vector paths,
+the exporter converts CAD primitives into corresponding SVG
+elements:</p>
+<ul>
+<li><strong>Lines and Polylines:</strong> Mapped to
+<code>&lt;line&gt;</code>, <code>&lt;polyline&gt;</code>, or
+<code>&lt;path&gt;</code> elements using move (<code>M</code>) and line
+(<code>L</code>) commands.</li>
+<li><strong>Arcs and Circles:</strong> Converted to native
+<code>&lt;circle&gt;</code>, <code>&lt;ellipse&gt;</code>, or elliptical
+arc curve commands (<code>A</code>) within a
+<code>&lt;path&gt;</code>.</li>
+<li><strong>Splines (NURBS/Bézier):</strong> Converted into SVG cubic
+(<code>C</code>) or quadratic (<code>Q</code>) Bézier curve commands. If
+an advanced spline cannot be mapped directly, it is tessellated into a
+series of closely spaced Bézier segments or polyline
+approximations.</li>
+</ul>
+<h3 id="2-coordinate-system-and-scale-transformation">2. Coordinate
+System and Scale Transformation</h3>
+<p>CAD programs typically use a Cartesian coordinate system where the
+origin <span class="math inline">\((0,0)\)</span> is at the bottom-left
+and the Y-axis points upward, operating in real-world physical units
+(such as millimeters or inches). Conversely, SVG uses a screen-based
+coordinate system where <span class="math inline">\((0,0)\)</span>
+resides at the top-left and the Y-axis points downward.</p>
+<p>To bridge this difference, the export engine performs an affine
+matrix transformation:</p>
+<ol type="1">
+<li><strong>Y-Axis Inversion:</strong> Inverts the Y-coordinates across
+the drawing height.</li>
+<li><strong>Translation and Bounds Calculation:</strong> Calculates the
+bounding box of the drawing to set the SVG <code>viewBox</code> and
+<code>width</code>/<code>height</code> attributes.</li>
+<li><strong>Unit Scaling:</strong> Scales real-world units into SVG user
+units (points or pixels) based on the specified output scale (e.g., 1:1
+or fitted to page).</li>
+</ol>
+<h3 id="3-layer-and-block-hierarchy-mapping">3. Layer and Block
+Hierarchy Mapping</h3>
+<p>Organizational structures in CAD drawings are mapped to SVG container
+elements:</p>
+<ul>
+<li><strong>Layers:</strong> Exported as SVG group elements
+(<code>&lt;g&gt;</code>), often retaining the CAD layer names as
+<code>id</code> or <code>class</code> attributes (e.g.,
+<code>&lt;g id="Centerlines"&gt;</code>).</li>
+<li><strong>Blocks and Symbols:</strong> Reusable components are defined
+once in the SVG <code>&lt;defs&gt;</code> section and referenced
+throughout the document using <code>&lt;use&gt;</code> elements,
+minimizing file size and preserving drawing structure.</li>
+<li><strong>Visibility:</strong> Frozen or hidden layers are either
+omitted entirely or given a <code>display="none"</code> or
+<code>visibility="hidden"</code> attribute.</li>
+</ul>
+<h3 id="4-translation-of-line-properties-and-styles">4. Translation of
+Line Properties and Styles</h3>
+<p>Technical drawings rely on standardized line weights, colors, and
+patterns (such as hidden lines or centerlines). The export engine
+translates these properties into SVG presentation attributes or inline
+CSS:</p>
+<ul>
+<li><strong>Stroke Color:</strong> Mapped to the <code>stroke</code>
+attribute using hex codes or RGB values.</li>
+<li><strong>Line Weight:</strong> Mapped to <code>stroke-width</code>,
+scaled appropriately to match the target viewport resolution.</li>
+<li><strong>Line Patterns:</strong> Converted to the
+<code>stroke-dasharray</code> attribute, defining the exact lengths of
+alternating dashes and spaces.</li>
+<li><strong>Caps and Joins:</strong> Translated using
+<code>stroke-linecap</code> and <code>stroke-linejoin</code> to maintain
+precise corner and endpoint geometry.</li>
+</ul>
+<h3 id="5-text-and-dimension-handling">5. Text and Dimension
+Handling</h3>
+<p>CAD drawings contain annotations, dimensions, and title block text.
+Exporters handle these using one of two methods:</p>
+<ul>
+<li><strong>Live Text:</strong> Preserved as native
+<code>&lt;text&gt;</code> and <code>&lt;tspan&gt;</code> elements
+containing font family, size, alignment, and transform attributes. This
+keeps the text selectable and searchable, though it requires the viewing
+environment to have the specified font installed.</li>
+<li><strong>Outlined Text:</strong> Converted directly into vector paths
+(<code>&lt;path&gt;</code>). While this removes text searchability, it
+guarantees that custom CAD fonts, symbols, and geometric tolerance
+callouts display identically on any device without font-substitution
+errors.</li>
+</ul>
+<h3 id="6-code-optimization-and-output-generation">6. Code Optimization
+and Output Generation</h3>
+<p>In the final stage, the exporter compiles all elements into an XML
+tree, optimizes the data, and writes the <code>.svg</code> file.
+Optimization routines often round floating-point coordinates to a
+user-defined decimal precision to reduce file size, strip unused
+definitions, and ensure XML compliance for broad browser and vector
+editor compatibility.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

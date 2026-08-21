@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How SVG Non-Scaling-Stroke Maintains Line Width - svg</title>
+    <meta name="description" content="This article explains how the vector-effect="non-scaling-stroke" property functions in Scalable Vector Graphics (SVG) to maintain consistent line thicknesses. By default, geometric transformations that scale an SVG element will also scale its stroke widt">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-svg-non-scaling-stroke-maintains-line-width">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How SVG Non-Scaling-Stroke Maintains Line Width - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-svg-non-scaling-stroke-maintains-line-width" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how the vector-effect="non-scaling-stroke" property functions in Scalable Vector Graphics (SVG) to maintain consistent line thicknesses. By default, geometric transformations that scale an SVG element will also scale its stroke widt" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-svg-non-scaling-stroke-maintains-line-width">How SVG
+Non-Scaling-Stroke Maintains Line Width</h1>
+<p>This article explains how the
+<code>vector-effect="non-scaling-stroke"</code> property functions in
+Scalable Vector Graphics (SVG) to maintain consistent line thicknesses.
+By default, geometric transformations that scale an SVG element will
+also scale its stroke width proportionally. Applying
+<code>non-scaling-stroke</code> overrides this behavior, ensuring that
+lines retain their exact defined pixel or unit width regardless of
+element scaling, coordinate transformations, or user zoom
+interactions.</p>
+<h2 id="the-default-scaling-problem-in-svg">The Default Scaling Problem
+in SVG</h2>
+<p>In standard SVG rendering, elements exist within a user coordinate
+system. When a transformation—such as a
+<code>transform="scale(...)"</code>, a changing <code>viewBox</code>, or
+a responsive container resize—is applied to an SVG shape, the coordinate
+space itself expands or contracts.</p>
+<p>Because stroke thickness is defined within this local coordinate
+system, it scales directly with the geometry. For example, a path with
+<code>stroke-width="2"</code> inside an SVG that is scaled up by a
+factor of 4 will visually render with an effective stroke width of 8
+pixels. While this is mathematically correct for proportional vector
+scaling, it is often undesirable for user interface icons, responsive
+borders, and interactive mapping systems.</p>
+<h2 id="how-non-scaling-stroke-works-internally">How non-scaling-stroke
+Works Internally</h2>
+<p>The <code>vector-effect</code> attribute modifies how the SVG
+rendering engine calculates stroke geometry relative to the Current
+Transformation Matrix (CTM).</p>
+<p>When <code>vector-effect="non-scaling-stroke"</code> is declared on
+an SVG element:</p>
+<ol type="1">
+<li><strong>Geometry Transformation:</strong> The shape's underlying
+path, vertices, and fill boundaries are transformed according to the
+local matrix and parent transformations as usual.</li>
+<li><strong>Stroke Decoupling:</strong> Before rasterizing the outline,
+the rendering engine decouples the stroke width from the local
+coordinate space. It references the host viewport coordinate system
+(device space) rather than the local user space.</li>
+<li><strong>Inverse Transformation:</strong> Mathematically, the
+renderer calculates the scale component of the combined transformation
+matrix and applies its inverse to the stroke width. If the shape is
+scaled by <span class="math inline">\(S_x\)</span> and <span
+class="math inline">\(S_y\)</span>, the stroke width is adjusted by
+<span class="math inline">\(1 / S\)</span> before rendering.</li>
+<li><strong>Final Rasterization:</strong> The stroke is drawn along the
+transformed path using the original, unscaled measurement defined in the
+<code>stroke-width</code> attribute.</li>
+</ol>
+<p>As a result, zooming into the graphic makes the shapes larger, but
+the borders and paths remain sharp, crisp, and visually identical in
+thickness.</p>
+<h2 id="implementation-methods">Implementation Methods</h2>
+<p>The non-scaling behavior can be applied directly within the SVG
+markup or through CSS.</p>
+<h3 id="svg-attribute">SVG Attribute</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">viewBox=</span><span class="st">&quot;0 0 100 100&quot;</span> <span class="ot">width=</span><span class="st">&quot;400&quot;</span> <span class="ot">height=</span><span class="st">&quot;400&quot;</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">circle</span> <span class="ot">cx=</span><span class="st">&quot;50&quot;</span> <span class="ot">cy=</span><span class="st">&quot;50&quot;</span> <span class="ot">r=</span><span class="st">&quot;40&quot;</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>          <span class="ot">stroke=</span><span class="st">&quot;black&quot;</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>          <span class="ot">stroke-width=</span><span class="st">&quot;2&quot;</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>          <span class="ot">fill=</span><span class="st">&quot;none&quot;</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>          <span class="ot">vector-effect=</span><span class="st">&quot;non-scaling-stroke&quot;</span> /&gt;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<h3 id="css-property">CSS Property</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.uniform-stroke</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">vector-effect</span><span class="ch">:</span> <span class="dv">non-scaling-stroke</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">path</span> <span class="ot">class=</span><span class="st">&quot;uniform-stroke&quot;</span> <span class="ot">d=</span><span class="st">&quot;M10 10 H 90 V 90 H 10 Z&quot;</span> <span class="ot">stroke=</span><span class="st">&quot;blue&quot;</span> <span class="ot">stroke-width=</span><span class="st">&quot;1.5&quot;</span> /&gt;</span></code></pre></div>
+<h2 id="primary-use-cases">Primary Use Cases</h2>
+<ul>
+<li><strong>Interactive Maps:</strong> Geographic paths, borders, and
+roads maintain a readable line weight when users zoom in and out of the
+map canvas.</li>
+<li><strong>Responsive UI Icons:</strong> A single set of SVG icons can
+scale across multiple screen resolutions while maintaining the exact
+line weight defined by the design system.</li>
+<li><strong>CAD and Architectural Diagrams:</strong> Dimension lines,
+technical schematics, and blueprint annotations remain legible at any
+magnification level.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why Cross-Domain SVG Use Symbols Fail to Load - svg</title>
+    <meta name="description" content="Referencing external SVG sprites across different domains using the <use> element often fails because modern web browsers enforce strict Same-Origin Policy (SOP) rules on vector resources. When an SVG references a <symbol> via a cross-origin URL, the bro">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/why-cross-domain-svg-use-symbols-fail-to-load">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why Cross-Domain SVG Use Symbols Fail to Load - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/why-cross-domain-svg-use-symbols-fail-to-load" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Referencing external SVG sprites across different domains using the <use> element often fails because modern web browsers enforce strict Same-Origin Policy (SOP) rules on vector resources. When an SVG references a <symbol> via a cross-origin URL, the bro" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="why-cross-domain-svg-use-symbols-fail-to-load">Why Cross-Domain
+SVG Use Symbols Fail to Load</h1>
+<p>Referencing external SVG sprites across different domains using the
+<code>&lt;use&gt;</code> element often fails because modern web browsers
+enforce strict Same-Origin Policy (SOP) rules on vector resources. When
+an SVG references a <code>&lt;symbol&gt;</code> via a cross-origin URL,
+the browser treats the operation as a request to import external DOM
+nodes rather than a standard static asset load. Consequently, unless
+specific cross-origin conditions and script-based handling are used,
+browsers block these requests by default to prevent cross-site scripting
+and unauthorized DOM access.</p>
+<h3 id="the-same-origin-policy-and-use-elements">The Same-Origin Policy
+and <code>&lt;use&gt;</code> Elements</h3>
+<p>The HTML and SVG specifications treat the <code>&lt;use&gt;</code>
+element uniquely compared to traditional media tags like
+<code>&lt;img&gt;</code> or <code>&lt;video&gt;</code>. Instead of
+rendering an isolated rasterized image, <code>&lt;use&gt;</code> clones
+the target vector nodes into the host document's Shadow DOM.</p>
+<p>Because the imported SVG elements can contain executable scripts,
+styles, and interactive attributes, allowing cross-domain fetching
+without restriction creates significant security vulnerabilities,
+including:</p>
+<ul>
+<li><strong>Cross-Site Scripting (XSS):</strong> Malicious SVG documents
+can execute JavaScript inside the context of the host application.</li>
+<li><strong>Data Leaks:</strong> Attackers could load sensitive SVGs
+from protected internal origins and inspect their structures.</li>
+</ul>
+<p>To mitigate these risks, browser security engines apply the
+Same-Origin Policy to all external vector fragment identifiers, blocking
+any request where the protocol, domain, or port does not strictly match
+the host document.</p>
+<h3 id="lack-of-native-cors-implementation-in-use">Lack of Native CORS
+Implementation in <code>&lt;use&gt;</code></h3>
+<p>Unlike the <code>&lt;img&gt;</code> tag (via the
+<code>crossorigin</code> attribute) or CSS <code>@font-face</code>
+rules, the native SVG <code>&lt;use&gt;</code> tag historically lacked
+robust support for Cross-Origin Resource Sharing (CORS) handshakes. Even
+if the remote server sends headers such as
+<code>Access-Control-Allow-Origin: *</code>, standard browser
+implementations will often reject external cross-domain
+<code>&lt;use href="https://remote-cdn.com/sprite.svg#icon"&gt;</code>
+references natively.</p>
+<h3 id="common-solutions-and-workarounds">Common Solutions and
+Workarounds</h3>
+<p>To display SVG symbols hosted on a separate domain or CDN, you must
+use an alternative loading strategy:</p>
+<h4 id="1-fetch-via-javascript-and-inject-inline">1. Fetch via
+JavaScript and Inject Inline</h4>
+<p>Fetch the external SVG sprite using the standard Fetch API, which
+fully respects CORS headers, and inject the content into the DOM:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">fetch</span>(<span class="st">&#39;https://cdn.example.com/sprite.svg&#39;</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(response <span class="kw">=&gt;</span> response<span class="op">.</span><span class="fu">text</span>())</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">then</span>(svgText <span class="kw">=&gt;</span> {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> div <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElement</span>(<span class="st">&#39;div&#39;</span>)<span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>    div<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">display</span> <span class="op">=</span> <span class="st">&#39;none&#39;</span><span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    div<span class="op">.</span><span class="at">innerHTML</span> <span class="op">=</span> svgText<span class="op">;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    <span class="bu">document</span><span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="fu">insertBefore</span>(div<span class="op">,</span> <span class="bu">document</span><span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">firstChild</span>)<span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span></code></pre></div>
+<p>Once injected, reference the symbols locally using
+<code>&lt;use href="#icon-name"&gt;</code>.</p>
+<h4 id="2-serve-from-the-same-origin-via-reverse-proxy">2. Serve from
+the Same Origin via Reverse Proxy</h4>
+<p>Configure your web server or CDN (such as Nginx, Cloudflare, or AWS
+CloudFront) to route requests for icons under a local path (e.g.,
+<code>/assets/icons/sprite.svg</code>) while proxying the actual file
+from the external source.</p>
+<h4 id="3-use-standard-img-or-css-backgrounds">3. Use Standard
+<code>&lt;img&gt;</code> or CSS Backgrounds</h4>
+<p>If you do not need to manipulate individual SVG paths or change
+colors using CSS variables, embed the asset using an
+<code>&lt;img&gt;</code> tag or CSS <code>background-image</code>, which
+natively allows cross-origin loading:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">img</span><span class="ot"> src</span><span class="op">=</span><span class="st">&quot;https://cdn.example.com/single-icon.svg&quot;</span><span class="ot"> alt</span><span class="op">=</span><span class="st">&quot;Icon&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span></code></pre></div>
+<h4 id="4-inline-the-svg-sprite">4. Inline the SVG Sprite</h4>
+<p>Embed critical SVG symbols directly in the initial HTML response.
+This eliminates all external network requests for icons and guarantees
+instant availability across all browsers without cross-origin
+friction.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

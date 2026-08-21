@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Internal vs External SVG Symbols Using the Use Element - svg</title>
+    <meta name="description" content="The SVG <use> element allows developers to instantiate reusable vector graphics defined inside <symbol> or <g> elements. The primary difference between referencing an internal versus an external SVG symbol lies in where the source definition is stored: i">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/internal-vs-external-svg-symbols-using-the-use-element">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Internal vs External SVG Symbols Using the Use Element - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/internal-vs-external-svg-symbols-using-the-use-element" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The SVG <use> element allows developers to instantiate reusable vector graphics defined inside <symbol> or <g> elements. The primary difference between referencing an internal versus an external SVG symbol lies in where the source definition is stored: i" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="internal-vs-external-svg-symbols-using-the-use-element">Internal
+vs External SVG Symbols Using the Use Element</h1>
+<p>The SVG <code>&lt;use&gt;</code> element allows developers to
+instantiate reusable vector graphics defined inside
+<code>&lt;symbol&gt;</code> or <code>&lt;g&gt;</code> elements. The
+primary difference between referencing an internal versus an external
+SVG symbol lies in where the source definition is stored: internal
+references point to an ID within the same HTML/SVG document, whereas
+external references fetch the symbol from a standalone SVG file over the
+network. This distinction impacts browser caching, cross-origin
+security, initial page weight, and maintenance workflows.</p>
+<h2 id="internal-svg-symbol-referencing">Internal SVG Symbol
+Referencing</h2>
+<p>An internal SVG reference retrieves a symbol defined directly within
+the same HTML or SVG document. The symbol is typically housed inside a
+hidden SVG container within a <code>&lt;defs&gt;</code> block on the
+page.</p>
+<h3 id="syntax">Syntax</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Hidden SVG sprite in the HTML document --&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">svg</span><span class="ot"> style</span><span class="op">=</span><span class="st">&quot;display: none;&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">symbol</span><span class="ot"> id</span><span class="op">=</span><span class="st">&quot;icon-user&quot;</span><span class="ot"> viewBox</span><span class="op">=</span><span class="st">&quot;0 0 24 24&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">path</span><span class="ot"> d</span><span class="op">=</span><span class="st">&quot;...&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">symbol</span><span class="dt">&gt;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">svg</span><span class="dt">&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Internal reference --&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">svg</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;icon&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">use</span><span class="ot"> href</span><span class="op">=</span><span class="st">&quot;#icon-user&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">use</span><span class="dt">&gt;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">svg</span><span class="dt">&gt;</span></span></code></pre></div>
+<h3 id="key-characteristics">Key Characteristics</h3>
+<ul>
+<li><strong>Zero Additional HTTP Requests:</strong> Because the SVG
+symbols are inlined into the HTML, no extra network requests are
+required to fetch icons.</li>
+<li><strong>No CORS Restrictions:</strong> Internal references work
+under all environments, including the <code>file://</code> protocol and
+across subdomains, as no cross-origin asset loading is involved.</li>
+<li><strong>No Browser Caching for the Sprite:</strong> Inlining the SVG
+increases the HTML payload size. Because the markup is part of the HTML
+file, the SVG code cannot be cached independently of the page.</li>
+<li><strong>Immediate Rendering:</strong> Icons render synchronously
+with the HTML, eliminating the risk of a Flash of Unstyled Content
+(FOUC).</li>
+</ul>
+<hr />
+<h2 id="external-svg-symbol-referencing">External SVG Symbol
+Referencing</h2>
+<p>An external SVG reference points to a symbol located inside an
+external SVG file (often called an SVG sprite sheet) hosted on a
+server.</p>
+<h3 id="syntax-1">Syntax</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- External reference to a separate file --&gt;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">svg</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;icon&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">use</span><span class="ot"> href</span><span class="op">=</span><span class="st">&quot;/assets/sprite.svg#icon-user&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">use</span><span class="dt">&gt;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">svg</span><span class="dt">&gt;</span></span></code></pre></div>
+<h3 id="key-characteristics-1">Key Characteristics</h3>
+<ul>
+<li><strong>Efficient Browser Caching:</strong> The external sprite file
+is treated as a static asset. Once fetched, the browser caches it via
+HTTP cache headers and reuses it across multiple page loads.</li>
+<li><strong>Lean HTML Markup:</strong> The main HTML document remains
+lightweight because it does not carry the bulk of the SVG vector
+paths.</li>
+<li><strong>CORS Restrictions:</strong> Browsers enforce the Same-Origin
+Policy on external SVG files referenced via <code>&lt;use&gt;</code>.
+The sprite file must be served from the same domain or include
+appropriate Cross-Origin Resource Sharing
+(<code>Access-Control-Allow-Origin</code>) headers.</li>
+<li><strong>Asynchronous Loading:</strong> On the initial visit, icons
+may experience a brief render delay while the external file
+downloads.</li>
+</ul>
+<hr />
+<h2 id="direct-comparison">Direct Comparison</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">Internal Reference (<code>#id</code>)</th>
+<th style="text-align: left;">External Reference
+(<code>file.svg#id</code>)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Source Location</strong></td>
+<td style="text-align: left;">Same HTML document</td>
+<td style="text-align: left;">External <code>.svg</code> file</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>HTTP Requests</strong></td>
+<td style="text-align: left;">0 additional requests</td>
+<td style="text-align: left;">1 request for the sprite file</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Caching Mechanism</strong></td>
+<td style="text-align: left;">Cached only with HTML</td>
+<td style="text-align: left;">Cached independently as static asset</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CORS Sensitive</strong></td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Yes (requires same-origin or CORS
+headers)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>HTML Document Size</strong></td>
+<td style="text-align: left;">Increases with icon count</td>
+<td style="text-align: left;">Stays minimal</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Offline/Local
+Testing</strong></td>
+<td style="text-align: left;">Works natively via
+<code>file://</code></td>
+<td style="text-align: left;">Requires a local web server</td>
+</tr>
+</tbody>
+</table>
+<hr />
+<h2 id="when-to-use-which">When to Use Which</h2>
+<ul>
+<li><strong>Use internal references</strong> when building single-page
+applications (SPAs) with small icon sets, dynamic server-rendered pages
+where total HTML size is negligible, or environments where setting up
+proper CORS headers for static assets is not possible.</li>
+<li><strong>Use external references</strong> for multi-page websites and
+design systems with large icon libraries, where leveraging the browser
+cache across routes delivers the best overall performance.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How SMIL Animate Works in SVG - svg</title>
+    <meta name="description" content="Synchronized Multimedia Integration Language (SMIL) allows developers to animate Scalable Vector Graphics (SVG) directly within XML markup without relying on external CSS keyframes or JavaScript. By embedding the <animate> element inside or linked to an">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-smil-animate-works-in-svg">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How SMIL Animate Works in SVG - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-smil-animate-works-in-svg" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Synchronized Multimedia Integration Language (SMIL) allows developers to animate Scalable Vector Graphics (SVG) directly within XML markup without relying on external CSS keyframes or JavaScript. By embedding the <animate> element inside or linked to an" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-smil-animate-works-in-svg">How SMIL Animate Works in
+SVG</h1>
+<p>Synchronized Multimedia Integration Language (SMIL) allows developers
+to animate Scalable Vector Graphics (SVG) directly within XML markup
+without relying on external CSS keyframes or JavaScript. By embedding
+the <code>&lt;animate&gt;</code> element inside or linked to an SVG
+shape, you can transition numerical values, colors, coordinates, and
+transformation attributes over specified timeframes. This guide explains
+the core mechanisms, essential attributes, and execution lifecycle of
+the SMIL <code>&lt;animate&gt;</code> element.</p>
+<h2 id="the-basic-mechanism-of-animate">The Basic Mechanism of
+<code>&lt;animate&gt;</code></h2>
+<p>The <code>&lt;animate&gt;</code> element functions by targeting a
+specific attribute of an SVG element and interpolating its value from a
+starting state to an ending state over a defined duration.</p>
+<p>To apply an animation, the <code>&lt;animate&gt;</code> tag is
+typically nested directly inside the target SVG element (such as a
+<code>&lt;circle&gt;</code>, <code>&lt;rect&gt;</code>, or
+<code>&lt;path&gt;</code>):</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">width=</span><span class="st">&quot;200&quot;</span> <span class="ot">height=</span><span class="st">&quot;200&quot;</span> <span class="ot">viewBox=</span><span class="st">&quot;0 0 200 200&quot;</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">circle</span> <span class="ot">cx=</span><span class="st">&quot;50&quot;</span> <span class="ot">cy=</span><span class="st">&quot;100&quot;</span> <span class="ot">r=</span><span class="st">&quot;30&quot;</span> <span class="ot">fill=</span><span class="st">&quot;blue&quot;</span>&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">animate</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>      <span class="ot">attributeName=</span><span class="st">&quot;cx&quot;</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      <span class="ot">from=</span><span class="st">&quot;50&quot;</span> </span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>      <span class="ot">to=</span><span class="st">&quot;150&quot;</span> </span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>      <span class="ot">dur=</span><span class="st">&quot;2s&quot;</span> </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>      <span class="ot">repeatCount=</span><span class="st">&quot;indefinite&quot;</span> /&gt;</span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">circle</span>&gt;</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<p>Alternatively, the element can target an external node using the
+<code>href</code> (or legacy <code>xlink:href</code>) attribute
+referencing the target element's <code>id</code>.</p>
+<h2 id="key-attributes-controlling-transitions">Key Attributes
+Controlling Transitions</h2>
+<p>The SMIL engine relies on specific attributes to calculate and render
+transitions:</p>
+<ul>
+<li><strong><code>attributeName</code></strong>: Specifies the exact XML
+attribute or CSS property to animate (e.g., <code>cx</code>,
+<code>y</code>, <code>width</code>, <code>fill</code>,
+<code>opacity</code>, <code>d</code>).</li>
+<li><strong><code>from</code> and <code>to</code></strong>: Define the
+initial and final values of the transition. The browser parses these
+values and computes the intermediate frames mathematically.</li>
+<li><strong><code>by</code></strong>: Specifies a relative offset value
+instead of an absolute target (e.g., increasing a radius
+<code>by="20"</code>).</li>
+<li><strong><code>values</code></strong>: Accepts a semicolon-separated
+list of values (e.g., <code>values="50; 150; 50"</code>) to create
+multi-step keyframe sequences without multiple animation tags.</li>
+<li><strong><code>dur</code></strong>: Defines the duration of one full
+animation cycle using standard time units such as seconds
+(<code>2s</code>) or milliseconds (<code>500ms</code>).</li>
+<li><strong><code>repeatCount</code></strong>: Determines the number of
+iterations, accepting a numeric count (e.g., <code>3</code>) or
+<code>indefinite</code> for continuous looping.</li>
+</ul>
+<h2 id="timing-triggers-and-fill-modes">Timing, Triggers, and Fill
+Modes</h2>
+<p>SMIL offers powerful synchronization controls for starting, ending,
+and persisting visual states:</p>
+<h3 id="triggering-with-begin-and-end">Triggering with
+<code>begin</code> and <code>end</code></h3>
+<p>The <code>begin</code> attribute sets when the transition starts. It
+can be a fixed clock time (<code>begin="0s"</code>), a delayed time
+(<code>begin="2s"</code>), or an event-based trigger. Event triggers
+allow interaction handling directly in markup, such as
+<code>begin="click"</code> or
+<code>begin="button.click+0.5s"</code>.</p>
+<h3 id="maintaining-state-with-fill">Maintaining State with
+<code>fill</code></h3>
+<p>By default, an animated attribute resets to its original value when
+the duration ends. Setting <code>fill="freeze"</code> instructs the
+renderer to retain the final animated state (<code>to</code> value)
+after completion. The default value is <code>fill="remove"</code>.</p>
+<h2 id="advanced-interpolation-and-pacing">Advanced Interpolation and
+Pacing</h2>
+<p>The SMIL engine determines transition pacing via the
+<code>calcMode</code> attribute:</p>
+<ul>
+<li><strong><code>linear</code></strong> (default): Interpolates values
+evenly across the duration.</li>
+<li><strong><code>discrete</code></strong>: Jumps instantly from one
+value to the next without interpolation.</li>
+<li><strong><code>paced</code></strong>: Produces an even rate of change
+through a list of values, ignoring custom timing.</li>
+<li><strong><code>spline</code></strong>: Enables custom cubic-bezier
+easing curves, defined in conjunction with <code>keyTimes</code> and
+<code>keySplines</code> attributes for fine-tuned acceleration and
+deceleration.</li>
+</ul>
+<p>Through these combined declarative parameters, the SVG rendering
+engine continuously calculates intermediate attribute values on the
+compositor level, delivering smooth vector transitions while keeping the
+animation self-contained within the SVG file format.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

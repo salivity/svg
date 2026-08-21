@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Why XML Parsing Errors Break SVG Rendering - svg</title>
+    <meta name="description" content="Scalable Vector Graphics (SVG) are XML-based files, meaning their rendering strictly depends on standard XML syntax rules. When an XML parsing error occurs, the rendering engine cannot construct the Document Object Model (DOM) required to display the gra">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/why-xml-parsing-errors-break-svg-rendering">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Why XML Parsing Errors Break SVG Rendering - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/why-xml-parsing-errors-break-svg-rendering" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Scalable Vector Graphics (SVG) are XML-based files, meaning their rendering strictly depends on standard XML syntax rules. When an XML parsing error occurs, the rendering engine cannot construct the Document Object Model (DOM) required to display the gra" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="why-xml-parsing-errors-break-svg-rendering">Why XML Parsing
+Errors Break SVG Rendering</h1>
+<p>Scalable Vector Graphics (SVG) are XML-based files, meaning their
+rendering strictly depends on standard XML syntax rules. When an XML
+parsing error occurs, the rendering engine cannot construct the Document
+Object Model (DOM) required to display the graphic, resulting in blank
+outputs, broken image icons, or explicit parsing error messages. This
+article explores the architectural reasons behind this failure, the
+principle of draconian error handling in XML, and the specific markup
+issues that trigger these rendering breakdowns.</p>
+<h2 id="the-principle-of-draconian-error-handling">The Principle of
+Draconian Error Handling</h2>
+<p>Unlike standard HTML, which is designed with lenient error-recovery
+algorithms to display poorly formatted markup, XML enforces a strict
+policy known as <strong>draconian error handling</strong>.</p>
+<p>According to the W3C XML specification, an XML parser must
+immediately stop processing and report a fatal error the moment it
+encounters a violation of well-formedness. Because SVG is an XML
+dialect, SVG rendering engines utilize standard XML parsers. If the
+parser detects an invalid structure, it halts execution before the
+layout and rasterization engines can calculate shapes, paths, or
+colors.</p>
+<p>Depending on how the SVG is embedded, this failure manifests in
+different ways:</p>
+<ul>
+<li><strong>Standalone SVG files (<code>.svg</code> loaded in a
+browser):</strong> Displays a detailed XML parse error page specifying
+the line and column number of the defect.</li>
+<li><strong>HTML <code>&lt;img&gt;</code> tags or CSS
+<code>background-image</code>:</strong> Renders as a missing or broken
+image indicator because the browser suppresses the error UI inside image
+contexts.</li>
+<li><strong>Inline SVG in HTML5:</strong> The HTML5 parser is more
+forgiving with inline SVG, but if the file is served with an XML MIME
+type (such as <code>image/svg+xml</code> or
+<code>application/xhtml+xml</code>), the entire document or component
+will fail to render.</li>
+</ul>
+<h2 id="common-markup-issues-causing-xml-parsing-failures">Common Markup
+Issues Causing XML Parsing Failures</h2>
+<p>An SVG will fail to render if any of the following common markup
+errors are present:</p>
+<h3 id="1-unclosed-or-improperly-nested-tags">1. Unclosed or Improperly
+Nested Tags</h3>
+<p>XML requires every open tag to have an exact, matching closing tag,
+or to be explicitly self-closing.</p>
+<ul>
+<li><strong>Invalid:</strong>
+<code>&lt;circle cx="50" cy="50" r="40"&gt;</code></li>
+<li><strong>Valid:</strong>
+<code>&lt;circle cx="50" cy="50" r="40" /&gt;</code> or
+<code>&lt;circle cx="50" cy="50" r="40"&gt;&lt;/circle&gt;</code></li>
+</ul>
+<p>Mismatched nesting, such as
+<code>&lt;g&gt;&lt;path&gt;&lt;/g&gt;&lt;/path&gt;</code>, also triggers
+an immediate parse termination.</p>
+<h3 id="2-unescaped-reserved-characters">2. Unescaped Reserved
+Characters</h3>
+<p>XML reserves certain characters for its syntax. Using them inside
+text nodes, attributes, or embedded scripts without proper escaping
+breaks the parser:</p>
+<ul>
+<li>Ampersand (<code>&amp;</code>) must be written as
+<code>&amp;amp;</code></li>
+<li>Less-than (<code>&lt;</code>) must be written as
+<code>&amp;lt;</code></li>
+<li>Greater-than (<code>&gt;</code>) must be written as
+<code>&amp;gt;</code></li>
+<li>Quotes (<code>"</code> or <code>'</code>) inside matching attribute
+delimiters must use <code>&amp;quot;</code> or
+<code>&amp;apos;</code></li>
+</ul>
+<p>If raw characters are required (for instance, inside embedded CSS or
+JavaScript), they must be wrapped inside a
+<code>&lt;![CDATA[ ... ]]&gt;</code> block.</p>
+<h3 id="3-missing-or-unquoted-attribute-values">3. Missing or Unquoted
+Attribute Values</h3>
+<p>In HTML, attributes like <code>checked</code> or
+<code>width=100</code> are permitted. In XML and SVG, all attribute
+values must be explicitly assigned and enclosed in double or single
+quotation marks.</p>
+<ul>
+<li><strong>Invalid:</strong>
+<code>&lt;rect width=100 height=100 /&gt;</code></li>
+<li><strong>Valid:</strong>
+<code>&lt;rect width="100" height="100" /&gt;</code></li>
+</ul>
+<h3 id="4-malformed-namespaces-and-prefixes">4. Malformed Namespaces and
+Prefixes</h3>
+<p>SVG relies on XML namespaces to define elements correctly. If an
+element uses a prefix (such as <code>&lt;xlink:href="..."&gt;</code>)
+without declaring the corresponding namespace attribute
+(<code>xmlns:xlink="http://www.w3.org/1999/xlink"</code>), the XML
+parser flags an undeclared namespace prefix error and aborts.</p>
+<h3 id="5-encoding-and-byte-order-mark-bom-issues">5. Encoding and Byte
+Order Mark (BOM) Issues</h3>
+<p>If an SVG document specifies an encoding header (e.g.,
+<code>&lt;?xml version="1.0" encoding="UTF-8"?&gt;</code>) but contains
+characters saved in a different encoding format (like ISO-8859-1), or
+contains an unsupported UTF-8 BOM, the parser will fail at line 1 before
+reading any visual elements.</p>
+<h2 id="summary">Summary</h2>
+<p>SVG rendering fails during XML parsing errors because XML engines are
+intentionally designed not to guess the author's intent. Any syntax
+deviation breaks document well-formedness, causing the parser to abort
+immediately and preventing the renderer from drawing the graphic.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

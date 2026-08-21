@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Convert Base64 SVG to Vector Paths - svg</title>
+    <meta name="description" content="This article covers the most effective methods for converting embedded base64 raster images within an SVG file back into native, scalable vector paths. When an SVG contains a base64-encoded PNG or JPEG inside an <image> tag, it loses the infinite scalabi">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-to-convert-base64-svg-to-vector-paths">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Convert Base64 SVG to Vector Paths - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-to-convert-base64-svg-to-vector-paths" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article covers the most effective methods for converting embedded base64 raster images within an SVG file back into native, scalable vector paths. When an SVG contains a base64-encoded PNG or JPEG inside an <image> tag, it loses the infinite scalabi" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-convert-base64-svg-to-vector-paths">How to Convert Base64
+SVG to Vector Paths</h1>
+<p>This article covers the most effective methods for converting
+embedded base64 raster images within an SVG file back into native,
+scalable vector paths. When an SVG contains a base64-encoded PNG or JPEG
+inside an <code>&lt;image&gt;</code> tag, it loses the infinite
+scalability and small footprint of true vector graphics. Below, you will
+find direct solutions to extract the raster data and trace it back into
+vector geometry using vector graphics software, command-line utilities,
+programmatic scripts, and browser-based tools.</p>
+<h2 id="1-vector-graphic-editors-gui-tracing">1. Vector Graphic Editors
+(GUI Tracing)</h2>
+<p>Desktop vector editors offer interactive tracing engines with
+real-time previews to adjust thresholding, smoothing, and color
+layers.</p>
+<h3 id="inkscape-free--open-source">Inkscape (Free &amp; Open
+Source)</h3>
+<ol type="1">
+<li>Open the SVG file containing the base64 image in Inkscape.</li>
+<li>Select the embedded image on the canvas.</li>
+<li>Navigate to <strong>Path &gt; Trace Bitmap</strong> (or press
+<code>Shift + Alt + B</code>).</li>
+<li>Choose a detection mode:
+<ul>
+<li><strong>Brightness Cutoff</strong> or <strong>Edge
+Detection</strong> for monochrome/black-and-white graphics.</li>
+<li><strong>Color Scans</strong> or <strong>Autotrace</strong> for
+multi-colored artwork.</li>
+</ul></li>
+<li>Click <strong>Apply</strong>. Inkscape places the newly generated
+<code>&lt;path&gt;</code> objects directly over the raster image.</li>
+<li>Delete the underlying raster image element and save the SVG.</li>
+</ol>
+<h3 id="adobe-illustrator">Adobe Illustrator</h3>
+<ol type="1">
+<li>Open the SVG in Illustrator and select the embedded image.</li>
+<li>Open the <strong>Image Trace</strong> panel (<strong>Window &gt;
+Image Trace</strong>).</li>
+<li>Select a preset (such as <strong>Silhouettes</strong>, <strong>Black
+and White Logo</strong>, or <strong>High Color</strong>).</li>
+<li>Click <strong>Expand</strong> in the top control bar to commit the
+trace and convert the live preview into editable vector paths.</li>
+<li>Delete the original linked or embedded pixel data and re-export the
+file.</li>
+</ol>
+<hr />
+<h2 id="2-command-line-tracing-utilities">2. Command-Line Tracing
+Utilities</h2>
+<p>For batch processing or headless environments, command-line
+vectorizers can process extracted base64 assets quickly.</p>
+<h3 id="potrace">Potrace</h3>
+<p>Potrace is a standard algorithm for tracing monochrome bitmaps.</p>
+<ol type="1">
+<li>Extract the base64 string from the SVG's <code>xlink:href</code> or
+<code>href</code> attribute.</li>
+<li>Decode the base64 string into a bitmap format (such as
+<code>.pbm</code>, <code>.pgm</code>, or <code>.bmp</code>).</li>
+<li>Run Potrace:
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="ex">potrace</span> input.bmp <span class="at">-s</span> <span class="at">-o</span> output.svg</span></code></pre></div></li>
+<li>Replace the original <code>&lt;image&gt;</code> node in your master
+SVG with the <code>&lt;path&gt;</code> or <code>&lt;g&gt;</code>
+elements from <code>output.svg</code>.</li>
+</ol>
+<h3 id="vtracer">VTracer</h3>
+<p>VTracer supports full-color vectorization without requiring
+multi-pass monochromatic layers.</p>
+<ol type="1">
+<li>Decode the base64 string to a <code>.png</code> or
+<code>.jpg</code>.</li>
+<li>Run VTracer:
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="ex">vtracer</span> <span class="at">--input</span> input.png <span class="at">--output</span> output.svg <span class="at">--colormode</span> color</span></code></pre></div></li>
+</ol>
+<hr />
+<h2 id="3-automated-programmatic-pipelines-python">3. Automated
+Programmatic Pipelines (Python)</h2>
+<p>You can automate the entire lifecycle—parsing the SVG, decoding
+base64 nodes, vectorizing them, and replacing the nodes—using
+Python.</p>
+<p>A standard script workflow follows these steps:</p>
+<ol type="1">
+<li><strong>Parse the XML:</strong> Use
+<code>xml.etree.ElementTree</code> or <code>lxml</code> to locate all
+<code>&lt;image&gt;</code> elements with
+<code>data:image/...;base64,</code> URIs.</li>
+<li><strong>Decode Data:</strong> Strip the URI prefix and decode the
+base64 string into raw image bytes using Python's <code>base64</code>
+module.</li>
+<li><strong>Execute Vectorizer:</strong> Pass the byte array to a
+tracing binding (such as <code>pypotrace</code> or
+<code>vtracer-python</code>).</li>
+<li><strong>Swap Elements:</strong> Parse the generated SVG path strings
+into XML nodes, insert them into the parent container of the SVG, and
+remove the original <code>&lt;image&gt;</code> element.</li>
+<li><strong>Serialize:</strong> Write the updated XML tree back to a
+clean SVG file.</li>
+</ol>
+<hr />
+<h2 id="4-web-based-tracing-tools">4. Web-Based Tracing Tools</h2>
+<p>For single-file conversions without installing software:</p>
+<ul>
+<li><strong>SVGcode:</strong> A Progressive Web App (PWA) that converts
+raster images directly to SVG in the browser using the Potrace engine.
+You can drag and drop your extracted base64 image and download the
+traced vector file.</li>
+<li><strong>Vector Magic:</strong> A web-based converter capable of
+handling complex color gradients and multi-tone raster data with
+automated edge detection.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculate SVG Path Length Using getTotalLength - svg</title>
+    <meta name="description" content="Calculating the total length of an SVG path is essential for creating precise line-drawing animations, path-following effects, and geometric measurements on the web. The SVG specification provides a native JavaScript method called getTotalLength() direct">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/calculate-svg-path-length-using-gettotallength">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Calculate SVG Path Length Using getTotalLength - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/calculate-svg-path-length-using-gettotallength" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Calculating the total length of an SVG path is essential for creating precise line-drawing animations, path-following effects, and geometric measurements on the web. The SVG specification provides a native JavaScript method called getTotalLength() direct" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="calculate-svg-path-length-using-gettotallength">Calculate SVG
+Path Length Using getTotalLength</h1>
+<p>Calculating the total length of an SVG path is essential for creating
+precise line-drawing animations, path-following effects, and geometric
+measurements on the web. The SVG specification provides a native
+JavaScript method called <code>getTotalLength()</code> directly on SVG
+geometry elements, particularly the <code>SVGPathElement</code>. This
+article outlines the step-by-step process of accessing an SVG path in
+the DOM, invoking <code>getTotalLength()</code>, handling dynamic
+rendering scenarios, and applying the result in real-world applications
+such as CSS dash animations.</p>
+<h3 id="1-select-the-path-element">1. Select the Path Element</h3>
+<p>To calculate the length, you must first obtain a reference to the
+<code>&lt;path&gt;</code> element in the Document Object Model
+(DOM).</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> pathElement <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;#my-path&#39;</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="2-invoke-the-gettotallength-method">2. Invoke the
+<code>getTotalLength()</code> Method</h3>
+<p>Once the element reference is available, call the
+<code>getTotalLength()</code> method directly on the object. This method
+computes the user-unit length along the path according to the current
+coordinate system.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> totalLength <span class="op">=</span> pathElement<span class="op">.</span><span class="fu">getTotalLength</span>()<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="bu">console</span><span class="op">.</span><span class="fu">log</span>(<span class="vs">`Path Length: </span><span class="sc">${</span>totalLength<span class="sc">}</span><span class="vs">px`</span>)<span class="op">;</span></span></code></pre></div>
+<h3 id="3-ensure-the-element-is-rendered-in-the-dom">3. Ensure the
+Element is Rendered in the DOM</h3>
+<p><code>getTotalLength()</code> requires the browser's layout and
+rendering engine to parse the path geometry. If the element is created
+dynamically via <code>document.createElementNS()</code> or kept in a
+disconnected <code>DocumentFragment</code>, the method might return
+<code>0</code> or throw an error in certain browsers. Ensure the SVG is
+attached to the active document tree before invoking the method:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> svgNS <span class="op">=</span> <span class="st">&quot;http://www.w3.org/2000/svg&quot;</span><span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> newPath <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">createElementNS</span>(svgNS<span class="op">,</span> <span class="st">&quot;path&quot;</span>)<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>newPath<span class="op">.</span><span class="fu">setAttribute</span>(<span class="st">&quot;d&quot;</span><span class="op">,</span> <span class="st">&quot;M 10 10 H 90 V 90 H 10 Z&quot;</span>)<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Append to the DOM before measuring</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;svg&#39;</span>)<span class="op">.</span><span class="fu">appendChild</span>(newPath)<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> length <span class="op">=</span> newPath<span class="op">.</span><span class="fu">getTotalLength</span>()<span class="op">;</span> <span class="co">// Returns accurate length</span></span></code></pre></div>
+<h3 id="4-applying-the-measurement-common-use-case-dash-animations">4.
+Applying the Measurement (Common Use Case: Dash Animations)</h3>
+<p>The most common use case for <code>getTotalLength()</code> is setting
+up the "line drawing" effect using CSS properties
+<code>stroke-dasharray</code> and <code>stroke-dashoffset</code>.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> path <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;.animated-path&#39;</span>)<span class="op">;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> length <span class="op">=</span> path<span class="op">.</span><span class="fu">getTotalLength</span>()<span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a><span class="co">// Set up dash array and offset to hide the line initially</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>path<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">strokeDasharray</span> <span class="op">=</span> length<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>path<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">strokeDashoffset</span> <span class="op">=</span> length<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Trigger layout recalculation, then animate to 0</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>path<span class="op">.</span><span class="fu">getBoundingClientRect</span>()<span class="op">;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>path<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">transition</span> <span class="op">=</span> <span class="st">&#39;stroke-dashoffset 2s ease-in-out&#39;</span><span class="op">;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>path<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">strokeDashoffset</span> <span class="op">=</span> <span class="st">&#39;0&#39;</span><span class="op">;</span></span></code></pre></div>
+<h3 id="key-considerations">Key Considerations</h3>
+<ul>
+<li><strong>Geometry Support:</strong> In modern browsers compliant with
+SVG 2, <code>getTotalLength()</code> is supported on all
+<code>SVGGeometryElement</code> instances (such as
+<code>&lt;circle&gt;</code>, <code>&lt;rect&gt;</code>, and
+<code>&lt;polygon&gt;</code>), not solely
+<code>&lt;path&gt;</code>.</li>
+<li><strong>Transformations:</strong> <code>getTotalLength()</code>
+calculates the internal length of the path data (<code>d</code>
+attribute) in user units, ignoring external CSS or SVG
+<code>transform</code> attributes (such as scale).</li>
+<li><strong>Display None:</strong> If the element or its parent has
+<code>display: none</code>, the browser may fail to calculate the
+geometric dimensions, returning <code>0</code>. Use
+<code>visibility: hidden</code> or absolute positioning off-screen if
+pre-measuring is required.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

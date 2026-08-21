@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Prevent SVG CSS Style Leakage with Shadow DOM - svg</title>
+    <meta name="description" content="Embedding inline Scalable Vector Graphics (SVGs) directly into HTML documents offers rich styling and animation possibilities, but it exposes the graphics to global CSS rules that can cause unintended visual breakage. Shadow DOM provides a native browser">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/prevent-svg-css-style-leakage-with-shadow-dom">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Prevent SVG CSS Style Leakage with Shadow DOM - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/prevent-svg-css-style-leakage-with-shadow-dom" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Embedding inline Scalable Vector Graphics (SVGs) directly into HTML documents offers rich styling and animation possibilities, but it exposes the graphics to global CSS rules that can cause unintended visual breakage. Shadow DOM provides a native browser" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="prevent-svg-css-style-leakage-with-shadow-dom">Prevent SVG CSS
+Style Leakage with Shadow DOM</h1>
+<p>Embedding inline Scalable Vector Graphics (SVGs) directly into HTML
+documents offers rich styling and animation possibilities, but it
+exposes the graphics to global CSS rules that can cause unintended
+visual breakage. Shadow DOM provides a native browser encapsulation
+mechanism that isolates the Document Object Model (DOM) and styling of a
+component. By encapsulating embedded SVG graphics inside a Shadow Root,
+developers can completely shield internal SVG nodes from external
+stylesheets and prevent internal SVG styles from leaking into the parent
+document.</p>
+<h3 id="the-problem-style-collisions-with-inline-svgs">The Problem:
+Style Collisions with Inline SVGs</h3>
+<p>When an SVG is embedded inline using the <code>&lt;svg&gt;</code>
+tag, it becomes part of the main DOM tree. Consequently, it shares the
+global styling scope:</p>
+<ul>
+<li><strong>Unintended Cascades:</strong> Global rules like
+<code>path { fill: #333; }</code> or generic class selectors override
+the graphic's built-in presentation attributes and internal
+<code>&lt;style&gt;</code> tags.</li>
+<li><strong>ID and Class Clashes:</strong> SVGs often rely on internal
+IDs for gradients, masks, and clip paths
+(<code>clip-path="url(#mask-id)"</code>). Duplicate IDs in a global
+scope cause rendering glitches.</li>
+<li><strong>Outward Leakage:</strong> If an inline SVG includes an
+internal <code>&lt;style&gt;</code> tag containing broad selectors,
+those rules bleed out into the hosting web page.</li>
+</ul>
+<h3 id="how-shadow-dom-resolves-style-leakage">How Shadow DOM Resolves
+Style Leakage</h3>
+<p>Shadow DOM introduces a separate, scoped DOM subtree—called a shadow
+tree—attached to a standard DOM element. This boundary enforces strict
+styling rules:</p>
+<ol type="1">
+<li><strong>Boundary Isolation:</strong> CSS rules declared in the light
+DOM (main document) cannot select elements inside a shadow root. A
+selector such as <code>svg path</code> in the global stylesheet will
+simply ignore paths within the shadow boundary.</li>
+<li><strong>Internal Containment:</strong> Any
+<code>&lt;style&gt;</code> tag placed inside the shadow root applies
+strictly to elements within that specific shadow tree, preventing any
+outward leakage.</li>
+<li><strong>ID Encapsulation:</strong> Element IDs are scoped
+exclusively to the shadow root, allowing complex SVG masks, linear
+gradients, and filters to use common IDs without causing conflicts
+across the document.</li>
+</ol>
+<h3 id="implementing-an-svg-inside-a-shadow-root">Implementing an SVG
+Inside a Shadow Root</h3>
+<p>To isolate an SVG, attach a shadow root to a custom HTML element or a
+standard container element, then insert the SVG markup inside that
+root.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">class</span> IsolatedSvgIcon <span class="kw">extends</span> <span class="bu">HTMLElement</span> {</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">connectedCallback</span>() {</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Attach the shadow root in open mode</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> shadow <span class="op">=</span> <span class="kw">this</span><span class="op">.</span><span class="fu">attachShadow</span>({ <span class="dt">mode</span><span class="op">:</span> <span class="st">&#39;open&#39;</span> })<span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Define internal styles and SVG markup</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    shadow<span class="op">.</span><span class="at">innerHTML</span> <span class="op">=</span> <span class="vs">`</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;style&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="vs">        :host {</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a><span class="vs">          display: inline-block;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="vs">          line-height: 0;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="vs">        }</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="vs">        svg {</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="vs">          width: 24px;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a><span class="vs">          height: 24px;</span></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="vs">        }</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="vs">        .accent {</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a><span class="vs">          fill: #0066cc;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="vs">        }</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;/style&gt;</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;svg viewBox=&quot;0 0 24 24&quot;&gt;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a><span class="vs">        &lt;circle cx=&quot;12&quot; cy=&quot;12&quot; r=&quot;10&quot; class=&quot;accent&quot; /&gt;</span></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a><span class="vs">      &lt;/svg&gt;</span></span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="vs">    `</span><span class="op">;</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a>customElements<span class="op">.</span><span class="fu">define</span>(<span class="st">&#39;isolated-svg-icon&#39;</span><span class="op">,</span> IsolatedSvgIcon)<span class="op">;</span></span></code></pre></div>
+<p>Once defined, this element can be used directly in HTML
+(<code>&lt;isolated-svg-icon&gt;&lt;/isolated-svg-icon&gt;</code>)
+without risk of its <code>.accent</code> class affecting the rest of the
+application or being overwritten by global styles.</p>
+<h3 id="managing-css-inheritance-and-intentional-customization">Managing
+CSS Inheritance and Intentional Customization</h3>
+<p>While Shadow DOM blocks CSS selectors, inheritable CSS properties
+(such as <code>color</code>, <code>font-family</code>, and
+<code>cursor</code>) can still pass through the boundary.</p>
+<ul>
+<li><strong>Blocking Inheritance:</strong> To prevent inherited
+properties from affecting an SVG, use the CSS reset property
+<code>:host { all: initial; }</code> at the root of the shadow
+styles.</li>
+<li><strong>Controlled Theming with CSS Variables:</strong> To allow
+deliberate, controlled styling from the outside without breaking
+encapsulation, utilize CSS Custom Properties. CSS variables pierce the
+shadow boundary:</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="co">/* Inside the Shadow DOM */</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu">.accent</span> {</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">fill</span><span class="ch">:</span> <span class="fu">var(</span><span class="va">--icon-fill-color</span><span class="op">,</span> <span class="cn">#0066cc</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>External stylesheets can now modify <code>--icon-fill-color</code> on
+the parent element to adjust the SVG's appearance safely, preserving
+full encapsulation while maintaining design system flexibility.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG feMorphology Radius Attribute Visual Changes - svg</title>
+    <meta name="description" content="The feMorphology SVG filter primitive alters the boundaries of shapes, text, and graphics by either expanding or shrinking them. The radius attribute directly controls the extent of this transformation, determining the pixel distance by which edges are a">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-femorphology-radius-attribute-visual-changes">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG feMorphology Radius Attribute Visual Changes - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-femorphology-radius-attribute-visual-changes" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The feMorphology SVG filter primitive alters the boundaries of shapes, text, and graphics by either expanding or shrinking them. The radius attribute directly controls the extent of this transformation, determining the pixel distance by which edges are a" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-femorphology-radius-attribute-visual-changes">SVG
+feMorphology Radius Attribute Visual Changes</h1>
+<p>The <code>feMorphology</code> SVG filter primitive alters the
+boundaries of shapes, text, and graphics by either expanding or
+shrinking them. The <code>radius</code> attribute directly controls the
+extent of this transformation, determining the pixel distance by which
+edges are altered. Depending on whether the filter is set to dilute or
+erode an element, adjusting the radius results in dramatic visual
+transformations ranging from subtle weight adjustments and bolding to
+complete dissolution or merging of shapes.</p>
+<h2 id="understanding-the-radius-attribute">Understanding the Radius
+Attribute</h2>
+<p>The <code>radius</code> attribute defines the size of the structuring
+element used to perform the morphological operation. It accepts either a
+single number or two space-separated numbers:</p>
+<ul>
+<li><strong>Single value (e.g., <code>radius="3"</code>):</strong>
+Applies the morphological transformation uniformly along both the X and
+Y axes.</li>
+<li><strong>Two values (e.g., <code>radius="4 1"</code>):</strong>
+Applies the first value to the horizontal (X) axis and the second value
+to the vertical (Y) axis, allowing for directional morphing.</li>
+</ul>
+<p>The visual outcome of changing the radius depends entirely on the
+<code>operator</code> attribute: <code>dilate</code> or
+<code>erode</code>.</p>
+<h2 id="visual-changes-with-dilate-operatordilate">Visual Changes with
+Dilate (<code>operator="dilate"</code>)</h2>
+<p>When the operator is set to <code>dilate</code>, increasing the
+<code>radius</code> value causes the graphic to expand outward,
+thickening its visual footprint.</p>
+<ul>
+<li><strong>Thickening and Bolding:</strong> Increasing the radius makes
+thin lines, outlines, and text appear significantly bolder. Fine details
+become heavy and pronounced.</li>
+<li><strong>Closing Gaps and Merging:</strong> Holes, internal cutouts,
+and small spaces between adjacent elements shrink and eventually
+disappear as the expanding edges overlap and fuse together.</li>
+<li><strong>Corner Rounding and Softening:</strong> Sharp internal
+corners fill in, while sharp external corners can become blocky or
+slightly blunted depending on the pixel grid.</li>
+<li><strong>Loss of Internal Detail:</strong> As the radius reaches
+higher values, the graphic loses internal structure, turning complex
+illustrations or text into solid silhouette blobs.</li>
+</ul>
+<h2 id="visual-changes-with-erode-operatorerode">Visual Changes with
+Erode (<code>operator="erode"</code>)</h2>
+<p>When the operator is set to <code>erode</code>, increasing the
+<code>radius</code> value eats away at the edges of the graphic,
+shrinking its visual footprint.</p>
+<ul>
+<li><strong>Thinning and Lightening:</strong> Elements become visibly
+thinner. Bold typography and thick strokes reduce in visual weight,
+creating a delicate, hairline appearance.</li>
+<li><strong>Disconnection and Fragmentation:</strong> Narrow connection
+points in paths break apart. Continuous lines or joined letters separate
+into disjointed fragments.</li>
+<li><strong>Loss of Fine Details:</strong> Small elements, thin strokes,
+and intricate details that are narrower than the radius value disappear
+entirely.</li>
+<li><strong>Complete Vanishing:</strong> If the radius exceeds half the
+thickness of the element at its widest point, the element completely
+vanishes from the rendered output.</li>
+</ul>
+<h2 id="directional-morphing-via-asymmetrical-radius">Directional
+Morphing via Asymmetrical Radius</h2>
+<p>When two distinct values are provided to the <code>radius</code>
+attribute, the visual changes become asymmetrical:</p>
+<ul>
+<li><strong>Horizontal Bias (e.g., <code>radius="6 0"</code>):</strong>
+Dilating expands the shape solely to the left and right, creating a
+motion-blur or horizontal smear effect. Eroding narrows vertical strokes
+while leaving horizontal strokes untouched.</li>
+<li><strong>Vertical Bias (e.g., <code>radius="0 6"</code>):</strong>
+Dilating stretches the graphic upward and downward. Eroding cuts away
+horizontal lines while leaving vertical structures intact, often turning
+letterforms into vertical parallel bars.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

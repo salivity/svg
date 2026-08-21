@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Sync SVG Animations with Page Scroll - svg</title>
+    <meta name="description" content="Data storytelling platforms use scroll-synchronized SVG animations—often called "scrollytelling"—to guide readers through complex datasets by tying visual state changes directly to the user's scroll progress. By mapping viewport coordinates to animat">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-to-sync-svg-animations-with-page-scroll">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Sync SVG Animations with Page Scroll - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-to-sync-svg-animations-with-page-scroll" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Data storytelling platforms use scroll-synchronized SVG animations—often called "scrollytelling"—to guide readers through complex datasets by tying visual state changes directly to the user's scroll progress. By mapping viewport coordinates to animat" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-sync-svg-animations-with-page-scroll">How to Sync SVG
+Animations with Page Scroll</h1>
+<p>Data storytelling platforms use scroll-synchronized SVG
+animations—often called "scrollytelling"—to guide readers through
+complex datasets by tying visual state changes directly to the user's
+scroll progress. By mapping viewport coordinates to animation timelines
+using browser APIs, CSS tricks like <code>stroke-dashoffset</code>, and
+JavaScript libraries, developers transform static vector graphics into
+responsive, interactive visual narratives.</p>
+<h3 id="1-mapping-scroll-progress-to-animation-timelines">1. Mapping
+Scroll Progress to Animation Timelines</h3>
+<p>The fundamental mechanism behind scroll-driven animation is
+normalizing scroll distance into a progress value between <code>0</code>
+and <code>1</code> (or 0% to 100%).</p>
+<p>Platforms define a "trigger container" (often a tall, invisible
+<code>&lt;div&gt;</code> with styling like <code>height: 300vh</code>)
+and stick the SVG element in place using CSS
+<code>position: sticky; top: 0;</code>. As the user scrolls through the
+container:</p>
+<ol type="1">
+<li><strong>Start Point:</strong> The top of the container enters the
+viewport.</li>
+<li><strong>Current Progress:</strong> Calculated as
+<code>progress = (currentScroll - startScroll) / totalScrollDistance</code>.</li>
+<li><strong>End Point:</strong> The bottom of the container leaves the
+viewport, completing the animation timeline.</li>
+</ol>
+<h3 id="2-svg-line-drawing-with-stroke-dashoffset">2. SVG Line Drawing
+with <code>stroke-dashoffset</code></h3>
+<p>One of the most common data storytelling techniques is revealing line
+charts, trend lines, or network paths as the user scrolls. This is
+achieved via SVG stroke properties:</p>
+<ul>
+<li><strong><code>path.getTotalLength()</code></strong>: JavaScript
+measures the exact length of an SVG <code>&lt;path&gt;</code>.</li>
+<li><strong><code>stroke-dasharray</code></strong>: Set to the path's
+total length, creating a dash pattern as long as the entire line.</li>
+<li><strong><code>stroke-dashoffset</code></strong>: Initially set to
+the total length (hiding the stroke completely), then dynamically
+reduced to <code>0</code> proportional to the scroll progress, creating
+the illusion of the line being drawn in real time.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> path <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;path&#39;</span>)<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> length <span class="op">=</span> path<span class="op">.</span><span class="fu">getTotalLength</span>()<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>path<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">strokeDasharray</span> <span class="op">=</span> length<span class="op">;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>path<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">strokeDashoffset</span> <span class="op">=</span> length<span class="op">;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="bu">window</span><span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">&#39;scroll&#39;</span><span class="op">,</span> () <span class="kw">=&gt;</span> {</span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> scrollPercent <span class="op">=</span> (<span class="bu">document</span><span class="op">.</span><span class="at">documentElement</span><span class="op">.</span><span class="at">scrollTop</span> <span class="op">+</span> <span class="bu">document</span><span class="op">.</span><span class="at">body</span><span class="op">.</span><span class="at">scrollTop</span>) <span class="op">/</span> </span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>                        (<span class="bu">document</span><span class="op">.</span><span class="at">documentElement</span><span class="op">.</span><span class="at">scrollHeight</span> <span class="op">-</span> <span class="bu">document</span><span class="op">.</span><span class="at">documentElement</span><span class="op">.</span><span class="at">clientHeight</span>)<span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> drawLength <span class="op">=</span> length <span class="op">*</span> scrollPercent<span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  path<span class="op">.</span><span class="at">style</span><span class="op">.</span><span class="at">strokeDashoffset</span> <span class="op">=</span> length <span class="op">-</span> drawLength<span class="op">;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<h3 id="3-native-css-scroll-driven-animations">3. Native CSS
+Scroll-Driven Animations</h3>
+<p>Modern browsers support CSS Scroll-Driven Animations, eliminating the
+need for JavaScript scroll event listeners:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">@keyframes</span> drawChart {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dv">from</span> { <span class="kw">stroke-dashoffset</span><span class="ch">:</span> <span class="dv">1000</span><span class="op">;</span> }</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dv">to</span> { <span class="kw">stroke-dashoffset</span><span class="ch">:</span> <span class="dv">0</span><span class="op">;</span> }</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu">.chart-line</span> {</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">stroke-dasharray</span><span class="ch">:</span> <span class="dv">1000</span><span class="op">;</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="kw">animation</span><span class="ch">:</span> <span class="dv">drawChart linear</span> <span class="dv">both</span><span class="op">;</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>  animation-timeline<span class="ch">:</span> scroll<span class="fu">(</span><span class="dv">root block</span><span class="fu">)</span><span class="op">;</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>This approach offloads the calculation to the browser's compositor
+thread, delivering 60+ FPS performance without JavaScript overhead.</p>
+<h3 id="4-advanced-orchestration-with-animation-libraries">4. Advanced
+Orchestration with Animation Libraries</h3>
+<p>For complex visualizations involving morphing shapes, coordinate
+updates, and multi-stage charts, platforms rely on dedicated
+libraries:</p>
+<ul>
+<li><strong>GSAP (GreenSock) &amp; ScrollTrigger:</strong> Allows
+developers to pin SVG canvases and scrub through complex timeline
+sequences, translating, rotating, and scaling individual SVG
+<code>&lt;g&gt;</code>, <code>&lt;circle&gt;</code>, or
+<code>&lt;rect&gt;</code> nodes.</li>
+<li><strong>D3.js:</strong> Used to interpolate numerical data arrays
+and recalculate SVG path definitions (<code>d</code> attributes) based
+on scroll step milestones.</li>
+<li><strong>Scrollama / Intersection Observer:</strong> Fires discrete
+JavaScript callbacks when narrative sections enter the viewport,
+triggering targeted step-by-step SVG transitions.</li>
+</ul>
+<h3 id="5-performance-optimization">5. Performance Optimization</h3>
+<p>Synchronizing SVGs with scrolling requires strict performance
+practices to avoid layout thrashing and dropped frames:</p>
+<ul>
+<li><strong>Throttling via <code>requestAnimationFrame</code>:</strong>
+Ensures scroll listeners only trigger DOM updates during the browser's
+repaint cycle.</li>
+<li><strong>Transform Attributes:</strong> Animating CSS
+<code>transform</code> (scale, translate, rotate) on SVG elements rather
+than layout attributes (<code>x</code>, <code>y</code>,
+<code>width</code>, <code>height</code>) allows the GPU to handle
+rendering.</li>
+<li><strong>Vector Simplification:</strong> Reducing the number of
+control points in <code>&lt;path&gt;</code> elements minimizes the
+computational cost of coordinate interpolation during rapid
+scrolling.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

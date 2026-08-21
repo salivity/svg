@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG viewBox 0 0 24 24 Coordinate System Explained - svg</title>
+    <meta name="description" content="Setting the attribute viewBox="0 0 24 24" on an SVG defines an internal 24-by-24 unit coordinate canvas that acts as the reference frame for all nested paths and shapes. This configuration decouples the artwork's internal dimensions from the actual displ">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-viewbox-0-0-24-24-coordinate-system-explained">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG viewBox 0 0 24 24 Coordinate System Explained - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-viewbox-0-0-24-24-coordinate-system-explained" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Setting the attribute viewBox="0 0 24 24" on an SVG defines an internal 24-by-24 unit coordinate canvas that acts as the reference frame for all nested paths and shapes. This configuration decouples the artwork's internal dimensions from the actual displ" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-viewbox-0-0-24-24-coordinate-system-explained">SVG viewBox 0
+0 24 24 Coordinate System Explained</h1>
+<p>Setting the attribute <code>viewBox="0 0 24 24"</code> on an SVG
+defines an internal 24-by-24 unit coordinate canvas that acts as the
+reference frame for all nested paths and shapes. This configuration
+decouples the artwork's internal dimensions from the actual display size
+on a screen, allowing the icon to scale infinitely without distortion
+while maintaining consistent visual proportions across entire user
+interface icon sets.</p>
+<h3 id="deconstructing-the-viewbox-values">Deconstructing the viewBox
+Values</h3>
+<p>The <code>viewBox</code> attribute accepts four numeric parameters:
+<code>min-x</code>, <code>min-y</code>, <code>width</code>, and
+<code>height</code>. When written as <code>viewBox="0 0 24 24"</code>,
+the values map as follows:</p>
+<ul>
+<li><strong><code>min-x</code> (0):</strong> Sets the origin point on
+the horizontal X-axis to the far left.</li>
+<li><strong><code>min-y</code> (0):</strong> Sets the origin point on
+the vertical Y-axis to the top edge.</li>
+<li><strong><code>width</code> (24):</strong> Establishes an internal
+horizontal span of 24 logical units.</li>
+<li><strong><code>height</code> (24):</strong> Establishes an internal
+vertical span of 24 logical units.</li>
+</ul>
+<p>Any coordinate referenced in a path command—such as
+<code>M 12 12</code>—is calculated relative to this 24x24 grid, where
+<code>(0, 0)</code> is the top-left corner and <code>(24, 24)</code> is
+the bottom-right corner.</p>
+<h3 id="separating-internal-coordinates-from-render-size">Separating
+Internal Coordinates from Render Size</h3>
+<p>The primary function of the <code>viewBox</code> is separating the
+internal coordinate space (the drawing canvas) from the external
+viewport (the physical display size defined by CSS or HTML
+<code>width</code> and <code>height</code> attributes).</p>
+<p>When you change the CSS dimensions of an SVG with
+<code>viewBox="0 0 24 24"</code> from <code>24px</code> to
+<code>120px</code>, the browser scales the entire internal 24x24
+coordinate system uniformly to fill the new container. The path data
+(<code>&lt;path d="..." /&gt;</code>) never needs to be recalculated or
+rewritten, as the browser automatically handles the vector scaling math
+based on the ratio between the <code>viewBox</code> and the rendered
+viewport.</p>
+<h3 id="why-24x24-is-the-industry-standard">Why 24x24 Is the Industry
+Standard</h3>
+<p>The 24x24 coordinate system has become the baseline for major design
+systems (including Material Design, Feather, and Lucide) for several
+structural reasons:</p>
+<ul>
+<li><strong>Optimal Divisibility:</strong> The number 24 is highly
+divisible (by 2, 3, 4, 6, 8, and 12). This allows designers to center
+elements, align strokes, and divide visual weights evenly without
+relying on fractional coordinates that cause sub-pixel rendering
+blur.</li>
+<li><strong>Touch and Tap Targets:</strong> Standard accessibility
+guidelines recommend interactive touch targets around 48x48 pixels. A
+24-unit canvas scales up by an integer factor of 2x, resulting in crisp
+edges on standard display densities.</li>
+<li><strong>Consistent Visual Bounding Boxes:</strong> Setting a
+standard 24x24 canvas ensures that different icons—whether wide like an
+arrow or tall like a bookmark—share the exact same baseline canvas.
+Designers can incorporate internal padding directly on the grid
+(typically 2 to 4 units of whitespace), ensuring visual balance when
+multiple icons sit adjacent to one another in navigation menus or
+toolbars.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

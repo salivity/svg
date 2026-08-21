@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Tools to Sanitize SVG Files for the Web - svg</title>
+    <meta name="description" content="Scalable Vector Graphics (SVGs) are widely used for crisp web graphics, but because they are XML-based documents, they can harbor malicious JavaScript, CSS, and external entities that cause Cross-Site Scripting (XSS) vulnerabilities. This article explore">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/best-tools-to-sanitize-svg-files-for-the-web">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Best Tools to Sanitize SVG Files for the Web - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/best-tools-to-sanitize-svg-files-for-the-web" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Scalable Vector Graphics (SVGs) are widely used for crisp web graphics, but because they are XML-based documents, they can harbor malicious JavaScript, CSS, and external entities that cause Cross-Site Scripting (XSS) vulnerabilities. This article explore" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="best-tools-to-sanitize-svg-files-for-the-web">Best Tools to
+Sanitize SVG Files for the Web</h1>
+<p>Scalable Vector Graphics (SVGs) are widely used for crisp web
+graphics, but because they are XML-based documents, they can harbor
+malicious JavaScript, CSS, and external entities that cause Cross-Site
+Scripting (XSS) vulnerabilities. This article explores the primary
+security risks of unsanitized SVGs and details the most effective
+libraries and tools available across different programming ecosystems to
+sanitize SVG files securely before rendering them in the browser.</p>
+<hr />
+<h2 id="why-svg-sanitization-is-critical">Why SVG Sanitization is
+Critical</h2>
+<p>Unlike raster formats like PNG or JPEG, SVGs can execute code. An
+unsanitized SVG file can contain:</p>
+<ul>
+<li><code>&lt;script&gt;</code> tags executing arbitrary
+JavaScript.</li>
+<li>Inline event handlers such as <code>onload</code>,
+<code>onerror</code>, or <code>onclick</code>.</li>
+<li>Malicious <code>&lt;foreignObject&gt;</code> tags embedding HTML
+iframes or forms.</li>
+<li>XML External Entity (XXE) attacks or Billion Laughs
+denial-of-service payloads.</li>
+</ul>
+<p>To safely display user-uploaded or third-party SVGs, you must
+sanitize them using trusted, allowlist-based libraries.</p>
+<hr />
+<h2 id="top-javascript-and-client-side-sanitizers">Top JavaScript and
+Client-Side Sanitizers</h2>
+<h3 id="1-dompurify">1. DOMPurify</h3>
+<p><strong>DOMPurify</strong> is the standard for client-side and
+Node.js DOM sanitization. It is extremely fast, actively maintained, and
+specifically engineered to prevent XSS.</p>
+<ul>
+<li><strong>Key Features:</strong> Uses the browser’s native DOM parser,
+supports custom allowlists, and has built-in profiles for SVG.</li>
+<li><strong>Usage Example:</strong>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> DOMPurify <span class="im">from</span> <span class="st">&#39;dompurify&#39;</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> cleanSvg <span class="op">=</span> DOMPurify<span class="op">.</span><span class="fu">sanitize</span>(dirtySvg<span class="op">,</span> {</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">USE_PROFILES</span><span class="op">:</span> { <span class="dt">svg</span><span class="op">:</span> <span class="kw">true</span><span class="op">,</span> <span class="dt">svgFilters</span><span class="op">:</span> <span class="kw">true</span> }</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div></li>
+</ul>
+<h3 id="2-sanitize-html">2. sanitize-html</h3>
+<p><strong>sanitize-html</strong> is a versatile HTML/XML sanitizer for
+Node.js environments.</p>
+<ul>
+<li><strong>Key Features:</strong> Allows strict configuration of
+allowed tags, attributes, and URL schemes.</li>
+<li><strong>Best Use Case:</strong> Server-side JavaScript applications
+where you need fine-grained control over accepted SVG elements.</li>
+</ul>
+<hr />
+<h2 id="server-side-sanitization-libraries">Server-Side Sanitization
+Libraries</h2>
+<p>Sanitizing files on the server before storing them protects
+downstream users and prevents malicious files from entering your storage
+pipelines.</p>
+<h3 id="php-enshrinedsvg-sanitize">PHP: enshrined/svg-sanitize</h3>
+<p><strong>svg-sanitize</strong> is the most popular PHP library
+designed specifically for cleaning SVG content, commonly used within CMS
+ecosystems like WordPress and Drupal.</p>
+<ul>
+<li><strong>Key Features:</strong> Cleans XML trees, removes potentially
+dangerous tags/attributes, and preserves safe vector paths.</li>
+<li><strong>Usage Example:</strong>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode php"><code class="sourceCode php"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">use</span> enshrined\svgSanitize\Sanitizer<span class="ot">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="va">$sanitizer</span> <span class="op">=</span> <span class="kw">new</span> Sanitizer()<span class="ot">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a><span class="va">$cleanSvg</span> <span class="op">=</span> <span class="va">$sanitizer</span>-&gt;sanitize(<span class="va">$dirtySvg</span>)<span class="ot">;</span></span></code></pre></div></li>
+</ul>
+<h3 id="python-defusedxml-and-nh3">Python: defusedxml and nh3</h3>
+<p>Python applications handling SVGs should address both XML parsing
+vulnerabilities and XSS.</p>
+<ul>
+<li><strong>defusedxml:</strong> Replaces standard Python XML parsers to
+defend against XML entity expansion attacks (XXE, entity bombs).</li>
+<li><strong>nh3:</strong> Fast Python bindings to the Rust
+<code>ammonia</code> library, capable of stripping unwanted scripts,
+attributes, and tags from SVG/HTML strings.</li>
+</ul>
+<h3 id="go-bluemonday">Go: bluemonday</h3>
+<p><strong>bluemonday</strong> is a fast, robust HTML/SVG sanitizer for
+Go applications.</p>
+<ul>
+<li><strong>Key Features:</strong> Provides policy-based sanitation to
+strip out executable scripts and dangerous attributes while preserving
+safe SVG presentation tags.</li>
+</ul>
+<hr />
+<h2 id="build-tools-and-optimizers">Build Tools and Optimizers</h2>
+<h3 id="svgo-svg-optimizer">SVGO (SVG Optimizer)</h3>
+<p><strong>SVGO</strong> is a Node.js-based tool for optimizing SVG
+vector graphics files.</p>
+<ul>
+<li><strong>Security Role:</strong> While primarily an optimizer rather
+than a dedicated security sanitizer, SVGO removes metadata, scripts,
+hidden elements, and unused attributes when properly configured with
+plugins like <code>removeScripts</code> and
+<code>removeUnknownsAndDefaults</code>.</li>
+<li><strong>Recommendation:</strong> SVGO should be paired with a
+dedicated sanitizer (like DOMPurify) rather than used alone as a
+security boundary.</li>
+</ul>
+<hr />
+<h2 id="best-practices-for-safe-svg-web-rendering">Best Practices for
+Safe SVG Web Rendering</h2>
+<ol type="1">
+<li><strong>Use <code>&lt;img&gt;</code> Tags Over Inline SVGs:</strong>
+Rendering an SVG via an <code>&lt;img&gt;</code> tag or CSS
+<code>background-image</code> prevents scripts from executing in
+standard browsers. Reserve inline SVG (<code>&lt;svg&gt;</code>) only
+for cases requiring dynamic CSS manipulation or interaction.</li>
+<li><strong>Apply a Strict Content Security Policy (CSP):</strong> Set
+headers that restrict script execution and limit external connections
+within image contexts.</li>
+<li><strong>Serve with Safe Content-Type Headers:</strong> Ensure files
+served directly have the <code>Content-Type: image/svg+xml</code> header
+and include the <code>Content-Disposition: attachment</code> header if
+the file is intended strictly for download rather than display.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

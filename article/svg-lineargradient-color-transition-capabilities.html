@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG linearGradient Color Transition Capabilities - svg</title>
+    <meta name="description" content="The SVG <linearGradient> element is a powerful vector tool used to define smooth, linear transitions between two or more colors along a straight line. By defining gradient vectors, color stops, opacity levels, and repetition modes inside an SVG <defs> bl">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-lineargradient-color-transition-capabilities">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG linearGradient Color Transition Capabilities - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-lineargradient-color-transition-capabilities" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The SVG <linearGradient> element is a powerful vector tool used to define smooth, linear transitions between two or more colors along a straight line. By defining gradient vectors, color stops, opacity levels, and repetition modes inside an SVG <defs> bl" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-lineargradient-color-transition-capabilities">SVG
+linearGradient Color Transition Capabilities</h1>
+<p>The SVG <code>&lt;linearGradient&gt;</code> element is a powerful
+vector tool used to define smooth, linear transitions between two or
+more colors along a straight line. By defining gradient vectors, color
+stops, opacity levels, and repetition modes inside an SVG
+<code>&lt;defs&gt;</code> block, developers and designers can apply
+scalable, resolution-independent color transitions to any SVG shape's
+fill or stroke. This guide explores the core capabilities and attributes
+that make <code>&lt;linearGradient&gt;</code> a versatile choice for web
+rendering and UI design.</p>
+<h2 id="directional-control-with-vector-coordinates">Directional Control
+with Vector Coordinates</h2>
+<p>The path of a linear color transition is determined by starting and
+ending coordinates along the X and Y axes:</p>
+<ul>
+<li><strong>Coordinates (<code>x1</code>, <code>y1</code>,
+<code>x2</code>, <code>y2</code>):</strong> These attributes define the
+gradient vector line.
+<ul>
+<li>A horizontal gradient uses <code>x1="0%" y1="0%"</code> and
+<code>x2="100%" y2="0%"</code>.</li>
+<li>A vertical gradient uses <code>x1="0%" y1="0%"</code> and
+<code>x2="0%" y2="100%"</code>.</li>
+<li>Diagonal angles can be created by adjusting both axes (e.g.,
+<code>x1="0%" y1="0%"</code> to <code>x2="100%" y2="100%"</code>).</li>
+</ul></li>
+<li><strong>Coordinate Systems (<code>gradientUnits</code>):</strong>
+<ul>
+<li><code>objectBoundingBox</code> (default): Coordinates are evaluated
+as percentages or fractions relative to the bounding box of the element
+referencing the gradient.</li>
+<li><code>userSpaceOnUse</code>: Coordinates are evaluated based on the
+current SVG viewport's coordinate system, allowing gradients to span
+across multiple elements continuously.</li>
+</ul></li>
+</ul>
+<h2 id="multi-stop-color-sequencing">Multi-Stop Color Sequencing</h2>
+<p>Linear gradients are not restricted to two colors. The
+<code>&lt;stop&gt;</code> child element allows for complex color
+progressions:</p>
+<ul>
+<li><strong>Offset Positioning (<code>offset</code>):</strong> Dictates
+where each color stop begins along the gradient vector, expressed as a
+percentage (e.g., <code>0%</code> to <code>100%</code>) or a decimal
+(<code>0</code> to <code>1.0</code>).</li>
+<li><strong>Color Assignment (<code>stop-color</code>):</strong> Accepts
+standard CSS color formats, including hex codes, RGB, RGBA, HSL, and
+named colors.</li>
+<li><strong>Hard Color Bands:</strong> Placing two
+<code>&lt;stop&gt;</code> elements at the exact same offset value
+creates an immediate, crisp transition line rather than a blend, useful
+for striped or segmented effects.</li>
+</ul>
+<h2 id="transparency-and-alpha-channel-management">Transparency and
+Alpha Channel Management</h2>
+<p>The <code>&lt;linearGradient&gt;</code> element provides native
+support for opacity manipulation:</p>
+<ul>
+<li><strong>Stop Opacity (<code>stop-opacity</code>):</strong> Sets the
+transparency level of an individual stop from <code>0</code> (completely
+transparent) to <code>1</code> (completely opaque).</li>
+<li><strong>Overlay Effects:</strong> By transitioning from an opaque
+color to a transparent one, gradients can be used for masking, fading
+out backgrounds, or creating lighting and glow effects over other
+graphic layers.</li>
+</ul>
+<h2 id="spread-methods">Spread Methods</h2>
+<p>The <code>spreadMethod</code> attribute controls how the gradient
+renders if the vector coordinates do not cover the entire surface area
+of the target element:</p>
+<ul>
+<li><strong><code>pad</code> (Default):</strong> Extends the first and
+last colors outward to fill the remaining area.</li>
+<li><strong><code>repeat</code>:</strong> Continuously repeats the
+gradient pattern from start to finish across the entire shape.</li>
+<li><strong><code>reflect</code>:</strong> Alternates the gradient
+direction back and forth (start-to-finish, finish-to-start) to produce a
+mirrored pattern.</li>
+</ul>
+<h2 id="dynamic-transformations">Dynamic Transformations</h2>
+<p>The <code>gradientTransform</code> attribute applies geometric
+transformations directly to the gradient vector without altering the
+underlying shape:</p>
+<ul>
+<li>Supports transformation functions such as <code>rotate()</code>,
+<code>scale()</code>, <code>translate()</code>, and <code>skewX()</code>
+/ <code>skewY()</code>.</li>
+<li>Enables precise angular adjustments (such as rotating a gradient by
+45 degrees) without manual recalculation of <code>x1</code>,
+<code>y1</code>, <code>x2</code>, and <code>y2</code> coordinates.</li>
+</ul>
+<h2 id="reusability-and-performance">Reusability and Performance</h2>
+<p>Defined inside the SVG <code>&lt;defs&gt;</code> container, a single
+<code>&lt;linearGradient&gt;</code> can be referenced repeatedly across
+multiple shapes using the <code>url(#gradient-id)</code> syntax on
+<code>fill</code> or <code>stroke</code> properties. Because the
+calculations are handled by the browser's vector engine, SVG linear
+gradients remain crisp at any display scale and screen density while
+maintaining a minimal file size.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

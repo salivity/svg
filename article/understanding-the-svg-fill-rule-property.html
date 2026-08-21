@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding the SVG fill-rule Property - svg</title>
+    <meta name="description" content="The SVG fill-rule property determines whether a specific point inside a complex, overlapping, or self-intersecting shape is treated as "inside" (filled with color) or "outside" (left transparent). It achieves this by using an algorithm called ray casting">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/understanding-the-svg-fill-rule-property">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Understanding the SVG fill-rule Property - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/understanding-the-svg-fill-rule-property" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The SVG fill-rule property determines whether a specific point inside a complex, overlapping, or self-intersecting shape is treated as "inside" (filled with color) or "outside" (left transparent). It achieves this by using an algorithm called ray casting" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="understanding-the-svg-fill-rule-property">Understanding the SVG
+fill-rule Property</h1>
+<p>The SVG <code>fill-rule</code> property determines whether a specific
+point inside a complex, overlapping, or self-intersecting shape is
+treated as "inside" (filled with color) or "outside" (left transparent).
+It achieves this by using an algorithm called ray casting to evaluate
+intersecting path segments. This property accepts two primary
+values—<code>nonzero</code> (the default) and <code>evenodd</code>—each
+calculating interior regions differently based on path crossings and
+winding direction.</p>
+<h3 id="the-ray-casting-principle">The Ray Casting Principle</h3>
+<p>To decide whether any given point on a canvas should be filled, the
+rendering engine casts an imaginary ray from that point in any direction
+to infinity. As this ray extends outward, it counts every time it
+crosses a path segment. How the engine interprets these crossings
+depends entirely on the active <code>fill-rule</code>.</p>
+<hr />
+<h3 id="the-nonzero-rule-default">The <code>nonzero</code> Rule
+(Default)</h3>
+<p>The <code>nonzero</code> value determines fill status based on the
+total winding number of the path segments the ray crosses. Direction
+(winding order) is critical for this rule.</p>
+<ol type="1">
+<li>A counter starts at zero (<code>0</code>).</li>
+<li>An imaginary ray is drawn from the test point to infinity.</li>
+<li>Every time the ray crosses a path drawn from <strong>left to
+right</strong> (or clockwise relative to the point), add <code>1</code>
+to the counter.</li>
+<li>Every time the ray crosses a path drawn from <strong>right to
+left</strong> (or counter-clockwise relative to the point), subtract
+<code>1</code> from the counter.</li>
+<li>If the final count is <strong>non-zero</strong>, the point is inside
+the shape and gets <strong>filled</strong>.</li>
+<li>If the final count equals <strong>zero</strong>, the point is
+outside the shape and remains <strong>unfilled</strong>.</li>
+</ol>
+<p><strong>Practical Behavior:</strong></p>
+<ul>
+<li><strong>Hollow Shapes:</strong> If an inner subpath is drawn in the
+opposite direction of the outer subpath (e.g., clockwise outer circle,
+counter-clockwise inner circle), the counts cancel out
+(<code>1 - 1 = 0</code>), creating a cutout/hole.</li>
+<li><strong>Solid Overlaps:</strong> If overlapping subpaths are drawn
+in the same direction, the sum remains non-zero
+(<code>1 + 1 = 2</code>), causing overlapping areas to remain
+solid.</li>
+</ul>
+<hr />
+<h3 id="the-evenodd-rule">The <code>evenodd</code> Rule</h3>
+<p>The <code>evenodd</code> rule determines fill status simply by
+counting the total number of path crossings, completely ignoring the
+direction in which the paths were drawn.</p>
+<ol type="1">
+<li>A counter starts at zero (<code>0</code>).</li>
+<li>An imaginary ray is drawn from the test point to infinity.</li>
+<li>Every time the ray crosses any path segment, add <code>1</code> to
+the counter.</li>
+<li>If the total number of crossings is <strong>odd</strong>, the point
+is inside and gets <strong>filled</strong>.</li>
+<li>If the total number of crossings is <strong>even</strong>, the point
+is outside and remains <strong>unfilled</strong>.</li>
+</ol>
+<p><strong>Practical Behavior:</strong></p>
+<ul>
+<li>Path direction has zero impact on the result.</li>
+<li>Alternating overlaps naturally create nested cutouts: the outermost
+layer is filled (1 crossing), the next inner layer is empty (2
+crossings), the next is filled (3 crossings), and so on.</li>
+</ul>
+<hr />
+<h3 id="summary-of-differences">Summary of Differences</h3>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;"><code>nonzero</code> (Default)</th>
+<th style="text-align: left;"><code>evenodd</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Path Direction
+Matters</strong></td>
+<td style="text-align: left;">Yes (Clockwise vs. Counter-Clockwise)</td>
+<td style="text-align: left;">No</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Evaluation Method</strong></td>
+<td style="text-align: left;">Net sum of directional crossings</td>
+<td style="text-align: left;">Total count of crossings</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Filled Condition</strong></td>
+<td style="text-align: left;">Result ≠ <code>0</code></td>
+<td style="text-align: left;">Result is an odd number</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Common Use Case</strong></td>
+<td style="text-align: left;">Complex icons with controlled cutouts</td>
+<td style="text-align: left;">Geometric patterns, concentric shapes,
+CAD/GIS paths</td>
+</tr>
+</tbody>
+</table></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

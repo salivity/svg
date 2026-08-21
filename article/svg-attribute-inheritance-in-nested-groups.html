@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Attribute Inheritance in Nested Groups - svg</title>
+    <meta name="description" content="In Scalable Vector Graphics (SVG), the group element (<g>) serves as a container to organize and structure related graphical shapes. Attribute inheritance allows styles, presentation properties, and coordinate transformations applied to a parent <g> elem">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-attribute-inheritance-in-nested-groups">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG Attribute Inheritance in Nested Groups - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-attribute-inheritance-in-nested-groups" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="In Scalable Vector Graphics (SVG), the group element (<g>) serves as a container to organize and structure related graphical shapes. Attribute inheritance allows styles, presentation properties, and coordinate transformations applied to a parent <g> elem" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-attribute-inheritance-in-nested-groups">SVG Attribute
+Inheritance in Nested Groups</h1>
+<p>In Scalable Vector Graphics (SVG), the group element
+(<code>&lt;g&gt;</code>) serves as a container to organize and structure
+related graphical shapes. Attribute inheritance allows styles,
+presentation properties, and coordinate transformations applied to a
+parent <code>&lt;g&gt;</code> element to automatically cascade down to
+its nested children and child groups. This article explains which
+attributes inherit, how coordinate systems accumulate, and how
+specificity and overriding work within nested SVG trees.</p>
+<h2 id="presentation-attributes-vs-geometry-attributes">Presentation
+Attributes vs. Geometry Attributes</h2>
+<p>SVG attributes fall into distinct categories, and only specific types
+are passed down through inheritance:</p>
+<ul>
+<li><strong>Inheritable Presentation Attributes:</strong> Properties
+that define the appearance of shapes—such as <code>fill</code>,
+<code>stroke</code>, <code>stroke-width</code>, <code>opacity</code>,
+<code>font-family</code>, and <code>visibility</code>—are inherited by
+all child elements within the group. If a parent <code>&lt;g&gt;</code>
+defines <code>fill="red"</code>, all child elements without an explicit
+<code>fill</code> will render with a red fill.</li>
+<li><strong>Non-Inheritable Geometry Attributes:</strong> Attributes
+that dictate geometry or position—such as <code>x</code>,
+<code>y</code>, <code>cx</code>, <code>cy</code>, <code>r</code>,
+<code>width</code>, <code>height</code>, and <code>d</code>—do not
+inherit. These must be defined directly on individual shape elements
+like <code>&lt;rect&gt;</code>, <code>&lt;circle&gt;</code>, or
+<code>&lt;path&gt;</code>.</li>
+</ul>
+<h2 id="hierarchical-inheritance-in-nested-groups">Hierarchical
+Inheritance in Nested Groups</h2>
+<p>When groups are nested within other groups, inheritance follows a
+tree-like hierarchy:</p>
+<ol type="1">
+<li><strong>Downward Cascade:</strong> An element inherits values from
+its immediate parent <code>&lt;g&gt;</code>. If that parent does not
+specify the attribute, the element inherits from the next ancestor group
+up the DOM tree, continuing up to the root <code>&lt;svg&gt;</code>
+element or defaulting to user-agent styles.</li>
+<li><strong>Intermediate Overriding:</strong> If an outer
+<code>&lt;g&gt;</code> defines an attribute (e.g.,
+<code>fill="blue"</code>) and a nested inner <code>&lt;g&gt;</code>
+defines a different value (e.g., <code>fill="green"</code>), elements
+inside the inner group will inherit <code>green</code>, while elements
+directly under the outer group remain <code>blue</code>.</li>
+</ol>
+<h2 id="accumulation-of-transformations">Accumulation of
+Transformations</h2>
+<p>The <code>transform</code> attribute behaves differently from visual
+presentation attributes. Rather than overriding an ancestor's transform,
+nested transformations compound:</p>
+<ul>
+<li>Each nested <code>&lt;g&gt;</code> element with a
+<code>transform</code> attribute establishes a new local coordinate
+system relative to its parent's coordinate space.</li>
+<li>Rotations, scaling, and translations applied to an outer group
+affect all nested groups and their descendants.</li>
+<li>A child element's final position and orientation on the canvas
+represent the mathematical product (matrix multiplication) of all
+ancestor transformations combined with its own.</li>
+</ul>
+<h2 id="overriding-inherited-properties">Overriding Inherited
+Properties</h2>
+<p>Inheritance represents a default value for descendants, but it can be
+overridden through several mechanisms:</p>
+<ul>
+<li><strong>Direct Presentation Attributes:</strong> Setting a
+presentation attribute directly on a child element (e.g.,
+<code>&lt;circle fill="yellow" /&gt;</code>) overrides the value
+inherited from any parent group.</li>
+<li><strong>Inline CSS Styles:</strong> Using the <code>style</code>
+attribute (e.g., <code>style="fill: yellow;"</code>) carries higher
+specificity than presentation attributes and will override both parent
+and element-level presentation attributes.</li>
+<li><strong>CSS Style Sheets:</strong> External or embedded CSS rules
+target elements based on standard CSS specificity rules. A rule
+targeting a child element takes precedence over an inherited group
+attribute.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

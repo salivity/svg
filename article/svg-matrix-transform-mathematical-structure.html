@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG Matrix Transform Mathematical Structure - svg</title>
+    <meta name="description" content="This article provides an overview and technical breakdown of the mathematical structure behind the SVG matrix() transformation function. It details how the six parameters of the matrix(a, b, c, d, e, f) syntax represent an affine transformation matrix in">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-matrix-transform-mathematical-structure">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG Matrix Transform Mathematical Structure - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-matrix-transform-mathematical-structure" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article provides an overview and technical breakdown of the mathematical structure behind the SVG matrix() transformation function. It details how the six parameters of the matrix(a, b, c, d, e, f) syntax represent an affine transformation matrix in" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-matrix-transform-mathematical-structure">SVG Matrix
+Transform Mathematical Structure</h1>
+<p>This article provides an overview and technical breakdown of the
+mathematical structure behind the SVG <code>matrix()</code>
+transformation function. It details how the six parameters of the
+<code>matrix(a, b, c, d, e, f)</code> syntax represent an affine
+transformation matrix in homogeneous coordinates, explains the linear
+equations used to calculate transformed coordinate points, and
+demonstrates how standard SVG transformations—such as translation,
+scaling, rotation, and skewing—map directly to this matrix format.</p>
+<hr />
+<h3 id="the-3x3-affine-transformation-matrix">The 3x3 Affine
+Transformation Matrix</h3>
+<p>In Scalable Vector Graphics (SVG), all 2D transformations are
+mathematically handled as <span class="math inline">\(3 \times
+3\)</span> affine transformation matrices using homogeneous coordinates.
+An affine transformation preserves collinearity and ratios of distances,
+ensuring straight lines remain straight and parallel lines remain
+parallel.</p>
+<p>The general transformation matrix is structured as:</p>
+<p><span class="math display">\[
+\begin{bmatrix}
+a &amp; c &amp; e \\
+b &amp; d &amp; f \\
+0 &amp; 0 &amp; 1
+\end{bmatrix}
+\]</span></p>
+<p>Because the bottom row of a 2D affine transformation matrix is always
+constant (<span class="math inline">\(\begin{bmatrix} 0 &amp; 0 &amp; 1
+\end{bmatrix}\)</span>), SVG simplifies the notation by omitting these
+fixed values. The function is written in SVG syntax with six
+parameters:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>transform=&quot;matrix(a, b, c, d, e, f)&quot;</span></code></pre></div>
+<h3 id="coordinate-transformation-formula">Coordinate Transformation
+Formula</h3>
+<p>To transform an original point <span class="math inline">\((x,
+y)\)</span> into a new coordinate <span class="math inline">\((x&#39;,
+y&#39;)\)</span>, the point is represented as a 3D homogeneous column
+vector <span class="math inline">\(\begin{bmatrix} x \\ y \\ 1
+\end{bmatrix}\)</span> and multiplied by the transformation matrix:</p>
+<h1 id="-beginbmatrix-x--y--1-endbmatrix">$$ \begin{bmatrix} x' \ y' \ 1
+\end{bmatrix}</h1>
+<p>\begin{bmatrix} a &amp; c &amp; e \ b &amp; d &amp; f \ 0 &amp; 0
+&amp; 1 \end{bmatrix} \begin{bmatrix} x \ y \ 1 \end{bmatrix} $$</p>
+<p>Expanding this matrix multiplication produces two linear
+equations:</p>
+<ul>
+<li><strong><span class="math inline">\(x&#39; = ax + cy +
+e\)</span></strong></li>
+<li><strong><span class="math inline">\(y&#39; = bx + dy +
+f\)</span></strong></li>
+</ul>
+<h3 id="parameter-roles-and-components">Parameter Roles and
+Components</h3>
+<p>Each parameter in <code>matrix(a, b, c, d, e, f)</code> controls
+specific transformation properties:</p>
+<ul>
+<li><strong><code>a</code></strong>: Controls horizontal scaling and
+affects rotation.</li>
+<li><strong><code>b</code></strong>: Controls vertical skewing and
+affects rotation.</li>
+<li><strong><code>c</code></strong>: Controls horizontal skewing and
+affects rotation.</li>
+<li><strong><code>d</code></strong>: Controls vertical scaling and
+affects rotation.</li>
+<li><strong><code>e</code></strong>: Represents translation along the
+X-axis (<span class="math inline">\(\Delta x\)</span>).</li>
+<li><strong><code>f</code></strong>: Represents translation along the
+Y-axis (<span class="math inline">\(\Delta y\)</span>).</li>
+</ul>
+<p>The identity matrix—representing no change to the coordinate
+system—is defined as <code>matrix(1, 0, 0, 1, 0, 0)</code>.</p>
+<h3 id="mapping-basic-transforms-to-matrix-notation">Mapping Basic
+Transforms to Matrix Notation</h3>
+<p>Every standard SVG transformation function is a specialized
+representation of this matrix:</p>
+<h4 id="1-translation-translatetx-ty">1. Translation:
+<code>translate(tx, ty)</code></h4>
+<p>Moves an element by <span class="math inline">\(tx\)</span> along the
+X-axis and <span class="math inline">\(ty\)</span> along the Y-axis.</p>
+<ul>
+<li><strong>Matrix:</strong>
+<code>matrix(1, 0, 0, 1, tx, ty)</code></li>
+<li><strong>Equations:</strong> <span class="math inline">\(x&#39; = x +
+tx\)</span>, <span class="math inline">\(y&#39; = y + ty\)</span></li>
+</ul>
+<h4 id="2-scaling-scalesx-sy">2. Scaling:
+<code>scale(sx, sy)</code></h4>
+<p>Scales an element by factors <span class="math inline">\(sx\)</span>
+and <span class="math inline">\(sy\)</span>.</p>
+<ul>
+<li><strong>Matrix:</strong>
+<code>matrix(sx, 0, 0, sy, 0, 0)</code></li>
+<li><strong>Equations:</strong> <span class="math inline">\(x&#39; = sx
+\cdot x\)</span>, <span class="math inline">\(y&#39; = sy \cdot
+y\)</span></li>
+</ul>
+<h4 id="3-rotation-rotateθ">3. Rotation: <code>rotate(θ)</code></h4>
+<p>Rotates an element by angle <span
+class="math inline">\(\theta\)</span> (measured in degrees, converted to
+radians for calculation) around the origin <span
+class="math inline">\((0, 0)\)</span>.</p>
+<ul>
+<li><strong>Matrix:</strong>
+<code>matrix(cos(θ), sin(θ), -sin(θ), cos(θ), 0, 0)</code></li>
+<li><strong>Equations:</strong>
+<ul>
+<li><span class="math inline">\(x&#39; = x \cos(\theta) - y
+\sin(\theta)\)</span></li>
+<li><span class="math inline">\(y&#39; = x \sin(\theta) + y
+\cos(\theta)\)</span></li>
+</ul></li>
+</ul>
+<h4 id="4-skewing-skewxα-and-skewyβ">4. Skewing: <code>skewX(α)</code>
+and <code>skewY(β)</code></h4>
+<p>Distorts an element along the X-axis by angle <span
+class="math inline">\(\alpha\)</span> or along the Y-axis by angle <span
+class="math inline">\(\beta\)</span>.</p>
+<ul>
+<li><strong>Skew X Matrix:</strong>
+<code>matrix(1, 0, tan(α), 1, 0, 0)</code>
+<ul>
+<li><span class="math inline">\(x&#39; = x + y \tan(\alpha)\)</span>,
+<span class="math inline">\(y&#39; = y\)</span></li>
+</ul></li>
+<li><strong>Skew Y Matrix:</strong>
+<code>matrix(1, tan(β), 0, 1, 0, 0)</code>
+<ul>
+<li><span class="math inline">\(x&#39; = x\)</span>, <span
+class="math inline">\(y&#39; = x \tan(\beta) + y\)</span></li>
+</ul></li>
+</ul>
+<h3 id="matrix-composition">Matrix Composition</h3>
+<p>When multiple transformations are applied to an element (for example,
+<code>transform="translate(20, 30) rotate(45)"</code>), SVG multiplies
+the corresponding matrices together from left to right. Because matrix
+multiplication is associative but non-commutative, the order of
+transformations determines the final matrix configuration.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

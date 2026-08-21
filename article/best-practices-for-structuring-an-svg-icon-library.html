@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Practices for Structuring an SVG Icon Library - svg</title>
+    <meta name="description" content="Structuring an SVG icon library for scalable web projects requires standardizing source assets, automating optimization pipelines, and choosing an efficient delivery method. This guide outlines the core architectural patterns and automation workflows nee">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/best-practices-for-structuring-an-svg-icon-library">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Best Practices for Structuring an SVG Icon Library - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/best-practices-for-structuring-an-svg-icon-library" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Structuring an SVG icon library for scalable web projects requires standardizing source assets, automating optimization pipelines, and choosing an efficient delivery method. This guide outlines the core architectural patterns and automation workflows nee" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="best-practices-for-structuring-an-svg-icon-library">Best
+Practices for Structuring an SVG Icon Library</h1>
+<p>Structuring an SVG icon library for scalable web projects requires
+standardizing source assets, automating optimization pipelines, and
+choosing an efficient delivery method. This guide outlines the core
+architectural patterns and automation workflows needed to maintain a
+high-performance, consistent, and developer-friendly icon system across
+enterprise applications and design systems.</p>
+<h2 id="standardize-source-assets-at-the-design-level">Standardize
+Source Assets at the Design Level</h2>
+<p>A scalable icon system begins with strict consistency in your design
+tools before code is generated:</p>
+<ul>
+<li><strong>Fixed ViewBox:</strong> Enforce a single grid size across
+all base icons (e.g., <code>24x24</code> or <code>16x16</code> pixels).
+A consistent <code>viewBox="0 0 24 24"</code> ensures predictable
+alignment and scaling in CSS.</li>
+<li><strong>Remove Fixed Colors:</strong> Replace hardcoded hex codes or
+RGB values with <code>currentColor</code> on <code>fill</code> or
+<code>stroke</code> attributes. This enables developers to change icon
+colors via standard CSS <code>color</code> properties.</li>
+<li><strong>Flatten and Outline Shapes:</strong> Convert text and
+strokes to outlined paths unless the system relies specifically on
+dynamic stroke weights. Ensure all overlapping paths are merged to
+reduce DOM complexity.</li>
+</ul>
+<h2 id="automate-optimization-with-svgo">Automate Optimization with
+SVGO</h2>
+<p>Raw SVG exports contain unnecessary metadata, comments, and
+non-standard attributes from design software. Integrate
+<strong>SVGO</strong> (SVG Optimizer) into your build pipeline to
+automate cleanup.</p>
+<p>Key SVGO optimizations include:</p>
+<ul>
+<li>Removing XML namespaces, metadata, and design-tool-specific tags
+(e.g., <code>data-name</code>, <code>&lt;sketch:type&gt;</code>).</li>
+<li>Removing empty containers and unused groups
+(<code>&lt;g&gt;</code>).</li>
+<li>Converting styling elements into minimal path attributes.</li>
+<li>Setting precision limits on path coordinates to shave off
+unnecessary bytes.</li>
+</ul>
+<h2 id="choose-the-right-delivery-pattern">Choose the Right Delivery
+Pattern</h2>
+<p>Select an architectural delivery pattern based on performance needs,
+framework requirements, and bundle size constraints.</p>
+<h3 id="1-the-svg-sprite-method-best-for-performance--caching">1. The
+SVG Sprite Method (Best for Performance &amp; Caching)</h3>
+<p>SVG sprites consolidate all icons into a single SVG file containing
+distinct <code>&lt;symbol&gt;</code> elements.</p>
+<ul>
+<li><strong>How it works:</strong> Icons are referenced in HTML via the
+<code>&lt;use&gt;</code> tag:
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">svg</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;icon&quot;</span><span class="ot"> aria-hidden</span><span class="op">=</span><span class="st">&quot;true&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">use</span><span class="ot"> href</span><span class="op">=</span><span class="st">&quot;/assets/icons/sprite.svg#chevron-right&quot;</span><span class="dt">&gt;&lt;/</span><span class="kw">use</span><span class="dt">&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">svg</span><span class="dt">&gt;</span></span></code></pre></div></li>
+<li><strong>Pros:</strong> Highly cacheable, prevents inline DOM bloat,
+zero JavaScript runtime overhead.</li>
+<li><strong>Cons:</strong> Cross-origin restrictions can complicate CDN
+hosting; multi-color dynamic theming requires CSS custom properties on
+internal symbol elements.</li>
+</ul>
+<h3 id="2-component-based-packages-best-for-reactvuesvelte">2.
+Component-Based Packages (Best for React/Vue/Svelte)</h3>
+<p>Tools like SVGR (React) or dedicated Vite plugins compile SVGs
+directly into tree-shakeable UI components.</p>
+<ul>
+<li><strong>How it works:</strong> Each icon becomes a standalone
+component:
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode jsx"><code class="sourceCode javascriptreact"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { ChevronRightIcon } <span class="im">from</span> <span class="st">&#39;@company/icons&#39;</span><span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="im">export</span> <span class="kw">const</span> Button <span class="op">=</span> () <span class="kw">=&gt;</span> (</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="kw">&lt;button&gt;</span>Next <span class="fu">&lt;ChevronRightIcon</span> <span class="ot">size</span><span class="op">=</span><span class="va">{</span><span class="dv">16</span><span class="va">}</span> <span class="fu">/&gt;</span><span class="kw">&lt;/button&gt;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>)<span class="op">;</span></span></code></pre></div></li>
+<li><strong>Pros:</strong> Native framework integration, easy prop
+passing (size, color, title), and strict TypeScript autocompletion.</li>
+<li><strong>Cons:</strong> Increases JavaScript bundle size if bundler
+tree-shaking is improperly configured.</li>
+</ul>
+<h2 id="establish-a-clean-directory-and-naming-structure">Establish a
+Clean Directory and Naming Structure</h2>
+<p>Organize source files and generated code to prevent name collisions
+and enable modular imports:</p>
+<pre class="text"><code>icons/
+├── src/
+│   ├── navigation/
+│   │   ├── arrow-left.svg
+│   │   └── arrow-right.svg
+│   └── actions/
+│       ├── edit.svg
+│       └── trash.svg
+├── dist/
+│   ├── sprite/
+│   │   └── sprite.svg
+│   ├── react/
+│   └── types/
+└── svgo.config.js</code></pre>
+<p>Use strict <code>kebab-case</code> naming for raw files and export
+standard <code>PascalCase</code> variants for components (e.g.,
+<code>arrow-left.svg</code> becomes <code>ArrowLeftIcon</code>). Avoid
+embedding size metrics in the icon name itself; handle sizing
+dynamically through CSS or component props.</p>
+<h2 id="ensure-built-in-accessibility">Ensure Built-in
+Accessibility</h2>
+<p>An icon library must provide programmatic support for both decorative
+and semantic icons:</p>
+<ul>
+<li><strong>Decorative Icons:</strong> Hide them from assistive tech by
+default using <code>aria-hidden="true"</code>.</li>
+<li><strong>Semantic Icons:</strong> When an icon acts as a standalone
+interactive element (e.g., an icon-only button), require an accessible
+label via <code>aria-label</code> on the parent container or include a
+descriptive <code>&lt;title&gt;</code> element linked via
+<code>aria-labelledby</code>.</li>
+</ul>
+<h2 id="automate-the-sync-workflow">Automate the Sync Workflow</h2>
+<p>Maintain a single source of truth by integrating automation between
+design and deployment:</p>
+<ol type="1">
+<li><strong>Figma Tokens / API:</strong> Use the Figma API or automated
+GitHub Actions to pull the latest production-ready SVG assets directly
+from the design file.</li>
+<li><strong>Build Pipeline:</strong> Run incoming SVGs through SVGO,
+generate sprites and component wrappers, and generate TypeScript
+definition files automatically.</li>
+<li><strong>Distribution:</strong> Publish the generated output as an
+independent NPM package (e.g., <code>@organization/icons</code>) to be
+consumed across multiple web applications consistently.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

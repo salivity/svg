@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interpolating Dissimilar SVG Paths with Flubber - svg</title>
+    <meta name="description" content="This article explores how the open-source library Flubber resolves common challenges in SVG shape morphing by smoothly interpolating dissimilar vector paths. Standard vector interpolation often fails or creates visually chaotic artifacts when morphing be">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/interpolating-dissimilar-svg-paths-with-flubber">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Interpolating Dissimilar SVG Paths with Flubber - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/interpolating-dissimilar-svg-paths-with-flubber" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores how the open-source library Flubber resolves common challenges in SVG shape morphing by smoothly interpolating dissimilar vector paths. Standard vector interpolation often fails or creates visually chaotic artifacts when morphing be" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="interpolating-dissimilar-svg-paths-with-flubber">Interpolating
+Dissimilar SVG Paths with Flubber</h1>
+<p>This article explores how the open-source library Flubber resolves
+common challenges in SVG shape morphing by smoothly interpolating
+dissimilar vector paths. Standard vector interpolation often fails or
+creates visually chaotic artifacts when morphing between shapes with
+differing numbers of vertices, complex curves, or disconnected
+sub-paths. Flubber solves this by intelligently normalizing, resampling,
+and aligning geometry to produce predictable and aesthetically pleasing
+transitions.</p>
+<h2 id="the-core-challenge-of-svg-path-morphing">The Core Challenge of
+SVG Path Morphing</h2>
+<p>Vector animations rely on interpolating coordinates between a
+starting path (<span class="math inline">\(d_1\)</span>) and an ending
+path (<span class="math inline">\(d_2\)</span>). Standard linear
+interpolation algorithms require a direct 1-to-1 mapping between the
+command segments and vertices of both paths.</p>
+<p>When two SVG paths are dissimilar—such as morphing a simple triangle
+(3 points) into a detailed star (10 points)—standard tools struggle.
+Common issues include:</p>
+<ul>
+<li><strong>Vertex mismatch:</strong> The animation fails or snaps
+abruptly when point counts differ.</li>
+<li><strong>Point twisting:</strong> Vertices travel across the interior
+of the shape, creating self-intersecting loops and unnatural
+distortion.</li>
+<li><strong>Topological differences:</strong> Standard interpolators
+cannot naturally handle transitioning between a single shape and
+multiple disconnected shapes (like morphing the letter "O" into the
+letter "B").</li>
+</ul>
+<h2 id="how-flubber-solves-disparity">How Flubber Solves Disparity</h2>
+<p>Flubber overcomes these limitations through several algorithmic steps
+that prepare and pair vector paths before interpolation begins.</p>
+<h3 id="1-automatic-path-resampling-and-subdivision">1. Automatic Path
+Resampling and Subdivision</h3>
+<p>Rather than requiring designers to manually add matching anchor
+points in vector software, Flubber automatically resamples both the
+source and target paths. It computes the perimeter of both paths and
+subdivides them by inserting additional points along path segments. This
+guarantees that both paths have an identical number of vertices spaced
+evenly relative to the geometry.</p>
+<h3 id="2-best-match-vertex-alignment">2. Best-Match Vertex
+Alignment</h3>
+<p>Once vertex counts match, Flubber determines the optimal starting
+index and winding direction (clockwise vs. counter-clockwise) for the
+paths. By minimizing the sum of squared Euclidean distances between
+corresponding points, it prevents vertices from traveling unnecessarily
+far, eliminating the unnatural spinning or folding effects seen in naive
+interpolators.</p>
+<h3 id="3-shape-triangulation-and-interior-mapping">3. Shape
+Triangulation and Interior Mapping</h3>
+<p>For complex transitions, Flubber uses polygon triangulation. It
+decomposes source and target shapes into a mesh of triangles. By mapping
+corresponding triangles between the two shapes, Flubber can smoothly
+transform complex, concave, or multi-segmented shapes with continuous
+geometric coherence.</p>
+<h3 id="4-splitting-and-merging-topologies">4. Splitting and Merging
+Topologies</h3>
+<p>Flubber includes dedicated methods for handling multi-path
+scenarios:</p>
+<ul>
+<li><strong><code>flubber.separate()</code></strong>: Morphs a single
+SVG path into multiple discrete closed paths.</li>
+<li><strong><code>flubber.combine()</code></strong>: Merges multiple
+separate SVG paths into a single cohesive path.</li>
+<li><strong><code>flubber.interpolate()</code></strong>: Standard
+morphing between two distinct shapes.</li>
+<li>Specialized methods like <code>toCircle()</code>,
+<code>fromCircle()</code>, <code>toRect()</code>, and
+<code>fromRect()</code> provide optimized geometric transforms for
+primitive shapes.</li>
+</ul>
+<h2 id="integrating-flubber-into-animation-workflows">Integrating
+Flubber into Animation Workflows</h2>
+<p>Flubber is design-agnostic and returns an interpolation function that
+accepts a progress parameter <span class="math inline">\(t\)</span>
+(ranging from <code>0</code> to <code>1</code>) and outputs an SVG path
+string (<code>d</code> attribute). This makes it directly compatible
+with modern web animation tools, including:</p>
+<ul>
+<li><strong>D3.js:</strong> Usable inside
+<code>d3.transition().attrTween()</code> for data-driven
+visualizations.</li>
+<li><strong>GSAP (GreenSock):</strong> Usable inside generic tween
+callbacks.</li>
+<li><strong>Vanilla JavaScript:</strong> Executable directly within a
+<code>requestAnimationFrame</code> loop.</li>
+</ul>
+<p>By automating path normalization, segment distribution, and spatial
+alignment, Flubber allows developers to create fluid, production-ready
+SVG morphing animations between completely dissimilar shapes without
+manual vector tweaking.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Performance Advantages of SVGs Over Bitmaps on the Web - svg</title>
+    <meta name="description" content="Using Scalable Vector Graphics (SVG) instead of standard bitmap formats—such as PNG, JPEG, and WebP—provides significant performance gains for modern websites and web applications. Because SVGs rely on XML-based vector paths rather than fixed pixel g">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/performance-advantages-of-svgs-over-bitmaps-on-the-web">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Performance Advantages of SVGs Over Bitmaps on the Web - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/performance-advantages-of-svgs-over-bitmaps-on-the-web" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Using Scalable Vector Graphics (SVG) instead of standard bitmap formats—such as PNG, JPEG, and WebP—provides significant performance gains for modern websites and web applications. Because SVGs rely on XML-based vector paths rather than fixed pixel g" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1
+id="performance-advantages-of-svgs-over-bitmaps-on-the-web">Performance
+Advantages of SVGs Over Bitmaps on the Web</h1>
+<p>Using Scalable Vector Graphics (SVG) instead of standard bitmap
+formats—such as PNG, JPEG, and WebP—provides significant performance
+gains for modern websites and web applications. Because SVGs rely on
+XML-based vector paths rather than fixed pixel grids, they dramatically
+reduce overall page weight, cut down network requests, scale across
+screen resolutions without quality or size penalties, and enable
+lightweight DOM-level animations. This guide breaks down the core
+technical advantages of utilizing SVGs to optimize web performance and
+improve Core Web Vitals.</p>
+<h3 id="resolution-independence-and-asset-consolidation">Resolution
+Independence and Asset Consolidation</h3>
+<p>Bitmap images require multiple high-density exports (such as
+<code>@2x</code> and <code>@3x</code> variants) to appear sharp on
+high-DPI displays, which increases total asset payloads and complicates
+responsive delivery. In contrast, an SVG uses geometric coordinates to
+calculate shapes at runtime. A single SVG file renders cleanly on any
+display size, eliminating the need to generate, store, and serve
+separate images for different screen densities.</p>
+<h3 id="drastically-reduced-file-sizes">Drastically Reduced File
+Sizes</h3>
+<p>For logos, icons, user interface elements, and simple illustrations,
+SVGs are typically a fraction of the file size of an equivalent bitmap.
+Because the format stores mathematical commands rather than color values
+for millions of individual pixels, simple vectors require minimal data.
+Furthermore, because SVG is fundamentally plain text (XML), it
+compresses exceptionally well using standard server-side compression
+algorithms such as Gzip and Brotli.</p>
+<h3 id="elimination-of-http-requests-via-inlining">Elimination of HTTP
+Requests via Inlining</h3>
+<p>Standard bitmap images require individual network round-trips to the
+server or CDN unless combined into complex CSS sprites. SVGs can be
+embedded directly into the HTML document as native markup using the
+<code>&lt;svg&gt;</code> tag. Inlining vectors removes external HTTP
+requests, eliminates render-blocking network latency, and allows the
+browser to parse and display critical UI assets immediately alongside
+the HTML.</p>
+<h3 id="dom-level-styling-and-scripting">DOM-Level Styling and
+Scripting</h3>
+<p>Unlike bitmaps, which are opaque binary blocks, every element within
+an SVG acts as a node within the Document Object Model (DOM). Web
+developers can target SVG paths directly with CSS to alter colors, hover
+states, and structural styling. This capability eliminates the need to
+download multiple versions of an icon or button to support interactive
+states, dark mode, or themes.</p>
+<h3
+id="hardware-accelerated-lightweight-animation">Hardware-Accelerated,
+Lightweight Animation</h3>
+<p>Animating bitmap formats usually requires embedding heavy animated
+GIFs, WebM video files, or running complex JavaScript canvas operations,
+all of which consume considerable CPU and memory. SVGs can be animated
+natively using lightweight CSS transitions, keyframes, or the Web
+Animations API. These animations run smoothly, take up negligible
+bandwidth, and leverage browser hardware acceleration.</p>
+<h3 id="easy-minification-and-build-automation">Easy Minification and
+Build Automation</h3>
+<p>Because SVGs are code-based, they can be processed and optimized
+directly within front-end build pipelines. Build tools can strip
+unnecessary metadata, editor comments, and invisible anchor points
+automatically. This ensures that only the leanest mathematical
+instructions reach production, keeping asset sizes strictly
+minimized.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

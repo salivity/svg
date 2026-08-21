@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Negative SVG viewBox Coordinates Shift Origin - svg</title>
+    <meta name="description" content="This article explains the mechanics of using negative values within the SVG viewBox attribute and how they alter the canvas coordinate system. You will learn how the min-x and min-y parameters define the visible window, why negative values push the (0,0)">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-negative-svg-viewbox-coordinates-shift-origin">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Negative SVG viewBox Coordinates Shift Origin - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-negative-svg-viewbox-coordinates-shift-origin" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains the mechanics of using negative values within the SVG viewBox attribute and how they alter the canvas coordinate system. You will learn how the min-x and min-y parameters define the visible window, why negative values push the (0,0)" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-negative-svg-viewbox-coordinates-shift-origin">How Negative
+SVG viewBox Coordinates Shift Origin</h1>
+<p>This article explains the mechanics of using negative values within
+the SVG <code>viewBox</code> attribute and how they alter the canvas
+coordinate system. You will learn how the <code>min-x</code> and
+<code>min-y</code> parameters define the visible window, why negative
+values push the <code>(0,0)</code> origin point into the visible area,
+and how this technique simplifies creating centered or symmetrical
+graphics.</p>
+<h2 id="understanding-the-viewbox-syntax">Understanding the viewBox
+Syntax</h2>
+<p>The SVG <code>viewBox</code> attribute is defined by four values:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>viewBox=&quot;min-x min-y width height&quot;</span></code></pre></div>
+<ul>
+<li><strong>min-x</strong>: The horizontal coordinate mapped to the left
+edge of the viewport.</li>
+<li><strong>min-y</strong>: The vertical coordinate mapped to the top
+edge of the viewport.</li>
+<li><strong>width</strong>: The total number of horizontal units visible
+in the viewport.</li>
+<li><strong>height</strong>: The total number of vertical units visible
+in the viewport.</li>
+</ul>
+<p>By default, an SVG without defined coordinate offsets assumes a
+<code>min-x</code> and <code>min-y</code> of <code>0 0</code>, placing
+the origin point <code>(0,0)</code> strictly at the top-left corner of
+the rendering container.</p>
+<h2 id="how-negative-coordinates-shift-the-origin">How Negative
+Coordinates Shift the Origin</h2>
+<p>When you assign negative numbers to <code>min-x</code> and
+<code>min-y</code>, you are declaring that the top-left corner of the
+visible screen area represents a negative coordinate in your SVG canvas
+space.</p>
+<p>Because standard SVG coordinates increase from left to right (X-axis)
+and top to bottom (Y-axis), setting a negative start point shifts the
+location of the <code>(0,0)</code> point down and to the right relative
+to the visual container.</p>
+<h3 id="example-shifting-by-50-units">Example: Shifting by 50 Units</h3>
+<p>Consider the following attribute:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>viewBox=&quot;-50 -50 200 200&quot;</span></code></pre></div>
+<ol type="1">
+<li>The top-left visual corner corresponds to the coordinate
+<code>(-50, -50)</code>.</li>
+<li>As the coordinate values increase across the 200-unit width and
+height, the coordinate <code>(0,0)</code> is reached 50 units inward
+from the top and left edges.</li>
+<li>Elements drawn with coordinates between <code>-50</code> and
+<code>0</code> become fully visible in the top-left quadrant of the
+viewport.</li>
+</ol>
+<h2 id="centering-the-origin-point">Centering the Origin Point</h2>
+<p>The most common practical application of negative
+<code>viewBox</code> coordinates is centering the coordinate origin
+<code>(0,0)</code> directly in the middle of the viewport.</p>
+<p>To place <code>(0,0)</code> at the exact center, set
+<code>min-x</code> to negative half of the <code>width</code>, and
+<code>min-y</code> to negative half of the <code>height</code>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>viewBox=&quot;-100 -100 200 200&quot;</span></code></pre></div>
+<p>In this setup:</p>
+<ul>
+<li>The horizontal axis spans from <code>-100</code> (left edge) to
+<code>+100</code> (right edge).</li>
+<li>The vertical axis spans from <code>-100</code> (top edge) to
+<code>+100</code> (bottom edge).</li>
+<li>The <code>(0,0)</code> point rests precisely at the center of the
+rendered graphic.</li>
+</ul>
+<h2 id="practical-benefits-of-shifting-the-origin">Practical Benefits of
+Shifting the Origin</h2>
+<ul>
+<li><strong>Simplified Symmetry</strong>: Drawing shapes like circles
+(<code>&lt;circle cx="0" cy="0" r="40" /&gt;</code>) or radial patterns
+requires no offset calculations.</li>
+<li><strong>Easier Transformations</strong>: Rotations and scaling
+operations default to rotating around <code>(0,0)</code>. When the
+origin is centered, elements rotate around the visual center of the
+canvas without requiring <code>transform-origin</code> adjustments.</li>
+<li><strong>Polar-to-Cartesian Plotting</strong>: Charts, dials, and
+clocks can be plotted using standard trigonometric formulas without
+manually offsetting every calculated point by the canvas midpoint.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

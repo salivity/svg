@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Best Tools to Visually Diff SVG Files in Git - svg</title>
+    <meta name="description" content="Because Scalable Vector Graphics (SVG) are XML-based text files, standard Git diffs only show changes in markup and coordinates rather than how the artwork actually looks. Reviewing code changes on complex vector paths is impractical, making visual diffi">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/best-tools-to-visually-diff-svg-files-in-git">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Best Tools to Visually Diff SVG Files in Git - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/best-tools-to-visually-diff-svg-files-in-git" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Because Scalable Vector Graphics (SVG) are XML-based text files, standard Git diffs only show changes in markup and coordinates rather than how the artwork actually looks. Reviewing code changes on complex vector paths is impractical, making visual diffi" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="best-tools-to-visually-diff-svg-files-in-git">Best Tools to
+Visually Diff SVG Files in Git</h1>
+<p>Because Scalable Vector Graphics (SVG) are XML-based text files,
+standard Git diffs only show changes in markup and coordinates rather
+than how the artwork actually looks. Reviewing code changes on complex
+vector paths is impractical, making visual diffing essential for design
+and development workflows. This guide covers the best tools and methods
+available to visually compare SVG revisions across Git repositories,
+including built-in platform features, dedicated desktop applications,
+and command-line utilities.</p>
+<h2 id="1-web-based-git-platforms">1. Web-Based Git Platforms</h2>
+<h3 id="github-visual-diffs">GitHub Visual Diffs</h3>
+<p>GitHub natively supports visual diffing for image formats, including
+SVGs, directly within pull requests and commit views. When viewing a
+modified SVG, you can switch between several viewing modes:</p>
+<ul>
+<li><strong>2-Up:</strong> Displays the original and modified versions
+side by side.</li>
+<li><strong>Swipe:</strong> Provides a split-screen slider allowing you
+to drag across the image to see differences in real time.</li>
+<li><strong>Onion Skin:</strong> Overlays the new version over the old
+one with an adjustable transparency slider to spot subtle shifts.</li>
+</ul>
+<h3 id="gitlab-image-diffing">GitLab Image Diffing</h3>
+<p>GitLab includes a similar native visual diffing tool for vector and
+raster images in merge requests. It provides side-by-side comparisons,
+swipe bars, and overlay modes directly in the web interface.</p>
+<h2 id="2-dedicated-visual-diff-desktop-tools">2. Dedicated Visual Diff
+Desktop Tools</h2>
+<h3 id="diffplug">DiffPlug</h3>
+<p>DiffPlug is a specialized diffing tool designed for technical data
+formats, including vector graphics. It can render SVGs visually and
+highlight exact geometry and path changes between two Git commits
+without requiring you to inspect raw XML.</p>
+<h3 id="kaleidoscope-macos">Kaleidoscope (macOS)</h3>
+<p>Kaleidoscope is a powerful visual comparison tool for macOS that
+integrates directly with Git. When configured as your Git
+<code>difftool</code>, it offers high-resolution side-by-side, split,
+and overlay comparisons for SVGs by rendering the vector files
+directly.</p>
+<h3 id="beyond-compare">Beyond Compare</h3>
+<p>Beyond Compare supports image comparison and can be integrated into
+Git workflows. With the appropriate file formats or helper plugins
+enabled, it renders SVGs visually and highlights differing pixels using
+a tolerance mask.</p>
+<h2 id="3-code-editor-extensions">3. Code Editor Extensions</h2>
+<h3 id="vs-code-extensions">VS Code Extensions</h3>
+<p>If you use Visual Studio Code for your Git workflow, extensions can
+render visual diffs locally:</p>
+<ul>
+<li><strong>SVG Viewer / SVG Diff:</strong> Allows you to preview
+changes side-by-side inside the editor.</li>
+<li><strong>GitLens:</strong> When paired with image preview extensions,
+GitLens allows you to visually inspect file history and compare
+revisions of vector assets from the sidebar.</li>
+</ul>
+<h2 id="4-command-line-and-automated-git-diff-drivers">4. Command-Line
+and Automated Git Diff Drivers</h2>
+<p>You can configure Git to automatically generate visual image diffs
+using external rendering engines and <code>.gitattributes</code>.</p>
+<h3 id="imagemagick-with-git-difftool">ImageMagick with Git
+Difftool</h3>
+<p>You can configure a custom Git difftool that converts SVGs to raster
+images in memory and generates a visual diff highlight:</p>
+<ol type="1">
+<li>Define a custom diff driver in your <code>.gitconfig</code>.</li>
+<li>Use ImageMagick's <code>compare</code> command to output a visual
+image where changed pixels are highlighted in red.</li>
+<li>Map <code>*.svg</code> files to this driver in your repository's
+<code>.gitattributes</code> file.</li>
+</ol>
+<h3 id="pixelmatch-and-headless-browsers">Pixelmatch and Headless
+Browsers</h3>
+<p>For automated CI pipelines, tools built on Puppeteer or Playwright
+render SVGs across two Git branches into headless browser canvases and
+use pixel-diffing libraries (like <code>pixelmatch</code>) to generate
+visual regression reports automatically during pull request checks.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

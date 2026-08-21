@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How orient="auto" Aligns SVG Markers to Path Curves - svg</title>
+    <meta name="description" content="The orient attribute of the SVG <marker> element determines how a marker rotates when placed along a vector path. When set to auto or auto-start-reverse, the browser calculates the path's directional tangent at the exact coordinate of the marker vertex a">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-orient-auto-aligns-svg-markers-to-path-curves">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How orient="auto" Aligns SVG Markers to Path Curves - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-orient-auto-aligns-svg-markers-to-path-curves" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The orient attribute of the SVG <marker> element determines how a marker rotates when placed along a vector path. When set to auto or auto-start-reverse, the browser calculates the path's directional tangent at the exact coordinate of the marker vertex a" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-orientauto-aligns-svg-markers-to-path-curves">How
+orient="auto" Aligns SVG Markers to Path Curves</h1>
+<p>The <code>orient</code> attribute of the SVG
+<code>&lt;marker&gt;</code> element determines how a marker rotates when
+placed along a vector path. When set to <code>auto</code> or
+<code>auto-start-reverse</code>, the browser calculates the path's
+directional tangent at the exact coordinate of the marker vertex and
+rotates the marker's coordinate system to match that angle. This article
+explains the technical mechanics behind this calculation, how curves and
+vertices are handled, and how browsers apply coordinate transformations
+to keep markers aligned with path curvature.</p>
+<h2 id="the-tangent-calculation">The Tangent Calculation</h2>
+<p>When an SVG user agent (such as a web browser) renders an SVG path,
+it breaks the path data (<code>d</code> attribute) into mathematical
+segments, such as lines, cubic Bézier curves, or quadratic Bézier
+curves.</p>
+<p>To determine the orientation of a marker at any given point along a
+curve:</p>
+<ol type="1">
+<li><strong>Derivative Evaluation:</strong> The browser calculates the
+derivative (the instantaneous rate of change, <span
+class="math inline">\(dx\)</span> and <span
+class="math inline">\(dy\)</span>) of the parametric curve equation at
+the marker's position (<span class="math inline">\(t\)</span>).</li>
+<li><strong>Angle Derivation:</strong> It calculates the rotation angle
+(<span class="math inline">\(\theta\)</span>) using the standard
+arctangent function: <span class="math display">\[\theta =
+\operatorname{atan2}(dy, dx)\]</span></li>
+<li><strong>Transformation Matrix:</strong> The marker's coordinate
+system is translated to the point on the path and rotated by angle <span
+class="math inline">\(\theta\)</span>.</li>
+</ol>
+<h2 id="handling-different-marker-positions">Handling Different Marker
+Positions</h2>
+<p>A path can place markers at three distinct locations via CSS or SVG
+attributes: <code>marker-start</code>, <code>marker-mid</code>, and
+<code>marker-end</code>. The <code>orient</code> calculation differs
+slightly depending on where the marker sits:</p>
+<ul>
+<li><strong>Start Markers (<code>marker-start</code>):</strong> The
+angle is determined exclusively by the outgoing tangent vector at the
+start of the first segment (<span class="math inline">\(t =
+0\)</span>).</li>
+<li><strong>End Markers (<code>marker-end</code>):</strong> The angle is
+determined exclusively by the incoming tangent vector at the end of the
+final segment (<span class="math inline">\(t = 1\)</span>).</li>
+<li><strong>Mid Markers (<code>marker-mid</code>):</strong> For
+intermediate vertices where two path commands meet, the browser
+calculates both the incoming tangent vector from the preceding segment
+and the outgoing tangent vector to the subsequent segment. The browser
+then computes the angle bisector between these two vectors to produce a
+balanced alignment between the incoming and outgoing curves.</li>
+</ul>
+<h2 id="values-of-the-orient-attribute">Values of the
+<code>orient</code> Attribute</h2>
+<p>The <code>orient</code> attribute accepts several values that govern
+rotation behavior:</p>
+<ul>
+<li><strong><code>auto</code>:</strong> Dynamically aligns the marker's
+positive x-axis with the path's forward tangent vector at the marker's
+point.</li>
+<li><strong><code>auto-start-reverse</code>:</strong> Acts identically
+to <code>auto</code> for mid and end markers. For start markers, it
+rotates the marker by an additional 180 degrees. This allows a single
+marker definition (such as an arrowhead) to be reused at both ends of a
+bidirectional line or curve.</li>
+<li><strong><code>&lt;angle&gt;</code> (e.g., <code>90deg</code>,
+<code>0.5rad</code>, <code>45</code>):</strong> Disables automatic path
+tracking and forces the marker to maintain a static, fixed rotation
+relative to the SVG canvas, regardless of the underlying path's
+curvature.</li>
+</ul>
+<h2 id="behavior-on-smooth-vs-sharp-curves">Behavior on Smooth vs. Sharp
+Curves</h2>
+<p>On smooth curves (like continuous Bézier segments), the calculated
+tangent changes continuously, allowing intermediate markers or endpoints
+to point accurately along the curve's flow.</p>
+<p>If a path encounters a sharp corner (a non-differentiable cusp where
+incoming and outgoing vectors differ significantly), the bisector angle
+calculation ensures the marker divides the interior angle evenly rather
+than snapping arbitrarily to one of the adjoining segments. If a
+zero-length segment occurs, the browser falls back to the adjacent
+non-zero tangent to maintain continuity.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

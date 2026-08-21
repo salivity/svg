@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base64 SVG: File Size and Performance Impact - svg</title>
+    <meta name="description" content="Base64 encoding is a popular technique for embedding SVG assets directly into HTML or CSS files to reduce HTTP requests. However, this method introduces significant trade-offs, notably an increase in raw file size, higher browser memory and CPU consumpti">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/base64-svg-file-size-and-performance-impact">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Base64 SVG: File Size and Performance Impact - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/base64-svg-file-size-and-performance-impact" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Base64 encoding is a popular technique for embedding SVG assets directly into HTML or CSS files to reduce HTTP requests. However, this method introduces significant trade-offs, notably an increase in raw file size, higher browser memory and CPU consumpti" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="base64-svg-file-size-and-performance-impact">Base64 SVG: File
+Size and Performance Impact</h1>
+<p>Base64 encoding is a popular technique for embedding SVG assets
+directly into HTML or CSS files to reduce HTTP requests. However, this
+method introduces significant trade-offs, notably an increase in raw
+file size, higher browser memory and CPU consumption during decoding,
+and less efficient caching. This article examines how Base64 affects the
+file size, network delivery, and runtime performance of SVG assets,
+along with alternative strategies for optimal web performance.</p>
+<h2 id="1-the-file-size-penalty">1. The File Size Penalty</h2>
+<p>Base64 encoding converts binary data or text strings into an ASCII
+format using a 64-character set. Because Base64 represents 6 bits of
+data per 8-bit character, it inherently increases uncompressed file size
+by roughly <strong>33%</strong>.</p>
+<ul>
+<li><strong>Raw Text Inefficiency:</strong> SVGs are already text-based
+XML files. Converting plain text into Base64 adds unnecessary overhead
+compared to embedding raw XML or using standard URL encoding
+(<code>data:image/svg+xml;utf8,...</code>).</li>
+<li><strong>Compression Limitations:</strong> While Gzip and Brotli
+compress Base64 data well, they compress raw SVG text even more
+effectively. Even after compression, a Base64-encoded SVG typically
+remains 10% to 15% larger than its compressed raw SVG equivalent.</li>
+</ul>
+<h2 id="2-browser-parsing-and-rendering-overhead">2. Browser Parsing and
+Rendering Overhead</h2>
+<p>When a browser encounters a Base64-encoded SVG, it cannot parse the
+graphic immediately. It must execute a two-step process:</p>
+<ol type="1">
+<li><strong>Decoding:</strong> The browser’s JavaScript/rendering engine
+must decode the Base64 string back into readable XML text.</li>
+<li><strong>DOM/Graphic Construction:</strong> The engine parses the
+resulting XML and converts it into a renderable vector graphic.</li>
+</ol>
+<p>For single, small icons, this parsing cost is negligible. However,
+when multiple Base64 SVGs are embedded into a single stylesheet or HTML
+document, the cumulative decoding overhead can delay the main thread,
+leading to noticeable layout shifts and delayed First Contentful Paint
+(FCP).</p>
+<h2 id="3-impact-on-caching-and-critical-rendering-path">3. Impact on
+Caching and Critical Rendering Path</h2>
+<p>Embedding Base64 SVGs directly into CSS or HTML changes how assets
+are loaded and cached:</p>
+<ul>
+<li><strong>Bloated Critical Path:</strong> Inlining Base64 SVGs into
+CSS blocks the browser from rendering the page until the entire
+stylesheet—including all embedded image data—is downloaded and
+parsed.</li>
+<li><strong>Inefficient Cache Invalidation:</strong> External SVG files
+can be cached independently by the browser. When an SVG is embedded in
+CSS or HTML via Base64, any minor update to the HTML/CSS forces the user
+to re-download the embedded images, and vice versa.</li>
+</ul>
+<h2 id="4-when-to-use-base64-and-when-to-avoid-it">4. When to Use Base64
+(and When to Avoid It)</h2>
+<h3 id="when-base64-may-be-acceptable">When Base64 May Be
+Acceptable:</h3>
+<ul>
+<li><strong>Micro-Assets:</strong> Extremely small icons (under 1 KB)
+where eliminating an HTTP request outweighs the 33% size increase
+(primarily relevant under HTTP/1.1 connections).</li>
+<li><strong>Self-Contained Components:</strong> Scenarios where an asset
+must be distributed as a single standalone file (e.g., email templates
+or single-file documentation).</li>
+</ul>
+<h3 id="when-to-avoid-base64">When to Avoid Base64:</h3>
+<ul>
+<li><strong>Complex Graphics:</strong> Detailed illustrations or large
+icons that significantly inflate payload sizes.</li>
+<li><strong>HTTP/2 and HTTP/3 Environments:</strong> Modern protocols
+multiplex requests efficiently over a single connection, eliminating the
+performance penalty of loading separate external SVG files.</li>
+</ul>
+<h2 id="5-better-alternatives-to-base64-for-svgs">5. Better Alternatives
+to Base64 for SVGs</h2>
+<p>To achieve optimal performance without the Base64 penalty, consider
+these alternatives:</p>
+<ul>
+<li><strong>Direct Inline SVG (<code>&lt;svg&gt;</code>):</strong>
+Pasting raw SVG code directly into HTML allows CSS styling, DOM
+manipulation, and avoids Base64 decoding overhead.</li>
+<li><strong>External Files (<code>&lt;img src="icon.svg"&gt;</code> or
+CSS <code>url('icon.svg')</code>):</strong> Enables parallel downloads
+and independent browser caching via modern CDNs.</li>
+<li><strong>URL-Encoded Data URIs:</strong> If CSS inlining is strictly
+required, use <code>data:image/svg+xml;utf8,&lt;svg ...&gt;</code> with
+URL-encoded special characters instead of Base64 to minimize the file
+size penalty.</li>
+<li><strong>SVG Sprites:</strong> Combine multiple vector icons into a
+single SVG file using the <code>&lt;use&gt;</code> element to reduce
+requests while retaining full caching benefits.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

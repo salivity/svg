@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSS offset-rotate in SVG Path Animations - svg</title>
+    <meta name="description" content="The offset-rotate CSS property defines the orientation and rotational angle of an element as it travels along a defined motion path, such as an SVG path. By controlling whether an object naturally faces the direction of travel, maintains a fixed angle, o">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/css-offset-rotate-in-svg-path-animations">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="CSS offset-rotate in SVG Path Animations - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/css-offset-rotate-in-svg-path-animations" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The offset-rotate CSS property defines the orientation and rotational angle of an element as it travels along a defined motion path, such as an SVG path. By controlling whether an object naturally faces the direction of travel, maintains a fixed angle, o" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="css-offset-rotate-in-svg-path-animations">CSS offset-rotate in
+SVG Path Animations</h1>
+<p>The <code>offset-rotate</code> CSS property defines the orientation
+and rotational angle of an element as it travels along a defined motion
+path, such as an SVG path. By controlling whether an object naturally
+faces the direction of travel, maintains a fixed angle, or applies an
+angular offset, <code>offset-rotate</code> ensures visual assets align
+properly with complex curves. This property is a core component of the
+CSS Motion Path module, eliminating the need for complex JavaScript
+calculations or manual keyframe rotations during path animations.</p>
+<h3 id="how-offset-rotate-works">How offset-rotate Works</h3>
+<p>When animating an element along an SVG path using
+<code>offset-path</code>, the browser calculates the element's
+coordinates over time. However, positioning alone does not dictate which
+way the element points. The <code>offset-rotate</code> property
+determines the element’s tangent angle relative to the path curve at any
+given point during the animation.</p>
+<h3 id="key-values-and-syntax">Key Values and Syntax</h3>
+<p>The <code>offset-rotate</code> property accepts keywords, specific
+degree angles, or a combination of both:</p>
+<ul>
+<li><strong><code>auto</code></strong>: The default behavior. It rotates
+the element to match the tangent of the path, ensuring the element
+dynamically faces forward in the direction of travel (similar to a car
+following turns in a road).</li>
+<li><strong><code>auto &lt;angle&gt;</code></strong>: Rotates the
+element to follow the path's direction while adding a constant
+rotational offset. For example, <code>offset-rotate: auto 90deg;</code>
+is useful when an SVG icon was originally drawn pointing upward instead
+of to the right (the standard 0-degree baseline).</li>
+<li><strong><code>reverse</code></strong>: Directs the element to face
+180 degrees away from the direction of travel, effectively moving it
+backward along the path. Like <code>auto</code>, it can also take an
+additional angle modifier (e.g., <code>reverse 45deg</code>).</li>
+<li><strong><code>&lt;angle&gt;</code> (Fixed Rotation)</strong>: Sets a
+constant angle (e.g., <code>0deg</code>, <code>45deg</code>,
+<code>180deg</code>). The element maintains this exact rotation
+regardless of how the path curves or turns.</li>
+</ul>
+<h3 id="practical-use-cases-in-svg-animations">Practical Use Cases in
+SVG Animations</h3>
+<ol type="1">
+<li><strong>Correcting Asset Orientation</strong>: SVG assets often have
+arbitrary default orientations depending on how they were exported from
+vector design tools. Using <code>offset-rotate: auto [angle]</code>
+corrects the initial facing direction so the asset aligns seamlessly
+with the path without altering the original SVG markup.</li>
+<li><strong>Simulating Realistic Movement</strong>: Objects like
+vehicles, airplanes, paper planes, or arrows require their front edge to
+track the curve of a path dynamically. Setting
+<code>offset-rotate: auto</code> handles this calculation
+automatically.</li>
+<li><strong>Maintaining Upright Elements</strong>: When moving UI
+elements like tooltips, avatar badges, or labels along a curved path,
+the text or icon must often remain upright. Applying
+<code>offset-rotate: 0deg</code> allows the element to translate along
+the path without tilting or turning upside down.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

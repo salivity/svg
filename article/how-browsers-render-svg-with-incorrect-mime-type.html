@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Browsers Render SVG with Incorrect MIME Type - svg</title>
+    <meta name="description" content="When a web server serves a Scalable Vector Graphics (SVG) file with an incorrect MIME type instead of image/svg+xml, browser rendering engines alter how the asset is processed based on the loading context. Depending on whether the SVG is requested as an">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-browsers-render-svg-with-incorrect-mime-type">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Browsers Render SVG with Incorrect MIME Type - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-browsers-render-svg-with-incorrect-mime-type" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When a web server serves a Scalable Vector Graphics (SVG) file with an incorrect MIME type instead of image/svg+xml, browser rendering engines alter how the asset is processed based on the loading context. Depending on whether the SVG is requested as an" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-browsers-render-svg-with-incorrect-mime-type">How Browsers
+Render SVG with Incorrect MIME Type</h1>
+<p>When a web server serves a Scalable Vector Graphics (SVG) file with
+an incorrect MIME type instead of <code>image/svg+xml</code>, browser
+rendering engines alter how the asset is processed based on the loading
+context. Depending on whether the SVG is requested as an image element,
+an embedded document, or a top-level resource, modern engines like
+Blink, Gecko, and WebKit will either execute MIME sniffing to display
+the image, block the resource entirely under security policies, or treat
+it as plain text or a binary download.</p>
+<h2 id="the-standard-mime-type-for-svg">The Standard MIME Type for
+SVG</h2>
+<p>The W3C standard dictates that SVG files must be served with the
+<code>image/svg+xml</code> Content-Type header. This header explicitly
+informs the browser's networking and rendering layers that the payload
+is XML-formatted vector graphics data capable of visual rendering and,
+in certain contexts, script execution.</p>
+<h2 id="rendering-behavior-by-context">Rendering Behavior by
+Context</h2>
+<p>Browser rendering engines do not apply a single uniform rule to
+incorrectly labeled SVGs. Instead, behavior depends on the HTML element
+or API used to fetch the asset.</p>
+<h3 id="1-image-elements-and-css-img-css-background-image">1. Image
+Elements and CSS (<code>&lt;img&gt;</code>, CSS
+<code>background-image</code>)</h3>
+<p>When an SVG is embedded using an <code>&lt;img&gt;</code> tag or via
+CSS properties like <code>background-image</code>:</p>
+<ul>
+<li><strong>MIME Sniffing:</strong> Modern engines often employ content
+sniffing if the server returns generic types like
+<code>text/plain</code> or <code>application/octet-stream</code>. If the
+engine detects XML and <code>&lt;svg&gt;</code> root tags within the
+payload, it will typically render the graphic visually.</li>
+<li><strong>MIME Mismatch Handling:</strong> If served with an incorrect
+image type (such as <code>image/png</code> or <code>image/jpeg</code>),
+some engines still parse the underlying SVG vector data and draw it,
+while others fail to decode it as a raster format and display a broken
+image icon.</li>
+<li><strong>Security Context:</strong> Script execution and external
+resource loading within the SVG are permanently disabled in image
+contexts, regardless of the MIME type provided.</li>
+</ul>
+<h3 id="2-document-embedding-elements-object-iframe-embed">2. Document
+Embedding Elements (<code>&lt;object&gt;</code>,
+<code>&lt;iframe&gt;</code>, <code>&lt;embed&gt;</code>)</h3>
+<p>When an SVG is loaded as an interactive document:</p>
+<ul>
+<li><strong>Strict Type Enforcement:</strong> Browsers strictly check
+MIME types for document-level embedding. If an SVG is served as
+<code>text/plain</code>, the browser will render the raw XML markup
+inside the frame rather than the visual graphic.</li>
+<li><strong>Binary Types:</strong> If served as
+<code>application/octet-stream</code>, browsers will typically trigger a
+file download prompt instead of rendering the content inside the page
+layout.</li>
+<li><strong>XML Parser Failure:</strong> If served as
+<code>text/html</code>, the HTML parser may attempt to parse the SVG
+content using standard HTML5 tokenization, which can break XML
+namespaces, CDATA sections, and self-closing tags.</li>
+</ul>
+<h3 id="3-direct-navigation-top-level-url">3. Direct Navigation
+(Top-Level URL)</h3>
+<p>When a user navigates directly to the SVG URL in the address bar:</p>
+<ul>
+<li><strong>Text Fallback:</strong> Serving the file as
+<code>text/plain</code> causes the browser to display the raw XML source
+code with monospaced text formatting.</li>
+<li><strong>Download Trigger:</strong> Serving the file with generic
+binary MIME types triggers the browser's download manager.</li>
+<li><strong>Rendering Success:</strong> Direct rendering as a vector
+graphic only reliably occurs when served as <code>image/svg+xml</code>
+or, in some browser configurations, <code>application/xml</code> or
+<code>text/xml</code>.</li>
+</ul>
+<h2 id="security-and-cross-origin-restrictions">Security and
+Cross-Origin Restrictions</h2>
+<p>Incorrect MIME types directly interfere with modern browser security
+mechanisms:</p>
+<ul>
+<li><strong>Cross-Origin Read Blocking (CORB) and ORB:</strong> Security
+algorithms like CORB and Opaque Response Blocking (ORB) inspect
+responses to protect sensitive data from speculative execution attacks.
+If an SVG is fetched across origins with an incorrect MIME type (such as
+<code>text/html</code>), the engine may block the response entirely,
+treating it as a cross-origin data leak risk.</li>
+<li><strong>Strict-Transport and CSP Interactions:</strong> A mismatched
+MIME type can cause Content Security Policy (CSP) directives like
+<code>img-src</code> or <code>object-src</code> to reject the resource
+if the engine cannot safely classify the resource type.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MathJax SVG vs HTML-CSS Performance Advantages - svg</title>
+    <meta name="description" content="MathJax provides multiple output processors to render mathematical notation on the web, most notably SVG and CommonHTML/HTML-CSS. While HTML-CSS relies on specialized web fonts and deeply nested DOM elements, SVG output renders mathematical expressions a">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/mathjax-svg-vs-html-css-performance-advantages">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="MathJax SVG vs HTML-CSS Performance Advantages - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/mathjax-svg-vs-html-css-performance-advantages" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="MathJax provides multiple output processors to render mathematical notation on the web, most notably SVG and CommonHTML/HTML-CSS. While HTML-CSS relies on specialized web fonts and deeply nested DOM elements, SVG output renders mathematical expressions a" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="mathjax-svg-vs-html-css-performance-advantages">MathJax SVG vs
+HTML-CSS Performance Advantages</h1>
+<p>MathJax provides multiple output processors to render mathematical
+notation on the web, most notably SVG and CommonHTML/HTML-CSS. While
+HTML-CSS relies on specialized web fonts and deeply nested DOM elements,
+SVG output renders mathematical expressions as self-contained vector
+paths. This article outlines the key performance advantages of choosing
+MathJax SVG rendering over traditional HTML-CSS font-based rendering,
+highlighting its impact on page load times, layout stability, rendering
+speed, and DOM complexity.</p>
+<h3 id="zero-web-font-loading-overhead">Zero Web Font Loading
+Overhead</h3>
+<p>HTML-CSS rendering requires downloading and caching specialized math
+web fonts (e.g., TeX, STIX) containing thousands of mathematical glyphs.
+If these fonts fail to load quickly, users experience a Flash of
+Unstyled Text (FOUT) or invisible text (FOIT), followed by heavy layout
+shifts once fonts resolve. MathJax SVG bypasses font network requests
+entirely by embedding glyph shapes directly as vector
+<code>&lt;path&gt;</code> elements within the SVG, leading to faster
+initial renders and zero font-blocking latency.</p>
+<h3 id="reduced-dom-node-count-and-reflows">Reduced DOM Node Count and
+Reflows</h3>
+<p>HTML-CSS builds formulas using extensive hierarchies of nested
+<code>&lt;span&gt;</code> elements combined with absolute and relative
+CSS positioning to align superscripts, fractions, and radicals. This
+deep nesting drastically increases the overall DOM node count, which
+degrades browser reflow and layout recalculation performance—especially
+on long pages with hundreds of equations. In contrast, SVG outputs a
+flat structure inside an <code>&lt;svg&gt;</code> container, minimizing
+DOM complexity and drastically reducing layout overhead for browser
+layout engines.</p>
+<h3 id="hardware-accelerated-vector-rendering">Hardware-Accelerated
+Vector Rendering</h3>
+<p>Modern web browsers offload SVG vector graphics rendering to the GPU.
+Because SVG math uses native vector paths and transforms rather than
+complex CSS rule parsing and sub-pixel font hinting, the browser renders
+the shapes faster. This hardware-accelerated pipeline ensures smooth
+scrolling and rapid redrawing on pages with dense mathematical
+content.</p>
+<h3
+id="predictable-layout-and-no-cumulative-layout-shift-cls">Predictable
+Layout and No Cumulative Layout Shift (CLS)</h3>
+<p>Font-based rendering relies on browser-specific font metrics and
+sub-pixel anti-aliasing engines, which can differ between operating
+systems and browsers. These discrepancies often cause unexpected
+wrapping, overlapping symbols, or layout jumps. SVG metrics are exact,
+mathematically defined, and deterministic, ensuring that dimensions are
+computed accurately on the first pass without requiring secondary layout
+passes or causing Cumulative Layout Shift (CLS).</p>
+<h3 id="effortless-scaling-and-zoom-performance">Effortless Scaling and
+Zoom Performance</h3>
+<p>When a user zooms in on a page or views it on a high-DPI (Retina)
+display, HTML-CSS output must recalculate font-hinting tables and CSS
+positions. SVG paths scale naturally through coordinate transformation
+matrices without triggering DOM recalibrations, maintaining crisp
+visuals and fluid performance during responsive window resizing and
+zooming.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

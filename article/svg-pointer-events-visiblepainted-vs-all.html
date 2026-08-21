@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG pointer-events: visiblePainted vs all - svg</title>
+    <meta name="description" content="The pointer-events property in SVG specifies under what circumstances a graphical element can become the target of pointer events, such as mouse clicks, hovers, or touch interactions. The key difference between visiblePainted and all lies in how they han">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-pointer-events-visiblepainted-vs-all">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG pointer-events: visiblePainted vs all - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-pointer-events-visiblepainted-vs-all" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The pointer-events property in SVG specifies under what circumstances a graphical element can become the target of pointer events, such as mouse clicks, hovers, or touch interactions. The key difference between visiblePainted and all lies in how they han" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-pointer-events-visiblepainted-vs-all">SVG pointer-events:
+visiblePainted vs all</h1>
+<p>The <code>pointer-events</code> property in SVG specifies under what
+circumstances a graphical element can become the target of pointer
+events, such as mouse clicks, hovers, or touch interactions. The key
+difference between <code>visiblePainted</code> and <code>all</code> lies
+in how they handle element visibility and whether the interior (fill)
+and outline (stroke) of an element must be painted to detect
+interactions. Understanding these differences allows developers to build
+precise click targets and invisible interactive zones within SVG
+graphics.</p>
+<h2 id="what-is-visiblepainted">What is
+<code>visiblePainted</code>?</h2>
+<p><code>visiblePainted</code> is the standard default value for most
+SVG elements. Under this setting, an element only captures pointer
+events if it meets strict rendering and visibility criteria:</p>
+<ul>
+<li><strong>Visibility Requirement:</strong> The element's
+<code>visibility</code> attribute or CSS property must be set to
+<code>visible</code>. If an element is set to
+<code>visibility: hidden</code> or <code>visibility: collapse</code>, it
+will not respond to pointer events.</li>
+<li><strong>Fill Area:</strong> The interior of the shape only registers
+pointer events if the <code>fill</code> property is set to a value other
+than <code>none</code> (for example, a solid color, gradient, or
+pattern). If <code>fill="none"</code>, clicks pass right through the
+interior.</li>
+<li><strong>Stroke Area:</strong> The perimeter of the shape only
+registers pointer events if the <code>stroke</code> property is set to a
+value other than <code>none</code> and the <code>stroke-width</code> is
+greater than zero.</li>
+</ul>
+<p>In short, <code>visiblePainted</code> ensures that users can only
+interact with pixels that are visibly rendered on the screen.</p>
+<h2 id="what-is-all">What is <code>all</code>?</h2>
+<p>The <code>all</code> value ignores rendering states, visibility
+settings, and paint values entirely. It makes the entire geometric area
+of an SVG element interactive.</p>
+<ul>
+<li><strong>Visibility Requirement:</strong> The element registers
+pointer events regardless of its <code>visibility</code> value. Even if
+an element has <code>visibility: hidden</code>, it still captures clicks
+and hover states.</li>
+<li><strong>Fill Area:</strong> The interior of the shape captures
+pointer events even if <code>fill="none"</code> is applied.</li>
+<li><strong>Stroke Area:</strong> The perimeter of the shape captures
+pointer events even if <code>stroke="none"</code> is applied.</li>
+</ul>
+<p>This makes <code>all</code> particularly useful for creating
+invisible hit areas, larger tap targets on mobile devices, or hotspot
+overlays over complex backgrounds.</p>
+<h2 id="key-differences-summary">Key Differences Summary</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;"><code>visiblePainted</code> (Default)</th>
+<th style="text-align: left;"><code>all</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Responds when
+<code>visibility: hidden</code></strong></td>
+<td style="text-align: left;">No</td>
+<td style="text-align: left;">Yes</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Responds when
+<code>fill="none"</code></strong></td>
+<td style="text-align: left;">No (passes through)</td>
+<td style="text-align: left;">Yes (captures interior)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Responds when
+<code>stroke="none"</code></strong></td>
+<td style="text-align: left;">No (passes through)</td>
+<td style="text-align: left;">Yes (captures boundary)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Primary Use Case</strong></td>
+<td style="text-align: left;">Standard UI interaction on visible
+shapes</td>
+<td style="text-align: left;">Invisible hitboxes, expanded click
+targets</td>
+</tr>
+</tbody>
+</table>
+<h2 id="practical-example">Practical Example</h2>
+<p>Consider a transparent circle overlay intended to act as a
+button:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">circle</span> <span class="ot">cx=</span><span class="st">&quot;50&quot;</span> <span class="ot">cy=</span><span class="st">&quot;50&quot;</span> <span class="ot">r=</span><span class="st">&quot;40&quot;</span> <span class="ot">fill=</span><span class="st">&quot;none&quot;</span> <span class="ot">stroke=</span><span class="st">&quot;none&quot;</span> <span class="ot">pointer-events=</span><span class="st">&quot;visiblePainted&quot;</span> /&gt;</span></code></pre></div>
+<p>With <code>pointer-events="visiblePainted"</code>, clicking this
+circle does nothing because neither the fill nor the stroke is
+painted.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">circle</span> <span class="ot">cx=</span><span class="st">&quot;50&quot;</span> <span class="ot">cy=</span><span class="st">&quot;50&quot;</span> <span class="ot">r=</span><span class="st">&quot;40&quot;</span> <span class="ot">fill=</span><span class="st">&quot;none&quot;</span> <span class="ot">stroke=</span><span class="st">&quot;none&quot;</span> <span class="ot">pointer-events=</span><span class="st">&quot;all&quot;</span> /&gt;</span></code></pre></div>
+<p>With <code>pointer-events="all"</code>, the entire 40px radius area
+registers clicks, providing a fully functional invisible hit target
+without requiring an opacity hack (like <code>opacity="0"</code> with a
+solid fill).</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

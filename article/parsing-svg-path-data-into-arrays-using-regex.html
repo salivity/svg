@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parsing SVG Path Data into Arrays Using Regex - svg</title>
+    <meta name="description" content="SVG path data stored in the d attribute uses a condensed string format containing command letters and numerical coordinates. This article explains how to parse raw SVG path strings into structured mathematical arrays using regular expressions. By breakin">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/parsing-svg-path-data-into-arrays-using-regex">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Parsing SVG Path Data into Arrays Using Regex - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/parsing-svg-path-data-into-arrays-using-regex" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="SVG path data stored in the d attribute uses a condensed string format containing command letters and numerical coordinates. This article explains how to parse raw SVG path strings into structured mathematical arrays using regular expressions. By breakin" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="parsing-svg-path-data-into-arrays-using-regex">Parsing SVG Path
+Data into Arrays Using Regex</h1>
+<p>SVG path data stored in the <code>d</code> attribute uses a condensed
+string format containing command letters and numerical coordinates. This
+article explains how to parse raw SVG path strings into structured
+mathematical arrays using regular expressions. By breaking down command
+types, capturing numerical tokens with regex, and converting them into
+numerical vectors, developers can extract coordinate matrices for
+geometric processing, custom rendering, physics calculations, and canvas
+animations.</p>
+<h2 id="understanding-svg-path-data-syntax">Understanding SVG Path Data
+Syntax</h2>
+<p>An SVG path string consists of single-letter commands followed by
+coordinate parameters. For example:</p>
+<pre class="text"><code>M 10 20 L 30 40 C 50 60, 70 80, 90 100 Z</code></pre>
+<p>Parsing this data is challenging because the SVG specification allows
+several compact formatting shortcuts:</p>
+<ul>
+<li>Whitespace and commas between numbers are optional if unambiguous
+(e.g., <code>M10-20</code> means <code>M 10 -20</code>).</li>
+<li>Consecutive decimal points can omit leading zeros and separators
+(e.g., <code>L.5.5</code> means <code>L 0.5 0.5</code>).</li>
+<li>Numbers can use scientific notation (e.g., <code>1e-4</code>).</li>
+<li>Subsequent coordinates after a command implicitly repeat that
+command.</li>
+</ul>
+<h2 id="the-regular-expression-strategy">The Regular Expression
+Strategy</h2>
+<p>To parse the string into discrete mathematical units, the process is
+split into two regex operations:</p>
+<ol type="1">
+<li><strong>Command Segment Matching:</strong> Splitting the path string
+into individual command letters along with their trailing parameter
+strings.</li>
+<li><strong>Number Tokenization:</strong> Extracting floating-point
+numbers, integers, and exponential values from each parameter
+string.</li>
+</ol>
+<h3 id="1-extracting-command-blocks">1. Extracting Command Blocks</h3>
+<p>The regex below matches any command character (<code>M</code>,
+<code>L</code>, <code>C</code>, <code>A</code>, <code>Z</code>, etc.,
+case-insensitive, excluding <code>e</code> which belongs to scientific
+notation) followed by its associated coordinate string:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> COMMAND_REGEX <span class="op">=</span> <span class="ss">/</span><span class="sc">([a-df-z])([^a-df-z]*)</span><span class="ss">/gi</span><span class="op">;</span></span></code></pre></div>
+<h3 id="2-extracting-coordinate-values">2. Extracting Coordinate
+Values</h3>
+<p>The number-parsing regex captures valid numerical values, including
+signs, decimals, and scientific notation:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> NUMBER_REGEX <span class="op">=</span> <span class="ss">/</span><span class="sc">[-+]?(?</span><span class="ss">:</span><span class="sc">\d*\.\d+|\d+)(?</span><span class="ss">:</span><span class="sc">[eE][-+]?\d+)?</span><span class="ss">/g</span><span class="op">;</span></span></code></pre></div>
+<h2 id="implementation-converting-path-data-to-arrays">Implementation:
+Converting Path Data to Arrays</h2>
+<p>The following JavaScript function parses an SVG path string into an
+array of objects or multi-dimensional numerical arrays.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">parseSVGPathToArrays</span>(pathData) {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> commandRegex <span class="op">=</span> <span class="ss">/</span><span class="sc">([a-df-z])([^a-df-z]*)</span><span class="ss">/gi</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> numberRegex <span class="op">=</span> <span class="ss">/</span><span class="sc">[-+]?(?</span><span class="ss">:</span><span class="sc">\d*\.\d+|\d+)(?</span><span class="ss">:</span><span class="sc">[eE][-+]?\d+)?</span><span class="ss">/g</span><span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> parsedData <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">let</span> match<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">while</span> ((match <span class="op">=</span> commandRegex<span class="op">.</span><span class="fu">exec</span>(pathData)) <span class="op">!==</span> <span class="kw">null</span>) {</span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> command <span class="op">=</span> match[<span class="dv">1</span>]<span class="op">;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> rawNumbers <span class="op">=</span> match[<span class="dv">2</span>]<span class="op">.</span><span class="fu">match</span>(numberRegex)<span class="op">;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> coordinates <span class="op">=</span> rawNumbers <span class="op">?</span> rawNumbers<span class="op">.</span><span class="fu">map</span>(<span class="bu">Number</span>) <span class="op">:</span> []<span class="op">;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    parsedData<span class="op">.</span><span class="fu">push</span>({</span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>      <span class="dt">command</span><span class="op">:</span> command<span class="op">,</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>      <span class="dt">points</span><span class="op">:</span> coordinates</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> parsedData<span class="op">;</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="example-input-and-output">Example Input and Output</h3>
+<p>Given the following input:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> path <span class="op">=</span> <span class="st">&quot;M0,0 L10.5,20.5 C30-40 50.2.8 100 200Z&quot;</span><span class="op">;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> result <span class="op">=</span> <span class="fu">parseSVGPathToArrays</span>(path)<span class="op">;</span></span></code></pre></div>
+<p>The returned structured array will be:</p>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>[</span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">command</span><span class="op">:</span> <span class="st">&quot;M&quot;</span><span class="op">,</span> <span class="dt">points</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span>] }<span class="op">,</span></span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">command</span><span class="op">:</span> <span class="st">&quot;L&quot;</span><span class="op">,</span> <span class="dt">points</span><span class="op">:</span> [<span class="fl">10.5</span><span class="op">,</span> <span class="fl">20.5</span>] }<span class="op">,</span></span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">command</span><span class="op">:</span> <span class="st">&quot;C&quot;</span><span class="op">,</span> <span class="dt">points</span><span class="op">:</span> [<span class="dv">30</span><span class="op">,</span> <span class="op">-</span><span class="dv">40</span><span class="op">,</span> <span class="fl">50.2</span><span class="op">,</span> <span class="fl">0.8</span><span class="op">,</span> <span class="dv">100</span><span class="op">,</span> <span class="dv">200</span>] }<span class="op">,</span></span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  { <span class="dt">command</span><span class="op">:</span> <span class="st">&quot;Z&quot;</span><span class="op">,</span> <span class="dt">points</span><span class="op">:</span> [] }</span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>]</span></code></pre></div>
+<h2 id="structuring-into-coordinate-tuples">Structuring into Coordinate
+Tuples</h2>
+<p>For mathematical calculations, flat parameter arrays can be grouped
+into coordinate pairs (<code>[x, y]</code> vectors) based on the command
+type:</p>
+<div class="sourceCode" id="cb7"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">groupPoints</span>(points<span class="op">,</span> size <span class="op">=</span> <span class="dv">2</span>) {</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> groups <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="cf">for</span> (<span class="kw">let</span> i <span class="op">=</span> <span class="dv">0</span><span class="op">;</span> i <span class="op">&lt;</span> points<span class="op">.</span><span class="at">length</span><span class="op">;</span> i <span class="op">+=</span> size) {</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>    groups<span class="op">.</span><span class="fu">push</span>(points<span class="op">.</span><span class="fu">slice</span>(i<span class="op">,</span> i <span class="op">+</span> size))<span class="op">;</span></span>
+<span id="cb7-5"><a href="#cb7-5" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb7-6"><a href="#cb7-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> groups<span class="op">;</span></span>
+<span id="cb7-7"><a href="#cb7-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb7-8"><a href="#cb7-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb7-9"><a href="#cb7-9" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">normalizePathToMatrix</span>(parsedData) {</span>
+<span id="cb7-10"><a href="#cb7-10" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> parsedData<span class="op">.</span><span class="fu">map</span>(item <span class="kw">=&gt;</span> {</span>
+<span id="cb7-11"><a href="#cb7-11" aria-hidden="true" tabindex="-1"></a>    <span class="cf">switch</span> (item<span class="op">.</span><span class="at">command</span><span class="op">.</span><span class="fu">toUpperCase</span>()) {</span>
+<span id="cb7-12"><a href="#cb7-12" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">&#39;M&#39;</span><span class="op">:</span></span>
+<span id="cb7-13"><a href="#cb7-13" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">&#39;L&#39;</span><span class="op">:</span></span>
+<span id="cb7-14"><a href="#cb7-14" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">&#39;T&#39;</span><span class="op">:</span></span>
+<span id="cb7-15"><a href="#cb7-15" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> { <span class="dt">command</span><span class="op">:</span> item<span class="op">.</span><span class="at">command</span><span class="op">,</span> <span class="dt">vectors</span><span class="op">:</span> <span class="fu">groupPoints</span>(item<span class="op">.</span><span class="at">points</span><span class="op">,</span> <span class="dv">2</span>) }<span class="op">;</span></span>
+<span id="cb7-16"><a href="#cb7-16" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">&#39;C&#39;</span><span class="op">:</span></span>
+<span id="cb7-17"><a href="#cb7-17" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> { <span class="dt">command</span><span class="op">:</span> item<span class="op">.</span><span class="at">command</span><span class="op">,</span> <span class="dt">vectors</span><span class="op">:</span> <span class="fu">groupPoints</span>(item<span class="op">.</span><span class="at">points</span><span class="op">,</span> <span class="dv">2</span>) }<span class="op">;</span> <span class="co">// Control points + endpoint</span></span>
+<span id="cb7-18"><a href="#cb7-18" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">&#39;Q&#39;</span><span class="op">:</span></span>
+<span id="cb7-19"><a href="#cb7-19" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">&#39;S&#39;</span><span class="op">:</span></span>
+<span id="cb7-20"><a href="#cb7-20" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> { <span class="dt">command</span><span class="op">:</span> item<span class="op">.</span><span class="at">command</span><span class="op">,</span> <span class="dt">vectors</span><span class="op">:</span> <span class="fu">groupPoints</span>(item<span class="op">.</span><span class="at">points</span><span class="op">,</span> <span class="dv">2</span>) }<span class="op">;</span></span>
+<span id="cb7-21"><a href="#cb7-21" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">&#39;H&#39;</span><span class="op">:</span></span>
+<span id="cb7-22"><a href="#cb7-22" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">&#39;V&#39;</span><span class="op">:</span></span>
+<span id="cb7-23"><a href="#cb7-23" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> { <span class="dt">command</span><span class="op">:</span> item<span class="op">.</span><span class="at">command</span><span class="op">,</span> <span class="dt">vectors</span><span class="op">:</span> item<span class="op">.</span><span class="at">points</span><span class="op">.</span><span class="fu">map</span>(v <span class="kw">=&gt;</span> [v]) }<span class="op">;</span></span>
+<span id="cb7-24"><a href="#cb7-24" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">&#39;A&#39;</span><span class="op">:</span></span>
+<span id="cb7-25"><a href="#cb7-25" aria-hidden="true" tabindex="-1"></a>        <span class="co">// Arcs contain 7 parameters: [rx, ry, x-axis-rotation, large-arc-flag, sweep-flag, x, y]</span></span>
+<span id="cb7-26"><a href="#cb7-26" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> { <span class="dt">command</span><span class="op">:</span> item<span class="op">.</span><span class="at">command</span><span class="op">,</span> <span class="dt">vectors</span><span class="op">:</span> <span class="fu">groupPoints</span>(item<span class="op">.</span><span class="at">points</span><span class="op">,</span> <span class="dv">7</span>) }<span class="op">;</span></span>
+<span id="cb7-27"><a href="#cb7-27" aria-hidden="true" tabindex="-1"></a>      <span class="cf">case</span> <span class="st">&#39;Z&#39;</span><span class="op">:</span></span>
+<span id="cb7-28"><a href="#cb7-28" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> { <span class="dt">command</span><span class="op">:</span> item<span class="op">.</span><span class="at">command</span><span class="op">,</span> <span class="dt">vectors</span><span class="op">:</span> [] }<span class="op">;</span></span>
+<span id="cb7-29"><a href="#cb7-29" aria-hidden="true" tabindex="-1"></a>      <span class="cf">default</span><span class="op">:</span></span>
+<span id="cb7-30"><a href="#cb7-30" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> { <span class="dt">command</span><span class="op">:</span> item<span class="op">.</span><span class="at">command</span><span class="op">,</span> <span class="dt">vectors</span><span class="op">:</span> <span class="fu">groupPoints</span>(item<span class="op">.</span><span class="at">points</span><span class="op">,</span> <span class="dv">2</span>) }<span class="op">;</span></span>
+<span id="cb7-31"><a href="#cb7-31" aria-hidden="true" tabindex="-1"></a>    }</span>
+<span id="cb7-32"><a href="#cb7-32" aria-hidden="true" tabindex="-1"></a>  })<span class="op">;</span></span>
+<span id="cb7-33"><a href="#cb7-33" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h2 id="handling-implicit-repeated-commands">Handling Implicit Repeated
+Commands</h2>
+<p>In the SVG specification, if a command letter is followed by more
+coordinates than expected, the command repeats automatically:</p>
+<ul>
+<li>Subsequent points after <code>M</code> (MoveTo) are treated as
+implicit <code>L</code> (LineTo) commands.</li>
+<li>Subsequent points after other commands (like <code>C</code> or
+<code>L</code>) repeat that same command.</li>
+</ul>
+<p>To handle this behavior, slice the extracted numbers according to the
+command's parameter length and emit individual command arrays for each
+parameter set. This ensures consistent array dimensions for downstream
+linear algebra and transformation functions.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

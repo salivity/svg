@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Optimizing SVG Animation with DOM Batching - svg</title>
+    <meta name="description" content="Animating complex SVG scenes frequently introduces severe performance bottlenecks caused by layout thrashing and forced synchronous reflows. When JavaScript alternates between measuring SVG elements and mutating their attributes or styles within the same">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/optimizing-svg-animation-with-dom-batching">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Optimizing SVG Animation with DOM Batching - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/optimizing-svg-animation-with-dom-batching" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Animating complex SVG scenes frequently introduces severe performance bottlenecks caused by layout thrashing and forced synchronous reflows. When JavaScript alternates between measuring SVG elements and mutating their attributes or styles within the same" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="optimizing-svg-animation-with-dom-batching">Optimizing SVG
+Animation with DOM Batching</h1>
+<p>Animating complex SVG scenes frequently introduces severe performance
+bottlenecks caused by layout thrashing and forced synchronous reflows.
+When JavaScript alternates between measuring SVG elements and mutating
+their attributes or styles within the same frame, the browser is forced
+to recalculate geometric properties repeatedly. This guide outlines
+actionable strategies to batch DOM read and write operations, minimize
+reflow overhead, and achieve consistent 60fps performance in dense SVG
+graphics.</p>
+<h2 id="understand-svg-layout-thrashing">Understand SVG Layout
+Thrashing</h2>
+<p>Layout thrashing occurs when your script reads a layout-triggering
+property (such as <code>getBBox()</code>,
+<code>getBoundingClientRect()</code>, or <code>computedStyle</code>)
+immediately after writing a style or attribute (such as <code>d</code>,
+<code>cx</code>, <code>transform</code>, or <code>setAttribute</code>).
+Because SVGs often feature deep DOM trees with hundreds or thousands of
+nested nodes, forced synchronous layouts in SVG contexts are
+computationally expensive compared to standard HTML elements.</p>
+<h2 id="implement-a-phased-frame-loop">Implement a Phased Frame
+Loop</h2>
+<p>The most fundamental strategy for preventing thrashing is to enforce
+a strict read-then-write execution order across all animated elements in
+your animation tick.</p>
+<ol type="1">
+<li><strong>Read Phase:</strong> Collect all necessary metrics (e.g.,
+current positions, bounding boxes, or viewport dimensions) across all
+elements.</li>
+<li><strong>Compute Phase:</strong> Calculate new positions, physics
+models, interpolation states, and path descriptions purely in JavaScript
+memory without touching the DOM.</li>
+<li><strong>Write Phase:</strong> Apply all mutated styles and
+attributes to the SVG nodes in a single, uninterrupted sweep.</li>
+</ol>
+<p>By synchronizing this three-phase pipeline with
+<code>requestAnimationFrame()</code>, you ensure the browser performs
+layout calculations only once per frame.</p>
+<h2 id="maintain-an-in-memory-state-model">Maintain an In-Memory State
+Model</h2>
+<p>Avoid querying the DOM for an element's current state during the
+render loop. Instead of calling <code>getAttribute()</code> or
+<code>getBBox()</code> to read an SVG element's current position:</p>
+<ul>
+<li><strong>Store metrics in JavaScript objects:</strong> Keep position,
+scale, rotation, and custom attributes in local state variables or
+arrays.</li>
+<li><strong>Initialize once:</strong> Read the starting geometry of your
+SVG elements once during initialization.</li>
+<li><strong>Update via state:</strong> Derive all subsequent positions
+mathematically from your simulation or tween variables rather than
+querying the live DOM node.</li>
+</ul>
+<p>This strategy completely eliminates the need for read operations
+during active animation cycles.</p>
+<h2 id="utilize-fastdom-or-queue-based-batching">Utilize FastDOM or
+Queue-Based Batching</h2>
+<p>When managing modular components where animation logic is distributed
+across multiple instances, manual phase coordination can become
+difficult. Using task schedulers like FastDOM or custom queue systems
+helps coordinate independent reads and writes.</p>
+<ul>
+<li><strong>Measure Queue:</strong> Push all measurement functions into
+a designated read queue (<code>fastdom.measure()</code>).</li>
+<li><strong>Mutate Queue:</strong> Push all DOM attribute assignments
+into a write queue (<code>fastdom.mutate()</code>).</li>
+</ul>
+<p>The queue manager executes all scheduled reads consecutively before
+executing the batch of writes, preventing accidental interleaved
+operations across decoupled components.</p>
+<h2 id="target-hardware-accelerated-transforms">Target
+Hardware-Accelerated Transforms</h2>
+<p>Directly modifying SVG-specific attributes like <code>x</code>,
+<code>y</code>, <code>r</code>, or path data (<code>d</code>) requires
+the browser's CPU to recalculate paths and trigger repainting. Where
+feasible:</p>
+<ul>
+<li>Animate elements using CSS transforms
+(<code>transform: translate3d(...)</code> or
+<code>transform: matrix(...)</code>) applied directly to SVG groups
+(<code>&lt;g&gt;</code>) or elements.</li>
+<li>Apply <code>will-change: transform</code> to complex animated SVG
+groups to promote them to their own compositor layers, bypassing layout
+recalculation during transform updates.</li>
+</ul>
+<h2 id="offload-complex-computations-to-web-workers">Offload Complex
+Computations to Web Workers</h2>
+<p>For scenes involving complex path calculations, morphing algorithms,
+or multi-body physics:</p>
+<ol type="1">
+<li>Move all mathematical computations to a background Web Worker.</li>
+<li>Transfer computed path strings or coordinate arrays back to the main
+thread via structured cloning or <code>ArrayBuffer</code>
+transfers.</li>
+<li>Apply the final array of data to the SVG elements in a single write
+pass inside <code>requestAnimationFrame()</code>.</li>
+</ol>
+<p>This keeps the main JavaScript thread completely free to execute DOM
+writes without missing display refresh deadlines.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

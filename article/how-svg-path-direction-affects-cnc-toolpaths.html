@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How SVG Path Direction Affects CNC Toolpaths - svg</title>
+    <meta name="description" content="When converting Scalable Vector Graphics (SVG) files into Computer Numerical Control (CNC) cutting paths, path direction—also known as winding order—plays a critical role in how CAM software interprets geometry. The direction in which a vector path i">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-svg-path-direction-affects-cnc-toolpaths">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How SVG Path Direction Affects CNC Toolpaths - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-svg-path-direction-affects-cnc-toolpaths" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="When converting Scalable Vector Graphics (SVG) files into Computer Numerical Control (CNC) cutting paths, path direction—also known as winding order—plays a critical role in how CAM software interprets geometry. The direction in which a vector path i" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-svg-path-direction-affects-cnc-toolpaths">How SVG Path
+Direction Affects CNC Toolpaths</h1>
+<p>When converting Scalable Vector Graphics (SVG) files into Computer
+Numerical Control (CNC) cutting paths, path direction—also known as
+winding order—plays a critical role in how CAM software interprets
+geometry. The direction in which a vector path is drawn (clockwise or
+counter-clockwise) directly influences whether cuts are placed inside or
+outside the line, determines the use of climb versus conventional
+milling, and defines how nested shapes such as holes and islands are
+recognized. Understanding and managing path direction ensures accurate
+part dimensions, clean surface finishes, and proper tool engagement.</p>
+<h3 id="inside-and-outside-profile-offsets">Inside and Outside Profile
+Offsets</h3>
+<p>CNC machines use the tool's radius to offset the path so that the
+finished part matches the intended digital dimensions. CAM software
+often relies on path direction to determine which side of the line
+represents the "inside" or "outside" of a part.</p>
+<ul>
+<li><strong>Clockwise (CW) Paths:</strong> Typically interpreted by CAM
+engines as an exterior boundary when offsetting to the right, or an
+interior cutout when offsetting to the left.</li>
+<li><strong>Counter-Clockwise (CCW) Paths:</strong> Inverts the offset
+logic compared to CW paths.</li>
+</ul>
+<p>If an SVG path has an inverted winding order, the CAM software may
+generate the toolpath on the wrong side of the vector. This error
+results in parts that are either undersized or oversized by exactly
+twice the tool's diameter.</p>
+<h3 id="climb-milling-vs-conventional-milling">Climb Milling vs.
+Conventional Milling</h3>
+<p>Most standard CNC spindles rotate in a clockwise direction. Because
+of this fixed rotation, the direction the cutter travels along an SVG
+path determines the cutting mechanics:</p>
+<ul>
+<li><strong>Climb Milling:</strong> The tool moves in the direction of
+the spindle rotation, taking thick-to-thin chips. This usually yields
+better surface finishes, reduced tool wear, and less heat
+generation.</li>
+<li><strong>Conventional Milling:</strong> The tool moves against the
+spindle rotation, taking thin-to-thick chips. This can cause increased
+tool deflection, chatter, and rougher edge finishes in certain
+materials.</li>
+</ul>
+<p>Reversing an SVG vector flips the cut from climb to conventional
+milling (or vice versa), which can negatively impact part accuracy, edge
+quality, and tool lifespan.</p>
+<h3 id="nested-geometry-and-island-recognition">Nested Geometry and
+Island Recognition</h3>
+<p>In complex designs featuring cutouts, text, or multiple nested parts,
+SVG winding rules (such as Non-Zero Winding and Even-Odd rules) define
+solid areas versus voids.</p>
+<p>CAM processors generally expect outer perimeters to run in one
+direction (e.g., clockwise) and inner cutouts to run in the opposite
+direction (e.g., counter-clockwise). If an interior hole shares the same
+path direction as the outer perimeter, the software may fail to
+recognize it as a void, incorrectly treating it as a separate outer
+boundary or ignoring it entirely during pocketing operations.</p>
+<h3 id="managing-svg-path-direction-for-cnc">Managing SVG Path Direction
+for CNC</h3>
+<p>While advanced CAM software packages include features to
+automatically detect boundaries or reverse vector directions, relying
+solely on automated correction can lead to inconsistencies. To avoid
+machining errors:</p>
+<ol type="1">
+<li><strong>Maintain Consistent Export Standards:</strong> Ensure design
+software exports closed vectors with outer contours running clockwise
+and inner cutouts running counter-clockwise.</li>
+<li><strong>Inspect Toolpaths in CAM Simulation:</strong> Always verify
+the visual toolpath simulation to confirm that the cutter is offset to
+the correct side of the line and traveling in the intended direction
+before running the job on the CNC machine.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

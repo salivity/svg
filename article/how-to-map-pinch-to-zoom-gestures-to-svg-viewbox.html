@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Map Pinch to Zoom Gestures to SVG ViewBox - svg</title>
+    <meta name="description" content="Mapping pinch-to-zoom gestures to an SVG viewBox involves capturing multi-touch screen coordinates, calculating the relative scale and focal center between two fingers, and mathematically updating the viewBox origin and dimensions in real time. By conver">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-to-map-pinch-to-zoom-gestures-to-svg-viewbox">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Map Pinch to Zoom Gestures to SVG ViewBox - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-to-map-pinch-to-zoom-gestures-to-svg-viewbox" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Mapping pinch-to-zoom gestures to an SVG viewBox involves capturing multi-touch screen coordinates, calculating the relative scale and focal center between two fingers, and mathematically updating the viewBox origin and dimensions in real time. By conver" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-map-pinch-to-zoom-gestures-to-svg-viewbox">How to Map
+Pinch to Zoom Gestures to SVG ViewBox</h1>
+<p>Mapping pinch-to-zoom gestures to an SVG <code>viewBox</code>
+involves capturing multi-touch screen coordinates, calculating the
+relative scale and focal center between two fingers, and mathematically
+updating the <code>viewBox</code> origin and dimensions in real time. By
+converting client touch coordinates into the SVG coordinate space, you
+can dynamically adjust the <code>min-x</code>, <code>min-y</code>,
+<code>width</code>, and <code>height</code> properties to ensure smooth,
+responsive zooming centered precisely where the user pinches.</p>
+<h3 id="the-svg-viewbox-structure">The SVG ViewBox Structure</h3>
+<p>An SVG <code>viewBox</code> attribute consists of four values:
+<code>min-x</code>, <code>min-y</code>, <code>width</code>, and
+<code>height</code>.</p>
+<ul>
+<li>Decreasing <code>width</code> and <code>height</code> zooms in.</li>
+<li>Increasing <code>width</code> and <code>height</code> zooms
+out.</li>
+<li>Adjusting <code>min-x</code> and <code>min-y</code> pans the
+viewport, keeping the zoom centered under the user's fingers.</li>
+</ul>
+<h3 id="step-1-capture-touch-events">Step 1: Capture Touch Events</h3>
+<p>Pinch gestures require monitoring two touch points using standard DOM
+touch events: <code>touchstart</code>, <code>touchmove</code>, and
+<code>touchend</code>.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> initialDistance <span class="op">=</span> <span class="dv">0</span><span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> initialViewBox <span class="op">=</span> { <span class="dt">x</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">w</span><span class="op">:</span> <span class="dv">1000</span><span class="op">,</span> <span class="dt">h</span><span class="op">:</span> <span class="dv">1000</span> }<span class="op">;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="kw">let</span> focalPoint <span class="op">=</span> { <span class="dt">x</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span> <span class="dt">y</span><span class="op">:</span> <span class="dv">0</span> }<span class="op">;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>svgElement<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">&#39;touchstart&#39;</span><span class="op">,</span> (e) <span class="kw">=&gt;</span> {</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (e<span class="op">.</span><span class="at">touches</span><span class="op">.</span><span class="at">length</span> <span class="op">===</span> <span class="dv">2</span>) {</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    e<span class="op">.</span><span class="fu">preventDefault</span>()<span class="op">;</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    initialDistance <span class="op">=</span> <span class="fu">getDistance</span>(e<span class="op">.</span><span class="at">touches</span>[<span class="dv">0</span>]<span class="op">,</span> e<span class="op">.</span><span class="at">touches</span>[<span class="dv">1</span>])<span class="op">;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    initialViewBox <span class="op">=</span> <span class="fu">getCurrentViewBox</span>()<span class="op">;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>    focalPoint <span class="op">=</span> <span class="fu">getTouchCenterInSvg</span>(e<span class="op">.</span><span class="at">touches</span>[<span class="dv">0</span>]<span class="op">,</span> e<span class="op">.</span><span class="at">touches</span>[<span class="dv">1</span>])<span class="op">;</span></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<h3 id="step-2-calculate-pinch-distance-and-focal-point">Step 2:
+Calculate Pinch Distance and Focal Point</h3>
+<p>Use the Pythagorean theorem to calculate the Euclidean distance
+between the two touches. The center point between the two fingers serves
+as the focal point of the zoom.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getDistance</span>(t1<span class="op">,</span> t2) {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> dx <span class="op">=</span> t1<span class="op">.</span><span class="at">clientX</span> <span class="op">-</span> t2<span class="op">.</span><span class="at">clientX</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> dy <span class="op">=</span> t1<span class="op">.</span><span class="at">clientY</span> <span class="op">-</span> t2<span class="op">.</span><span class="at">clientY</span><span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">hypot</span>(dx<span class="op">,</span> dy)<span class="op">;</span></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">getTouchCenter</span>(t1<span class="op">,</span> t2) {</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> {</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">x</span><span class="op">:</span> (t1<span class="op">.</span><span class="at">clientX</span> <span class="op">+</span> t2<span class="op">.</span><span class="at">clientX</span>) <span class="op">/</span> <span class="dv">2</span><span class="op">,</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">y</span><span class="op">:</span> (t1<span class="op">.</span><span class="at">clientY</span> <span class="op">+</span> t2<span class="op">.</span><span class="at">clientY</span>) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="step-3-convert-screen-coordinates-to-svg-space">Step 3: Convert
+Screen Coordinates to SVG Space</h3>
+<p>To ensure the zoom focuses accurately on the user's touch location
+regardless of CSS scaling, transform the screen coordinates into SVG
+coordinate space using the element's Current Transformation Matrix
+(<code>getScreenCTM</code>).</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">function</span> <span class="fu">screenToSVG</span>(svg<span class="op">,</span> clientX<span class="op">,</span> clientY) {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> pt <span class="op">=</span> svg<span class="op">.</span><span class="fu">createSVGPoint</span>()<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  pt<span class="op">.</span><span class="at">x</span> <span class="op">=</span> clientX<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  pt<span class="op">.</span><span class="at">y</span> <span class="op">=</span> clientY<span class="op">;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> pt<span class="op">.</span><span class="fu">matrixTransform</span>(svg<span class="op">.</span><span class="fu">getScreenCTM</span>()<span class="op">.</span><span class="fu">inverse</span>())<span class="op">;</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h3 id="step-4-calculate-and-apply-the-new-viewbox">Step 4: Calculate
+and Apply the New ViewBox</h3>
+<p>During <code>touchmove</code>, determine the scale factor by dividing
+the current distance between touches by the initial distance. Update the
+<code>viewBox</code> width and height by this factor, and adjust the
+origin (<code>x</code> and <code>y</code>) relative to the focal point
+so the image expands or contracts around the pinch center.</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>svgElement<span class="op">.</span><span class="fu">addEventListener</span>(<span class="st">&#39;touchmove&#39;</span><span class="op">,</span> (e) <span class="kw">=&gt;</span> {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">if</span> (e<span class="op">.</span><span class="at">touches</span><span class="op">.</span><span class="at">length</span> <span class="op">===</span> <span class="dv">2</span>) {</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>    e<span class="op">.</span><span class="fu">preventDefault</span>()<span class="op">;</span></span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> currentDistance <span class="op">=</span> <span class="fu">getDistance</span>(e<span class="op">.</span><span class="at">touches</span>[<span class="dv">0</span>]<span class="op">,</span> e<span class="op">.</span><span class="at">touches</span>[<span class="dv">1</span>])<span class="op">;</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> scale <span class="op">=</span> initialDistance <span class="op">/</span> currentDistance<span class="op">;</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Calculate new dimensions</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> newWidth <span class="op">=</span> initialViewBox<span class="op">.</span><span class="at">w</span> <span class="op">*</span> scale<span class="op">;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> newHeight <span class="op">=</span> initialViewBox<span class="op">.</span><span class="at">h</span> <span class="op">*</span> scale<span class="op">;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Adjust origin around the SVG-space focal point</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> newX <span class="op">=</span> focalPoint<span class="op">.</span><span class="at">x</span> <span class="op">-</span> (focalPoint<span class="op">.</span><span class="at">x</span> <span class="op">-</span> initialViewBox<span class="op">.</span><span class="at">x</span>) <span class="op">*</span> scale<span class="op">;</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> newY <span class="op">=</span> focalPoint<span class="op">.</span><span class="at">y</span> <span class="op">-</span> (focalPoint<span class="op">.</span><span class="at">y</span> <span class="op">-</span> initialViewBox<span class="op">.</span><span class="at">y</span>) <span class="op">*</span> scale<span class="op">;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>    <span class="co">// Apply the updated viewBox</span></span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>    svgElement<span class="op">.</span><span class="fu">setAttribute</span>(<span class="st">&#39;viewBox&#39;</span><span class="op">,</span> <span class="vs">`</span><span class="sc">${</span>newX<span class="sc">}</span><span class="vs"> </span><span class="sc">${</span>newY<span class="sc">}</span><span class="vs"> </span><span class="sc">${</span>newWidth<span class="sc">}</span><span class="vs"> </span><span class="sc">${</span>newHeight<span class="sc">}</span><span class="vs">`</span>)<span class="op">;</span></span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>  }</span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>})<span class="op">;</span></span></code></pre></div>
+<h3 id="performance-and-edge-cases">Performance and Edge Cases</h3>
+<ul>
+<li><strong>Passive Listeners:</strong> Set
+<code>{ passive: false }</code> when adding touch listeners to allow
+<code>e.preventDefault()</code>, which prevents the default browser page
+zoom.</li>
+<li><strong>Constraints:</strong> Apply minimum and maximum width/height
+limits to the calculated <code>viewBox</code> dimensions to prevent
+inverted scaling or excessive zooming.</li>
+<li><strong>Rendering Performance:</strong> Use
+<code>requestAnimationFrame</code> to decouple touch event triggers from
+DOM updates, ensuring smooth rendering at the display's native refresh
+rate.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

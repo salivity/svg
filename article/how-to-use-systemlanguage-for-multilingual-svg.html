@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How to Use systemLanguage for Multilingual SVG - svg</title>
+    <meta name="description" content="Creating multilingual SVG graphics and diagrams allows a single graphic asset to adapt seamlessly to users worldwide without requiring multiple files or complex JavaScript. By leveraging the native SVG systemLanguage attribute in combination with the <sw">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-to-use-systemlanguage-for-multilingual-svg">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How to Use systemLanguage for Multilingual SVG - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-to-use-systemlanguage-for-multilingual-svg" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Creating multilingual SVG graphics and diagrams allows a single graphic asset to adapt seamlessly to users worldwide without requiring multiple files or complex JavaScript. By leveraging the native SVG systemLanguage attribute in combination with the <sw" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-to-use-systemlanguage-for-multilingual-svg">How to Use
+systemLanguage for Multilingual SVG</h1>
+<p>Creating multilingual SVG graphics and diagrams allows a single
+graphic asset to adapt seamlessly to users worldwide without requiring
+multiple files or complex JavaScript. By leveraging the native SVG
+<code>systemLanguage</code> attribute in combination with the
+<code>&lt;switch&gt;</code> element, SVG files can automatically detect
+a user's browser or operating system language preferences and display
+the corresponding localized text, labels, and graphic components.</p>
+<h2 id="understanding-the-systemlanguage-attribute">Understanding the
+systemLanguage Attribute</h2>
+<p>The <code>systemLanguage</code> attribute evaluates a comma-separated
+list of BCP 47 language tags (such as <code>en</code>, <code>fr</code>,
+<code>es-MX</code>, or <code>ja</code>). When an SVG renderer encounters
+this attribute, it compares the specified language tags against the
+user's preferred language list configured in their browser or operating
+system. If a match is found, the attribute evaluates to true; otherwise,
+it evaluates to false.</p>
+<h2 id="how-systemlanguage-works-with-the-switch-element">How
+systemLanguage Works with the <code>&lt;switch&gt;</code> Element</h2>
+<p>While <code>systemLanguage</code> can be applied to individual
+elements, its primary utility comes from wrapping localized elements
+inside a <code>&lt;switch&gt;</code> container.</p>
+<p>The <code>&lt;switch&gt;</code> element processes its direct child
+elements in sequential order from top to bottom. It renders the first
+direct child whose conditional processing attributes (like
+<code>systemLanguage</code>) evaluate to true, and completely ignores
+all subsequent sibling elements within that <code>&lt;switch&gt;</code>
+block.</p>
+<h3 id="example-implementation">Example Implementation</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">xmlns=</span><span class="st">&quot;http://www.w3.org/2000/svg&quot;</span> <span class="ot">viewBox=</span><span class="st">&quot;0 0 400 100&quot;</span> <span class="ot">width=</span><span class="st">&quot;100%&quot;</span> <span class="ot">height=</span><span class="st">&quot;100%&quot;</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">switch</span>&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    <span class="co">&lt;!-- Displayed if user preference matches Spanish --&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">text</span> <span class="ot">x=</span><span class="st">&quot;20&quot;</span> <span class="ot">y=</span><span class="st">&quot;50&quot;</span> <span class="ot">systemLanguage=</span><span class="st">&quot;es&quot;</span> <span class="ot">font-size=</span><span class="st">&quot;20&quot;</span>&gt;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>      Bienvenido a nuestro diagrama</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">text</span>&gt;</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a>    <span class="co">&lt;!-- Displayed if user preference matches French --&gt;</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">text</span> <span class="ot">x=</span><span class="st">&quot;20&quot;</span> <span class="ot">y=</span><span class="st">&quot;50&quot;</span> <span class="ot">systemLanguage=</span><span class="st">&quot;fr&quot;</span> <span class="ot">font-size=</span><span class="st">&quot;20&quot;</span>&gt;</span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a>      Bienvenue sur notre diagramme</span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">text</span>&gt;</span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a>    <span class="co">&lt;!-- Displayed if user preference matches German --&gt;</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">text</span> <span class="ot">x=</span><span class="st">&quot;20&quot;</span> <span class="ot">y=</span><span class="st">&quot;50&quot;</span> <span class="ot">systemLanguage=</span><span class="st">&quot;de&quot;</span> <span class="ot">font-size=</span><span class="st">&quot;20&quot;</span>&gt;</span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a>      Willkommen zu unserem Diagramm</span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">text</span>&gt;</span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a>    </span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a>    <span class="co">&lt;!-- Fallback: Default text when no language matches --&gt;</span></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">text</span> <span class="ot">x=</span><span class="st">&quot;20&quot;</span> <span class="ot">y=</span><span class="st">&quot;50&quot;</span> <span class="ot">font-size=</span><span class="st">&quot;20&quot;</span>&gt;</span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a>      Welcome to our diagram</span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a>    &lt;/<span class="kw">text</span>&gt;</span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">switch</span>&gt;</span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<h2 id="key-advantages-for-graphics-and-diagrams">Key Advantages for
+Graphics and Diagrams</h2>
+<ul>
+<li><strong>Single Asset Management:</strong> Translators and developers
+maintain a single <code>.svg</code> file rather than generating and
+synchronizing separate files for every supported locale.</li>
+<li><strong>Layout and Geometry Customization:</strong> Different
+languages vary in word length and reading direction. Entire groups
+(<code>&lt;g&gt;</code>) containing adjusted text coordinates, shapes,
+arrows, or background boxes can be enclosed within
+<code>&lt;switch&gt;</code> elements to accommodate language-specific
+spatial requirements.</li>
+<li><strong>Zero JavaScript Dependency:</strong> The language switching
+is resolved natively by the SVG user agent (browser or vector viewer),
+ensuring fast rendering and compatibility even when scripts are
+disabled.</li>
+<li><strong>Accessibility and Search Indexing:</strong> Because
+translations remain real vector text instead of rasterized images,
+screen readers and search engines can parse the text content
+appropriately.</li>
+</ul>
+<h2 id="best-practices-for-implementation">Best Practices for
+Implementation</h2>
+<ol type="1">
+<li><strong>Always Include a Default Fallback:</strong> Place an element
+without a <code>systemLanguage</code> attribute at the very end of the
+<code>&lt;switch&gt;</code> block. If a user's language does not match
+any specified options, the SVG displays this fallback rather than
+rendering a blank space.</li>
+<li><strong>Order Specificity Correctly:</strong> Place regional
+dialects (e.g., <code>pt-BR</code>) above broader language codes (e.g.,
+<code>pt</code>) inside the <code>&lt;switch&gt;</code> block to ensure
+regional users receive the intended specialized translation.</li>
+<li><strong>Account for Text Expansion:</strong> German, French, and
+other languages often require more horizontal space than English. Ensure
+diagram bounding boxes and containers have enough padding to handle
+varying string lengths without clipping.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

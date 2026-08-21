@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Making SVG Charts Accessible to Screen Readers - svg</title>
+    <meta name="description" content="Making SVG charts accessible to screen readers requires a combination of semantic ARIA attributes, internal structural elements, and text descriptions. This guide outlines the essential markup needed to transform visual SVG data visualizations into acces">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/making-svg-charts-accessible-to-screen-readers">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Making SVG Charts Accessible to Screen Readers - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/making-svg-charts-accessible-to-screen-readers" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Making SVG charts accessible to screen readers requires a combination of semantic ARIA attributes, internal structural elements, and text descriptions. This guide outlines the essential markup needed to transform visual SVG data visualizations into acces" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="making-svg-charts-accessible-to-screen-readers">Making SVG
+Charts Accessible to Screen Readers</h1>
+<p>Making SVG charts accessible to screen readers requires a combination
+of semantic ARIA attributes, internal structural elements, and text
+descriptions. This guide outlines the essential markup needed to
+transform visual SVG data visualizations into accessible components,
+covering root element definitions, title and description associations,
+grouping semantics, and decorative element handling.</p>
+<h2 id="1-configure-the-root-svg-element">1. Configure the Root
+<code>&lt;svg&gt;</code> Element</h2>
+<p>By default, screen readers may ignore SVG elements, treat them
+inconsistently, or announce redundant structural paths. To ensure the
+SVG is announced as a cohesive graphic, define the following attributes
+on the <code>&lt;svg&gt;</code> root:</p>
+<ul>
+<li><strong><code>role="img"</code></strong>: Informs assistive
+technologies to treat the entire SVG as a single image.</li>
+<li><strong><code>aria-labelledby="title-id"</code></strong>: Connects
+the SVG to its internal <code>&lt;title&gt;</code> element for a concise
+label.</li>
+<li><strong><code>aria-describedby="desc-id"</code></strong>: Connects
+the SVG to its internal <code>&lt;desc&gt;</code> element for a detailed
+explanation of the chart's data.</li>
+<li><strong><code>focusable="false"</code></strong>: Prevents older
+versions of Internet Explorer and certain screen readers from placing an
+empty keyboard focus stop on the SVG wrapper.</li>
+</ul>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> </span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">role=</span><span class="st">&quot;img&quot;</span> </span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">aria-labelledby=</span><span class="st">&quot;chart-title&quot;</span> </span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">aria-describedby=</span><span class="st">&quot;chart-desc&quot;</span> </span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">focusable=</span><span class="st">&quot;false&quot;</span></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">viewBox=</span><span class="st">&quot;0 0 500 300&quot;</span>&gt;</span></code></pre></div>
+<h2 id="2-include-title-and-desc-tags">2. Include
+<code>&lt;title&gt;</code> and <code>&lt;desc&gt;</code> Tags</h2>
+<p>Place <code>&lt;title&gt;</code> and <code>&lt;desc&gt;</code>
+elements as the first direct children of the <code>&lt;svg&gt;</code>
+element:</p>
+<ul>
+<li><strong><code>&lt;title&gt;</code></strong>: Acts as the accessible
+name of the chart (similar to the <code>alt</code> text on an
+<code>&lt;img&gt;</code> tag). Keep it brief, such as "Quarterly Revenue
+2024".</li>
+<li><strong><code>&lt;desc&gt;</code></strong>: Acts as the accessible
+description. Provide a summary of the data trends, the highest/lowest
+data points, and the chart type.</li>
+</ul>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">title</span> <span class="ot">id=</span><span class="st">&quot;chart-title&quot;</span>&gt;Monthly Active Users in 2024&lt;/<span class="kw">title</span>&gt;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">desc</span> <span class="ot">id=</span><span class="st">&quot;chart-desc&quot;</span>&gt;A bar chart showing user growth from 10,000 in January to 45,000 in December, with the highest surge occurring in Q3.&lt;/<span class="kw">desc</span>&gt;</span></code></pre></div>
+<h2 id="3-hide-decorative-elements">3. Hide Decorative Elements</h2>
+<p>Charts contain decorative lines, grid backgrounds, tick marks, and
+axes that add visual context but create noise for screen readers. Hide
+these elements using the <code>aria-hidden="true"</code> attribute on
+individual elements or groups (<code>&lt;g&gt;</code>).</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">g</span> <span class="ot">class=</span><span class="st">&quot;grid-lines&quot;</span> <span class="ot">aria-hidden=</span><span class="st">&quot;true&quot;</span>&gt;</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">line</span> <span class="ot">x1=</span><span class="st">&quot;0&quot;</span> <span class="ot">y1=</span><span class="st">&quot;50&quot;</span> <span class="ot">x2=</span><span class="st">&quot;500&quot;</span> <span class="ot">y2=</span><span class="st">&quot;50&quot;</span> <span class="ot">stroke=</span><span class="st">&quot;#e0e0e0&quot;</span> /&gt;</span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">line</span> <span class="ot">x1=</span><span class="st">&quot;0&quot;</span> <span class="ot">y1=</span><span class="st">&quot;100&quot;</span> <span class="ot">x2=</span><span class="st">&quot;500&quot;</span> <span class="ot">y2=</span><span class="st">&quot;100&quot;</span> <span class="ot">stroke=</span><span class="st">&quot;#e0e0e0&quot;</span> /&gt;</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">g</span>&gt;</span></code></pre></div>
+<h2 id="4-structure-individual-data-points-optional">4. Structure
+Individual Data Points (Optional)</h2>
+<p>If individual bars, points, or slices must be exposed to screen
+readers or focusable via keyboard:</p>
+<ul>
+<li>Apply <code>role="graphics-symbol"</code> or <code>role="img"</code>
+to each segment.</li>
+<li>Provide an explicit <code>aria-label</code> detailing the category
+and value.</li>
+<li>Add <code>tabindex="0"</code> if the user needs to focus on
+individual data points interactively.</li>
+</ul>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">rect</span> </span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">x=</span><span class="st">&quot;20&quot;</span> <span class="ot">y=</span><span class="st">&quot;50&quot;</span> <span class="ot">width=</span><span class="st">&quot;30&quot;</span> <span class="ot">height=</span><span class="st">&quot;150&quot;</span> </span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">role=</span><span class="st">&quot;img&quot;</span> </span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">aria-label=</span><span class="st">&quot;January: 10,000 users&quot;</span> </span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">tabindex=</span><span class="st">&quot;0&quot;</span> /&gt;</span></code></pre></div>
+<h2 id="5-provide-an-accessible-html-data-alternative">5. Provide an
+Accessible HTML Data Alternative</h2>
+<p>While proper SVG markup makes the graphic recognizable to screen
+readers, complex data visualizations are best consumed in a structured
+tabular format. Pair the SVG with a visually hidden HTML
+<code>&lt;table&gt;</code> using CSS screen-reader-only utility
+classes:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">&quot;sr-only&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">table</span><span class="dt">&gt;</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">caption</span><span class="dt">&gt;</span>Monthly Active Users in 2024<span class="dt">&lt;/</span><span class="kw">caption</span><span class="dt">&gt;</span></span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">thead</span><span class="dt">&gt;</span></span>
+<span id="cb5-5"><a href="#cb5-5" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&lt;</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
+<span id="cb5-6"><a href="#cb5-6" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">&quot;col&quot;</span><span class="dt">&gt;</span>Month<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
+<span id="cb5-7"><a href="#cb5-7" aria-hidden="true" tabindex="-1"></a>        <span class="dt">&lt;</span><span class="kw">th</span><span class="ot"> scope</span><span class="op">=</span><span class="st">&quot;col&quot;</span><span class="dt">&gt;</span>Users<span class="dt">&lt;/</span><span class="kw">th</span><span class="dt">&gt;</span></span>
+<span id="cb5-8"><a href="#cb5-8" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&lt;/</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
+<span id="cb5-9"><a href="#cb5-9" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;/</span><span class="kw">thead</span><span class="dt">&gt;</span></span>
+<span id="cb5-10"><a href="#cb5-10" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;</span><span class="kw">tbody</span><span class="dt">&gt;</span></span>
+<span id="cb5-11"><a href="#cb5-11" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&lt;</span><span class="kw">tr</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>January<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>10,000<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;/</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
+<span id="cb5-12"><a href="#cb5-12" aria-hidden="true" tabindex="-1"></a>      <span class="dt">&lt;</span><span class="kw">tr</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>December<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;</span><span class="kw">td</span><span class="dt">&gt;</span>45,000<span class="dt">&lt;/</span><span class="kw">td</span><span class="dt">&gt;&lt;/</span><span class="kw">tr</span><span class="dt">&gt;</span></span>
+<span id="cb5-13"><a href="#cb5-13" aria-hidden="true" tabindex="-1"></a>    <span class="dt">&lt;/</span><span class="kw">tbody</span><span class="dt">&gt;</span></span>
+<span id="cb5-14"><a href="#cb5-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">table</span><span class="dt">&gt;</span></span>
+<span id="cb5-15"><a href="#cb5-15" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span></code></pre></div>
+<h2 id="complete-accessible-svg-example">Complete Accessible SVG
+Example</h2>
+<div class="sourceCode" id="cb6"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> </span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>  <span class="ot">role=</span><span class="st">&quot;img&quot;</span> </span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>  <span class="ot">aria-labelledby=</span><span class="st">&quot;chart-title&quot;</span> </span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>  <span class="ot">aria-describedby=</span><span class="st">&quot;chart-desc&quot;</span> </span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>  <span class="ot">focusable=</span><span class="st">&quot;false&quot;</span></span>
+<span id="cb6-6"><a href="#cb6-6" aria-hidden="true" tabindex="-1"></a>  <span class="ot">viewBox=</span><span class="st">&quot;0 0 400 200&quot;</span></span>
+<span id="cb6-7"><a href="#cb6-7" aria-hidden="true" tabindex="-1"></a>  <span class="ot">xmlns=</span><span class="st">&quot;http://www.w3.org/2000/svg&quot;</span>&gt;</span>
+<span id="cb6-8"><a href="#cb6-8" aria-hidden="true" tabindex="-1"></a>  </span>
+<span id="cb6-9"><a href="#cb6-9" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">title</span> <span class="ot">id=</span><span class="st">&quot;chart-title&quot;</span>&gt;Quarterly Sales Performance&lt;/<span class="kw">title</span>&gt;</span>
+<span id="cb6-10"><a href="#cb6-10" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">desc</span> <span class="ot">id=</span><span class="st">&quot;chart-desc&quot;</span>&gt;Bar chart representing sales figures across four quarters, peaking in Q4 at $80,000.&lt;/<span class="kw">desc</span>&gt;</span>
+<span id="cb6-11"><a href="#cb6-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-12"><a href="#cb6-12" aria-hidden="true" tabindex="-1"></a>  <span class="co">&lt;!-- Decorative Axis --&gt;</span></span>
+<span id="cb6-13"><a href="#cb6-13" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">g</span> <span class="ot">class=</span><span class="st">&quot;axes&quot;</span> <span class="ot">aria-hidden=</span><span class="st">&quot;true&quot;</span>&gt;</span>
+<span id="cb6-14"><a href="#cb6-14" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">line</span> <span class="ot">x1=</span><span class="st">&quot;40&quot;</span> <span class="ot">y1=</span><span class="st">&quot;10&quot;</span> <span class="ot">x2=</span><span class="st">&quot;40&quot;</span> <span class="ot">y2=</span><span class="st">&quot;170&quot;</span> <span class="ot">stroke=</span><span class="st">&quot;#333&quot;</span> /&gt;</span>
+<span id="cb6-15"><a href="#cb6-15" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">line</span> <span class="ot">x1=</span><span class="st">&quot;40&quot;</span> <span class="ot">y1=</span><span class="st">&quot;170&quot;</span> <span class="ot">x2=</span><span class="st">&quot;380&quot;</span> <span class="ot">y2=</span><span class="st">&quot;170&quot;</span> <span class="ot">stroke=</span><span class="st">&quot;#333&quot;</span> /&gt;</span>
+<span id="cb6-16"><a href="#cb6-16" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">g</span>&gt;</span>
+<span id="cb6-17"><a href="#cb6-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb6-18"><a href="#cb6-18" aria-hidden="true" tabindex="-1"></a>  <span class="co">&lt;!-- Data Bars --&gt;</span></span>
+<span id="cb6-19"><a href="#cb6-19" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">g</span> <span class="ot">class=</span><span class="st">&quot;chart-data&quot;</span>&gt;</span>
+<span id="cb6-20"><a href="#cb6-20" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">rect</span> <span class="ot">x=</span><span class="st">&quot;60&quot;</span> <span class="ot">y=</span><span class="st">&quot;90&quot;</span> <span class="ot">width=</span><span class="st">&quot;40&quot;</span> <span class="ot">height=</span><span class="st">&quot;80&quot;</span> <span class="ot">fill=</span><span class="st">&quot;#007acc&quot;</span> <span class="ot">role=</span><span class="st">&quot;img&quot;</span> <span class="ot">aria-label=</span><span class="st">&quot;Q1: $40,000&quot;</span> /&gt;</span>
+<span id="cb6-21"><a href="#cb6-21" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">rect</span> <span class="ot">x=</span><span class="st">&quot;140&quot;</span> <span class="ot">y=</span><span class="st">&quot;70&quot;</span> <span class="ot">width=</span><span class="st">&quot;40&quot;</span> <span class="ot">height=</span><span class="st">&quot;100&quot;</span> <span class="ot">fill=</span><span class="st">&quot;#007acc&quot;</span> <span class="ot">role=</span><span class="st">&quot;img&quot;</span> <span class="ot">aria-label=</span><span class="st">&quot;Q2: $50,000&quot;</span> /&gt;</span>
+<span id="cb6-22"><a href="#cb6-22" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">rect</span> <span class="ot">x=</span><span class="st">&quot;220&quot;</span> <span class="ot">y=</span><span class="st">&quot;50&quot;</span> <span class="ot">width=</span><span class="st">&quot;40&quot;</span> <span class="ot">height=</span><span class="st">&quot;120&quot;</span> <span class="ot">fill=</span><span class="st">&quot;#007acc&quot;</span> <span class="ot">role=</span><span class="st">&quot;img&quot;</span> <span class="ot">aria-label=</span><span class="st">&quot;Q3: $60,000&quot;</span> /&gt;</span>
+<span id="cb6-23"><a href="#cb6-23" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">rect</span> <span class="ot">x=</span><span class="st">&quot;300&quot;</span> <span class="ot">y=</span><span class="st">&quot;10&quot;</span> <span class="ot">width=</span><span class="st">&quot;40&quot;</span> <span class="ot">height=</span><span class="st">&quot;160&quot;</span> <span class="ot">fill=</span><span class="st">&quot;#007acc&quot;</span> <span class="ot">role=</span><span class="st">&quot;img&quot;</span> <span class="ot">aria-label=</span><span class="st">&quot;Q4: $80,000&quot;</span> /&gt;</span>
+<span id="cb6-24"><a href="#cb6-24" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">g</span>&gt;</span>
+<span id="cb6-25"><a href="#cb6-25" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

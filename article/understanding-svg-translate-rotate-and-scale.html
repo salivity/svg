@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding SVG Translate, Rotate, and Scale - svg</title>
+    <meta name="description" content="This article explores how the Scalable Vector Graphics (SVG) coordinate transformation system processes translate, rotate, and scale operations. Instead of altering an element's geometric definition directly, SVG transformations modify the element's loca">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/understanding-svg-translate-rotate-and-scale">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Understanding SVG Translate, Rotate, and Scale - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/understanding-svg-translate-rotate-and-scale" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores how the Scalable Vector Graphics (SVG) coordinate transformation system processes translate, rotate, and scale operations. Instead of altering an element's geometric definition directly, SVG transformations modify the element's loca" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="understanding-svg-translate-rotate-and-scale">Understanding SVG
+Translate, Rotate, and Scale</h1>
+<p>This article explores how the Scalable Vector Graphics (SVG)
+coordinate transformation system processes <code>translate</code>,
+<code>rotate</code>, and <code>scale</code> operations. Instead of
+altering an element's geometric definition directly, SVG transformations
+modify the element's local coordinate system. Understanding this
+fundamental concept clarifies how visual shifts, resizing, and rotations
+take place relative to the canvas origin.</p>
+<h2 id="the-svg-coordinate-system-foundation">The SVG Coordinate System
+Foundation</h2>
+<p>The standard SVG viewport establishes a Cartesian coordinate system
+where the point <code>(0, 0)</code> resides in the top-left corner. The
+positive x-axis extends to the right, and the positive y-axis extends
+downward.</p>
+<p>When you apply a <code>transform</code> attribute to an SVG element,
+you do not simply move the rendered pixels. Instead, you create a new,
+local coordinate space that is positioned, oriented, and scaled relative
+to its parent coordinate space. All shapes, strokes, and child elements
+are then rendered according to this newly transformed grid.</p>
+<h2 id="translate-shifting-the-origin">Translate: Shifting the
+Origin</h2>
+<p>The <code>translate(tx, [ty])</code> function moves the coordinate
+system's origin <code>(0, 0)</code> by <code>tx</code> units along the
+x-axis and <code>ty</code> units along the y-axis. If <code>ty</code> is
+omitted, it defaults to <code>0</code>.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">g</span> <span class="ot">transform=</span><span class="st">&quot;translate(50, 100)&quot;</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">rect</span> <span class="ot">x=</span><span class="st">&quot;0&quot;</span> <span class="ot">y=</span><span class="st">&quot;0&quot;</span> <span class="ot">width=</span><span class="st">&quot;40&quot;</span> <span class="ot">height=</span><span class="st">&quot;40&quot;</span> /&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">g</span>&gt;</span></code></pre></div>
+<p>In this example:</p>
+<ul>
+<li>The origin of the <code>&lt;g&gt;</code> group is shifted 50 units
+right and 100 units down.</li>
+<li>The rectangle's <code>(x, y)</code> position of <code>(0, 0)</code>
+is evaluated within this new coordinate space, placing it visually at
+<code>(50, 100)</code> in the root viewport.</li>
+</ul>
+<h2 id="scale-resizing-the-unit-grid">Scale: Resizing the Unit Grid</h2>
+<p>The <code>scale(sx, [sy])</code> function multiplies the unit size
+along the x-axis by <code>sx</code> and the y-axis by <code>sy</code>.
+If <code>sy</code> is omitted, it assumes the value of <code>sx</code>,
+applying a uniform scale.</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">g</span> <span class="ot">transform=</span><span class="st">&quot;scale(2, 2)&quot;</span>&gt;</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">rect</span> <span class="ot">x=</span><span class="st">&quot;10&quot;</span> <span class="ot">y=</span><span class="st">&quot;10&quot;</span> <span class="ot">width=</span><span class="st">&quot;20&quot;</span> <span class="ot">height=</span><span class="st">&quot;20&quot;</span> <span class="ot">stroke-width=</span><span class="st">&quot;2&quot;</span> /&gt;</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">g</span>&gt;</span></code></pre></div>
+<p>Key behaviors of <code>scale</code>:</p>
+<ul>
+<li><strong>Grid Stretching:</strong> A scale factor of <code>2</code>
+doubles the size of every unit along that axis.</li>
+<li><strong>Position Scaling:</strong> The shape's position
+<code>(10, 10)</code> is also multiplied by the scale factor, placing
+its top-left corner at <code>(20, 20)</code> relative to the parent
+space.</li>
+<li><strong>Stroke Scaling:</strong> Non-vector properties like
+<code>stroke-width</code> scale proportionally. A
+<code>stroke-width="2"</code> becomes 4 units wide unless
+<code>vector-effect="non-scaling-stroke"</code> is specified.</li>
+</ul>
+<h2 id="rotate-angling-the-coordinate-axes">Rotate: Angling the
+Coordinate Axes</h2>
+<p>The <code>rotate(angle, [cx, cy])</code> function rotates the
+coordinate system clockwise by the specified angle in degrees.</p>
+<p>By default, rotation occurs around the current origin
+<code>(0, 0)</code>:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Rotates 45 degrees around (0, 0) --&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">rect</span> <span class="ot">x=</span><span class="st">&quot;20&quot;</span> <span class="ot">y=</span><span class="st">&quot;20&quot;</span> <span class="ot">width=</span><span class="st">&quot;50&quot;</span> <span class="ot">height=</span><span class="st">&quot;50&quot;</span> <span class="ot">transform=</span><span class="st">&quot;rotate(45)&quot;</span> /&gt;</span></code></pre></div>
+<p>Because rotating around <code>(0, 0)</code> often swings elements
+off-screen or out of position, SVG provides optional center coordinates
+<code>(cx, cy)</code>:</p>
+<div class="sourceCode" id="cb4"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Rotates 45 degrees around (45, 45) --&gt;</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">rect</span> <span class="ot">x=</span><span class="st">&quot;20&quot;</span> <span class="ot">y=</span><span class="st">&quot;20&quot;</span> <span class="ot">width=</span><span class="st">&quot;50&quot;</span> <span class="ot">height=</span><span class="st">&quot;50&quot;</span> <span class="ot">transform=</span><span class="st">&quot;rotate(45, 45, 45)&quot;</span> /&gt;</span></code></pre></div>
+<p>Supplying <code>cx</code> and <code>cy</code> is shorthand for three
+separate operations executed in order:</p>
+<ol type="1">
+<li><code>translate(cx, cy)</code></li>
+<li><code>rotate(angle)</code></li>
+<li><code>translate(-cx, -cy)</code></li>
+</ol>
+<h2 id="combining-transformations-and-execution-order">Combining
+Transformations and Execution Order</h2>
+<p>Multiple transformations can be chained within a single
+<code>transform</code> attribute, separated by spaces or commas:</p>
+<div class="sourceCode" id="cb5"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">rect</span> <span class="ot">transform=</span><span class="st">&quot;translate(100, 50) rotate(45) scale(1.5)&quot;</span> <span class="er">...</span> /&gt;</span></code></pre></div>
+<p>Transformations are processed sequentially from left to right. Each
+successive operation applies to the coordinate system created by the
+preceding transformation:</p>
+<ol type="1">
+<li><strong>Translate:</strong> Moves the origin to
+<code>(100, 50)</code>.</li>
+<li><strong>Rotate:</strong> Rotates the grid 45 degrees around the new
+origin.</li>
+<li><strong>Scale:</strong> Stretches the rotated grid by a factor of
+1.5.</li>
+</ol>
+<p>Reversing the order alters the final output. For example, scaling
+before translating causes the translation distance itself to be
+magnified by the scale factor. Behind the scenes, SVG engines represent
+each operation as a <span class="math inline">\(3\times3\)</span> affine
+transformation matrix, multiplying these matrices together to compute
+the final mapping for every vertex.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

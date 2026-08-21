@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG stroke-linecap: Butt, Round, and Square Explained - svg</title>
+    <meta name="description" content="The SVG stroke-linecap attribute determines the shape used at the end of open subpaths and dashed lines. By choosing between butt, round, and square, you control whether the stroke terminates precisely at its coordinates or extends past them with rounded">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-stroke-linecap-butt-round-and-square-explained">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG stroke-linecap: Butt, Round, and Square Explained - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-stroke-linecap-butt-round-and-square-explained" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The SVG stroke-linecap attribute determines the shape used at the end of open subpaths and dashed lines. By choosing between butt, round, and square, you control whether the stroke terminates precisely at its coordinates or extends past them with rounded" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-stroke-linecap-butt-round-and-square-explained">SVG
+stroke-linecap: Butt, Round, and Square Explained</h1>
+<p>The SVG <code>stroke-linecap</code> attribute determines the shape
+used at the end of open subpaths and dashed lines. By choosing between
+<code>butt</code>, <code>round</code>, and <code>square</code>, you
+control whether the stroke terminates precisely at its coordinates or
+extends past them with rounded or squared caps. Understanding how these
+three values modify stroke geometry is essential for precise vector
+alignment, path styling, and SVG animation.</p>
+<h3 id="how-stroke-linecap-works">How stroke-linecap Works</h3>
+<p>When an SVG renderer draws a path, the path's coordinates define its
+mathematical center line. The <code>stroke-width</code> determines the
+thickness, expanding outward equally on both sides of that line. The
+<code>stroke-linecap</code> attribute dictates how the renderer finishes
+the stroke at the start and end coordinates of that line.</p>
+<h3 id="the-three-stroke-linecap-values">The Three stroke-linecap
+Values</h3>
+<h4 id="1-butt-default">1. butt (Default)</h4>
+<p>The <code>butt</code> value cuts the stroke off with a straight, flat
+edge directly perpendicular to the path direction at the exact endpoint
+coordinates.</p>
+<ul>
+<li><strong>Extension:</strong> It adds zero extra length past the
+path's coordinates.</li>
+<li><strong>Appearance:</strong> A flat, squared-off end that stops
+precisely where the line ends.</li>
+<li><strong>Common Use Cases:</strong> Ideal for precise grid
+alignments, technical diagrams, and instances where the stroke must not
+bleed past its bounding box.</li>
+</ul>
+<h4 id="2-round">2. round</h4>
+<p>The <code>round</code> value finishes the path with a semicircular
+cap extending past the endpoint.</p>
+<ul>
+<li><strong>Extension:</strong> The radius of the semicircle is equal to
+half of the <code>stroke-width</code>, meaning the stroke extends beyond
+the endpoint coordinate by <code>stroke-width / 2</code>.</li>
+<li><strong>Appearance:</strong> Smooth, rounded tips that soften line
+endings.</li>
+<li><strong>Common Use Cases:</strong> Perfect for UI icons, organic
+line art, and dashed strokes where pill-shaped dashes are desired.</li>
+</ul>
+<h4 id="3-square">3. square</h4>
+<p>The <code>square</code> value caps the line with a rectangular
+extension that extends past the endpoint.</p>
+<ul>
+<li><strong>Extension:</strong> The cap extends beyond the path
+coordinate by a distance equal to half the
+<code>stroke-width</code>.</li>
+<li><strong>Appearance:</strong> Visually similar to <code>butt</code>
+because it is flat, but the total rendered path is longer.</li>
+<li><strong>Common Use Cases:</strong> Used when lines need to overlap
+neatly at corners without using path joins, or when dashed lines need
+uniform square segments with consistent spacing.</li>
+</ul>
+<h3 id="key-differences-in-dimensions-and-layout">Key Differences in
+Dimensions and Layout</h3>
+<ul>
+<li><strong>Bounding Box:</strong> Paths with <code>round</code> and
+<code>square</code> caps have larger visual bounding boxes than paths
+with <code>butt</code> caps because the strokes extend beyond the
+declared coordinate boundaries by half the stroke width in every
+direction.</li>
+<li><strong>Dash Patterns:</strong> When using
+<code>stroke-dasharray</code>, the <code>stroke-linecap</code> applies
+to every single dash segment. Setting <code>round</code> or
+<code>square</code> on a dashed line will lengthen each visible dash and
+reduce the visible gap between them.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

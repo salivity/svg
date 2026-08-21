@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>How Browsers Calculate SVG Intrinsic Dimensions - svg</title>
+    <meta name="description" content="Web browsers determine the intrinsic dimensions of an unconstrained Scalable Vector Graphics (SVG) element by evaluating its width, height, and viewBox attributes according to the CSS Images and SVG specifications. When external CSS properties do not exp">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/how-browsers-calculate-svg-intrinsic-dimensions">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="How Browsers Calculate SVG Intrinsic Dimensions - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/how-browsers-calculate-svg-intrinsic-dimensions" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Web browsers determine the intrinsic dimensions of an unconstrained Scalable Vector Graphics (SVG) element by evaluating its width, height, and viewBox attributes according to the CSS Images and SVG specifications. When external CSS properties do not exp" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="how-browsers-calculate-svg-intrinsic-dimensions">How Browsers
+Calculate SVG Intrinsic Dimensions</h1>
+<p>Web browsers determine the intrinsic dimensions of an unconstrained
+Scalable Vector Graphics (SVG) element by evaluating its
+<code>width</code>, <code>height</code>, and <code>viewBox</code>
+attributes according to the CSS Images and SVG specifications. When
+external CSS properties do not explicitly force a size, the rendering
+engine combines these attributes to calculate three key metrics:
+intrinsic width, intrinsic height, and intrinsic aspect ratio.
+Understanding how browsers resolve these properties helps avoid layout
+shifts and rendering inconsistencies across different contexts.</p>
+<h3 id="the-role-of-svg-attributes">The Role of SVG Attributes</h3>
+<p>Browsers extract geometric data from three primary attributes located
+on the root <code>&lt;svg&gt;</code> element:</p>
+<ol type="1">
+<li><strong><code>width</code> and <code>height</code></strong>: Define
+explicit intrinsic physical dimensions (e.g., in pixels, ems, or
+percentages).</li>
+<li><strong><code>viewBox</code></strong>: Defines the internal
+coordinate system via four numbers (<code>min-x</code>,
+<code>min-y</code>, <code>width</code>, <code>height</code>). The ratio
+between the <code>viewBox</code> width and height establishes the SVG's
+intrinsic aspect ratio.</li>
+</ol>
+<h3 id="dimension-resolution-scenarios">Dimension Resolution
+Scenarios</h3>
+<p>When an SVG is placed in an unconstrained container (such as an
+<code>&lt;img&gt;</code> tag without CSS sizing), the browser follows a
+defined fallback hierarchy:</p>
+<h4 id="1-both-widthheight-and-viewbox-are-present">1. Both
+<code>width</code>/<code>height</code> and <code>viewBox</code> are
+present</h4>
+<p>The browser assigns the intrinsic width and height directly from the
+respective attributes. The <code>viewBox</code> dictates the aspect
+ratio and coordinates for scaling the internal graphics within those
+bounds.</p>
+<h4 id="2-both-width-and-height-are-present-without-a-viewbox">2. Both
+<code>width</code> and <code>height</code> are present without a
+<code>viewBox</code></h4>
+<p>The browser uses the specified <code>width</code> and
+<code>height</code> as the intrinsic dimensions. The intrinsic aspect
+ratio is calculated as <code>width / height</code>. Graphics inside the
+SVG are clipped or positioned based on absolute coordinate units.</p>
+<h4 id="3-only-the-viewbox-is-present">3. Only the <code>viewBox</code>
+is present</h4>
+<p>The SVG has an intrinsic aspect ratio, but no intrinsic width or
+height. In an unconstrained context, the browser applies the default
+object size rules for replaced elements:</p>
+<ul>
+<li>The element expands to fit the available container width.</li>
+<li>The height is calculated using the container width divided by the
+aspect ratio.</li>
+<li>If no container width is provided, the browser defaults to a
+standard fallback width of <strong>300px</strong>, calculating the
+height proportionally.</li>
+</ul>
+<h4 id="4-one-dimension-width-or-height-is-present-alongside-viewbox">4.
+One dimension (<code>width</code> or <code>height</code>) is present
+alongside <code>viewBox</code></h4>
+<p>The browser uses the single provided dimension as an intrinsic value
+and computes the missing dimension by applying the aspect ratio derived
+from the <code>viewBox</code>.</p>
+<h4 id="5-one-dimension-is-present-without-viewbox">5. One dimension is
+present without <code>viewBox</code></h4>
+<p>The specified dimension is used directly. Because no aspect ratio is
+available, the missing dimension defaults to the standard replaced
+element fallback (typically <strong>150px</strong> if height is missing,
+or <strong>300px</strong> if width is missing).</p>
+<h4 id="6-neither-widthheight-nor-viewbox-are-present">6. Neither
+<code>width</code>/<code>height</code> nor <code>viewBox</code> are
+present</h4>
+<p>The SVG possesses neither intrinsic dimensions nor an intrinsic
+aspect ratio. The browser treats the SVG as a generic replaced element
+and assigns the CSS default sizing: a width of <strong>300px</strong>
+and a height of <strong>150px</strong> (a 2:1 ratio).</p>
+<h3 id="inline-svg-vs-img-embedding">Inline <code>&lt;svg&gt;</code> vs.
+<code>&lt;img&gt;</code> Embedding</h3>
+<ul>
+<li><strong>Replaced Elements (<code>&lt;img&gt;</code>,
+<code>&lt;object&gt;</code>, <code>&lt;iframe&gt;</code>)</strong>:
+Follow strict CSS replaced element sizing rules, falling back to 300px
+by 150px if dimensions and aspect ratios cannot be resolved.</li>
+<li><strong>Inline HTML (<code>&lt;svg&gt;</code> in DOM)</strong>:
+Render as inline blocks by default in standard HTML5. If unconstrained,
+modern layout engines compute size based on the root attributes or
+default to stretching across the available block-formatting context
+width while resolving height via the <code>viewBox</code> ratio.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

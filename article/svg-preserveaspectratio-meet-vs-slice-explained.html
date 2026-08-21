@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG preserveAspectRatio Meet vs Slice Explained - svg</title>
+    <meta name="description" content="This article explores the difference between the meet and slice values used in the SVG preserveAspectRatio attribute. You will learn how each parameter controls the scaling and alignment of an SVG when its aspect ratio does not match its container, their">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-preserveaspectratio-meet-vs-slice-explained">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG preserveAspectRatio Meet vs Slice Explained - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-preserveaspectratio-meet-vs-slice-explained" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explores the difference between the meet and slice values used in the SVG preserveAspectRatio attribute. You will learn how each parameter controls the scaling and alignment of an SVG when its aspect ratio does not match its container, their" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-preserveaspectratio-meet-vs-slice-explained">SVG
+preserveAspectRatio Meet vs Slice Explained</h1>
+<p>This article explores the difference between the <code>meet</code>
+and <code>slice</code> values used in the SVG
+<code>preserveAspectRatio</code> attribute. You will learn how each
+parameter controls the scaling and alignment of an SVG when its aspect
+ratio does not match its container, their CSS equivalents, and when to
+use each approach in web design.</p>
+<h2 id="understanding-svg-preserveaspectratio">Understanding SVG
+preserveAspectRatio</h2>
+<p>The <code>preserveAspectRatio</code> attribute determines how an SVG
+image scales when its <code>viewBox</code> aspect ratio differs from the
+viewport (the <code>width</code> and <code>height</code> defined on the
+<code>&lt;svg&gt;</code> element or by its parent container).</p>
+<p>The attribute takes two parameters: an alignment value and an
+optional aspect-ratio handling value:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>preserveAspectRatio=&quot;&lt;<span class="kw">align</span>&gt; &lt;<span class="kw">meetOrSlice</span>&gt;&quot;</span></code></pre></div>
+<p>The <code>&lt;meetOrSlice&gt;</code> parameter accepts two values:
+<code>meet</code> (the default) and <code>slice</code>.</p>
+<hr />
+<h2 id="the-meet-parameter">The <code>meet</code> Parameter</h2>
+<p>When using <code>meet</code>, the SVG scales while preserving its
+aspect ratio until the entire <code>viewBox</code> fits within the
+viewport.</p>
+<ul>
+<li><strong>Visibility:</strong> The entire SVG graphic remains visible;
+no part of the image is cropped.</li>
+<li><strong>Sizing Behavior:</strong> Scaling stops as soon as one
+dimension (width or height) reaches the boundary of the viewport.</li>
+<li><strong>White Space:</strong> If the container's aspect ratio
+differs from the SVG, extra empty space (letterboxing or pillarboxing)
+will appear along the unconstrained axis.</li>
+<li><strong>CSS Equivalent:</strong> Works identically to
+<code>object-fit: contain</code> or
+<code>background-size: contain</code>.</li>
+</ul>
+<h3 id="example">Example</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">viewBox=</span><span class="st">&quot;0 0 100 100&quot;</span> <span class="ot">width=</span><span class="st">&quot;300&quot;</span> <span class="ot">height=</span><span class="st">&quot;150&quot;</span> <span class="ot">preserveAspectRatio=</span><span class="st">&quot;xMidYMid meet&quot;</span>&gt;</span></code></pre></div>
+<p>In this scenario, the 1:1 <code>viewBox</code> scales down to fit the
+150px height completely, leaving empty space on the left and right sides
+within the 300px width.</p>
+<hr />
+<h2 id="the-slice-parameter">The <code>slice</code> Parameter</h2>
+<p>When using <code>slice</code>, the SVG scales while preserving its
+aspect ratio until the entire viewport is covered by the
+<code>viewBox</code>.</p>
+<ul>
+<li><strong>Visibility:</strong> The SVG will cover the entire
+container, but any content extending beyond the viewport boundaries is
+clipped (sliced off).</li>
+<li><strong>Sizing Behavior:</strong> Scaling continues until the larger
+dimension covers the viewport entirely.</li>
+<li><strong>White Space:</strong> There is never empty space or
+letterboxing inside the container.</li>
+<li><strong>CSS Equivalent:</strong> Works identically to
+<code>object-fit: cover</code> or
+<code>background-size: cover</code>.</li>
+</ul>
+<h3 id="example-1">Example</h3>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">viewBox=</span><span class="st">&quot;0 0 100 100&quot;</span> <span class="ot">width=</span><span class="st">&quot;300&quot;</span> <span class="ot">height=</span><span class="st">&quot;150&quot;</span> <span class="ot">preserveAspectRatio=</span><span class="st">&quot;xMidYMid slice&quot;</span>&gt;</span></code></pre></div>
+<p>In this scenario, the 1:1 <code>viewBox</code> scales up to match the
+300px width, causing the top and bottom portions of the SVG to be sliced
+off because they exceed the 150px height.</p>
+<hr />
+<h2 id="summary-comparison">Summary Comparison</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;"><code>meet</code></th>
+<th style="text-align: left;"><code>slice</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Default Value</strong></td>
+<td style="text-align: left;">Yes</td>
+<td style="text-align: left;">No</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Cropping</strong></td>
+<td style="text-align: left;">Never crops content</td>
+<td style="text-align: left;">Crops overflowing content</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Container Coverage</strong></td>
+<td style="text-align: left;">May leave empty space</td>
+<td style="text-align: left;">Fully covers the container</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>CSS Equivalent</strong></td>
+<td style="text-align: left;"><code>contain</code></td>
+<td style="text-align: left;"><code>cover</code></td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Best Used For</strong></td>
+<td style="text-align: left;">Icons, logos, and detailed diagrams</td>
+<td style="text-align: left;">Background patterns, banners, and
+decorative graphics</td>
+</tr>
+</tbody>
+</table></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

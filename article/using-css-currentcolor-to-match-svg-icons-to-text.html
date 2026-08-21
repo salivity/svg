@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Using CSS currentColor to Match SVG Icons to Text - svg</title>
+    <meta name="description" content="The CSS currentColor keyword allows SVG icons to dynamically adapt and match the text color of their parent element. By referencing the computed value of an element's color property, currentColor eliminates the need to hardcode color values inside your S">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/using-css-currentcolor-to-match-svg-icons-to-text">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Using CSS currentColor to Match SVG Icons to Text - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/using-css-currentcolor-to-match-svg-icons-to-text" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The CSS currentColor keyword allows SVG icons to dynamically adapt and match the text color of their parent element. By referencing the computed value of an element's color property, currentColor eliminates the need to hardcode color values inside your S" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="using-css-currentcolor-to-match-svg-icons-to-text">Using CSS
+currentColor to Match SVG Icons to Text</h1>
+<p>The CSS <code>currentColor</code> keyword allows SVG icons to
+dynamically adapt and match the text color of their parent element. By
+referencing the computed value of an element's <code>color</code>
+property, <code>currentColor</code> eliminates the need to hardcode
+color values inside your SVG markup or write repetitive CSS rules for
+different states. This article explains how <code>currentColor</code>
+functions, how to implement it within inline SVG assets, and how it
+simplifies UI theming and hover interactions.</p>
+<h2 id="understanding-the-currentcolor-keyword">Understanding the
+currentColor Keyword</h2>
+<p>In CSS, <code>currentColor</code> is a native variable that
+represents the computed value of the <code>color</code> property on the
+current element. If the element does not have an explicitly declared
+<code>color</code>, it inherits the <code>color</code> from its nearest
+ancestor.</p>
+<p>Because <code>currentColor</code> acts like a standard CSS color
+value, it can be applied to any property that accepts colors, including
+<code>border-color</code>, <code>box-shadow</code>, and SVG presentation
+attributes like <code>fill</code> and <code>stroke</code>.</p>
+<h2 id="implementing-currentcolor-in-svg-icons">Implementing
+currentColor in SVG Icons</h2>
+<p>To enable an SVG icon to adopt its parent's text color, set the SVG's
+<code>fill</code> or <code>stroke</code> attributes to
+<code>currentColor</code>.</p>
+<h3 id="1-inlining-in-svg-markup">1. Inlining in SVG Markup</h3>
+<p>In the SVG source code, replace static hex, RGB, or named color
+values with <code>currentColor</code>:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">button</span> <span class="ot">class=</span><span class="st">&quot;btn&quot;</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">svg</span> <span class="ot">viewBox=</span><span class="st">&quot;0 0 24 24&quot;</span> <span class="ot">width=</span><span class="st">&quot;16&quot;</span> <span class="ot">height=</span><span class="st">&quot;16&quot;</span>&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>    &lt;<span class="kw">path</span> <span class="ot">fill=</span><span class="st">&quot;currentColor&quot;</span> <span class="ot">d=</span><span class="st">&quot;M12 2L2 22h20L12 2z&quot;</span> /&gt;</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  &lt;/<span class="kw">svg</span>&gt;</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">span</span>&gt;Warning&lt;/<span class="kw">span</span>&gt;</span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">button</span>&gt;</span></code></pre></div>
+<h3 id="2-styling-via-external-css">2. Styling via External CSS</h3>
+<p>Alternatively, you can strip static color attributes from the SVG and
+control the presentation using a stylesheet:</p>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.btn</span> svg {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">fill</span><span class="ch">:</span> <span class="dv">currentColor</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<h2 id="how-it-handles-hover-states-and-theming">How It Handles Hover
+States and Theming</h2>
+<p>When using <code>currentColor</code>, changing the parent element's
+text color automatically updates the SVG icon without requiring targeted
+SVG selectors.</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="fu">.btn</span> {</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span><span class="ch">:</span> <span class="cn">#333333</span><span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">border</span><span class="ch">:</span> <span class="dv">1</span><span class="dt">px</span> <span class="dv">solid</span> <span class="cn">#333333</span><span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="fu">.btn</span><span class="in">:hover</span> {</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="kw">color</span><span class="ch">:</span> <span class="cn">#0066cc</span><span class="op">;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>In this example, hovering over <code>.btn</code> updates the text
+color to <code>#0066cc</code>. Because the SVG path uses
+<code>fill="currentColor"</code>, the icon instantly switches to
+<code>#0066cc</code> without requiring a separate
+<code>.btn:hover svg</code> rule.</p>
+<h2 id="key-benefits-of-using-currentcolor">Key Benefits of Using
+currentColor</h2>
+<ul>
+<li><strong>Fewer CSS Rules:</strong> You only need to define state
+changes (such as <code>:hover</code>, <code>:active</code>, or
+<code>:disabled</code>) on the parent container's <code>color</code>
+property.</li>
+<li><strong>Seamless Dark Mode:</strong> When switching themes by
+adjusting global or component text colors, icons update automatically
+without extra theme-specific SVG overrides.</li>
+<li><strong>Component Reusability:</strong> Icons remain agnostic of
+their surrounding design system, allowing a single icon component to be
+reused across buttons, alerts, links, and navigation items.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

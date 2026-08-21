@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Understanding the SVG Path Element - svg</title>
+    <meta name="description" content="The <path> element is the most versatile and powerful tool in Scalable Vector Graphics (SVG), designed to draw complex shapes, lines, curves, and custom icons that cannot be created with basic geometric primitives. This article explains the core purpose">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/understanding-the-svg-path-element">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Understanding the SVG Path Element - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/understanding-the-svg-path-element" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The <path> element is the most versatile and powerful tool in Scalable Vector Graphics (SVG), designed to draw complex shapes, lines, curves, and custom icons that cannot be created with basic geometric primitives. This article explains the core purpose" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="understanding-the-svg-path-element">Understanding the SVG Path
+Element</h1>
+<p>The <code>&lt;path&gt;</code> element is the most versatile and
+powerful tool in Scalable Vector Graphics (SVG), designed to draw
+complex shapes, lines, curves, and custom icons that cannot be created
+with basic geometric primitives. This article explains the core purpose
+of the SVG <code>&lt;path&gt;</code> element, how its data commands
+define coordinate trajectories, and why it serves as the foundation for
+modern web vector rendering.</p>
+<h2 id="the-core-purpose-of-the-path-element">The Core Purpose of the
+Path Element</h2>
+<p>While SVG provides basic geometric elements such as
+<code>&lt;rect&gt;</code>, <code>&lt;circle&gt;</code>, and
+<code>&lt;polygon&gt;</code>, the <code>&lt;path&gt;</code> element acts
+as a universal drawing tool. Its primary purpose is to define freeform
+vector shapes and compound paths using a series of connected points,
+straight segments, and mathematically defined curves (such as Bézier
+curves and elliptical arcs).</p>
+<p>Virtually any 2D shape—including typography glyphs, UI icons,
+intricate illustrations, and geographic maps—can be represented using a
+single <code>&lt;path&gt;</code> element.</p>
+<h2 id="how-the-path-element-works-the-d-attribute">How the Path Element
+Works: The <code>d</code> Attribute</h2>
+<p>The <code>&lt;path&gt;</code> element relies on a single crucial
+attribute: <code>d</code> (short for "data"). The <code>d</code>
+attribute contains a sequence of path commands and coordinates that
+instruct the rendering engine where and how to draw.</p>
+<p>Commands are represented by single letters:</p>
+<ul>
+<li><strong>Uppercase letters</strong> indicate absolute coordinates on
+the canvas.</li>
+<li><strong>Lowercase letters</strong> indicate coordinates relative to
+the previous point.</li>
+</ul>
+<h3 id="common-path-commands">Common Path Commands</h3>
+<ul>
+<li><strong>MoveTo (<code>M</code>, <code>m</code>):</strong> Lifts the
+virtual pen and moves it to a new coordinate without drawing a
+line.</li>
+<li><strong>LineTo (<code>L</code>, <code>l</code>):</strong> Draws a
+straight line from the current position to the specified
+coordinate.</li>
+<li><strong>Horizontal Line (<code>H</code>, <code>h</code>) &amp;
+Vertical Line (<code>V</code>, <code>v</code>):</strong> Draws straight
+lines restricted to single axes.</li>
+<li><strong>Cubic Bézier Curve (<code>C</code>, <code>c</code>,
+<code>S</code>, <code>s</code>):</strong> Draws smooth, complex curves
+using two control points.</li>
+<li><strong>Quadratic Bézier Curve (<code>Q</code>, <code>q</code>,
+<code>T</code>, <code>t</code>):</strong> Draws simpler curves using a
+single control point.</li>
+<li><strong>Elliptical Arc (<code>A</code>, <code>a</code>):</strong>
+Draws segments of an ellipse or circle between two points.</li>
+<li><strong>ClosePath (<code>Z</code>, <code>z</code>):</strong> Draws a
+straight line back to the starting point of the current sub-path,
+closing the shape.</li>
+</ul>
+<h2 id="advantages-of-using-the-path-element">Advantages of Using the
+Path Element</h2>
+<ol type="1">
+<li><strong>Infinite Flexibility:</strong> It is not constrained by
+preset geometries, allowing the creation of complex artwork and organic
+shapes.</li>
+<li><strong>Compact File Sizes:</strong> Complex illustrations can often
+be defined in a single consolidated <code>&lt;path&gt;</code>, reducing
+DOM node overhead and improving rendering performance.</li>
+<li><strong>Dynamic Animation and Morphing:</strong> Because path data
+is string-based coordinate math, web developers can animate the
+<code>d</code> attribute using CSS or JavaScript (e.g., stroke-dasharray
+animations or shape morphing).</li>
+<li><strong>Universal Styling:</strong> Like all SVG elements, paths can
+be dynamically styled with CSS attributes such as <code>fill</code>,
+<code>stroke</code>, <code>stroke-width</code>, and
+<code>opacity</code>.</li>
+</ol></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

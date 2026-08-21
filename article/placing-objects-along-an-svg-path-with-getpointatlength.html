@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Placing Objects Along an SVG Path With getPointAtLength - svg</title>
+    <meta name="description" content="This article explains how the SVGPathElement.prototype.getPointAtLength() method allows developers to accurately position, align, and animate elements along complex vector curves. You will learn the mechanics behind the method, how to extract exact X and">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/placing-objects-along-an-svg-path-with-getpointatlength">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="Placing Objects Along an SVG Path With getPointAtLength - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/placing-objects-along-an-svg-path-with-getpointatlength" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="This article explains how the SVGPathElement.prototype.getPointAtLength() method allows developers to accurately position, align, and animate elements along complex vector curves. You will learn the mechanics behind the method, how to extract exact X and" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="placing-objects-along-an-svg-path-with-getpointatlength">Placing
+Objects Along an SVG Path With getPointAtLength</h1>
+<p>This article explains how the
+<code>SVGPathElement.prototype.getPointAtLength()</code> method allows
+developers to accurately position, align, and animate elements along
+complex vector curves. You will learn the mechanics behind the method,
+how to extract exact X and Y coordinates at specific distances, how to
+calculate orientation angles for realistic alignment, and why this
+technique is essential for dynamic web graphics and animations.</p>
+<h2 id="understanding-getpointatlength">Understanding
+getPointAtLength()</h2>
+<p>The <code>getPointAtLength()</code> method is a native JavaScript API
+available on SVG <code>&lt;path&gt;</code> elements. It takes a single
+numerical parameter representing a linear distance along the path and
+returns an <code>SVGPoint</code> object containing the <code>x</code>
+and <code>y</code> coordinates at that exact point.</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> path <span class="op">=</span> <span class="bu">document</span><span class="op">.</span><span class="fu">querySelector</span>(<span class="st">&#39;path&#39;</span>)<span class="op">;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> point <span class="op">=</span> path<span class="op">.</span><span class="fu">getPointAtLength</span>(<span class="dv">150</span>)<span class="op">;</span> <span class="co">// Returns { x: 230.4, y: 115.8 }</span></span></code></pre></div>
+<p>By abstracting away the complex mathematical formulas required to
+calculate positions on cubic and quadratic Bézier curves, the browser
+computes the exact spatial location instantaneously.</p>
+<h2 id="calculating-normalized-positions">Calculating Normalized
+Positions</h2>
+<p>To position an object relative to the entire length of a path (for
+example, at 50% or 75% of the total distance),
+<code>getPointAtLength()</code> is paired with
+<code>getTotalLength()</code>.</p>
+<ol type="1">
+<li><strong>Measure the Path:</strong> Use
+<code>path.getTotalLength()</code> to get the total perimeter in user
+units.</li>
+<li><strong>Determine the Target Distance:</strong> Multiply the total
+length by a normalized value between <code>0</code> (start) and
+<code>1</code> (end).</li>
+<li><strong>Retrieve Coordinates:</strong> Pass the calculated distance
+to <code>getPointAtLength()</code>.</li>
+</ol>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> totalLength <span class="op">=</span> path<span class="op">.</span><span class="fu">getTotalLength</span>()<span class="op">;</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> targetProgress <span class="op">=</span> <span class="fl">0.5</span><span class="op">;</span> <span class="co">// 50% along the path</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> coords <span class="op">=</span> path<span class="op">.</span><span class="fu">getPointAtLength</span>(totalLength <span class="op">*</span> targetProgress)<span class="op">;</span></span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Apply to an SVG element or HTML DOM element</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>targetElement<span class="op">.</span><span class="fu">setAttribute</span>(<span class="st">&#39;transform&#39;</span><span class="op">,</span> <span class="vs">`translate(</span><span class="sc">${</span>coords<span class="op">.</span><span class="at">x</span><span class="sc">}</span><span class="vs">, </span><span class="sc">${</span>coords<span class="op">.</span><span class="at">y</span><span class="sc">}</span><span class="vs">)`</span>)<span class="op">;</span></span></code></pre></div>
+<h2 id="determining-rotation-and-orientation">Determining Rotation and
+Orientation</h2>
+<p>Placing an object on a path often requires orienting the object in
+the direction of the curve (such as an arrow following a route or a
+vehicle driving along a track).</p>
+<p>Because <code>getPointAtLength()</code> returns a single point,
+orientation is calculated by sampling a second point slightly ahead or
+behind the target position:</p>
+<div class="sourceCode" id="cb3"><pre
+class="sourceCode javascript"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> delta <span class="op">=</span> <span class="fl">0.1</span><span class="op">;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> p1 <span class="op">=</span> path<span class="op">.</span><span class="fu">getPointAtLength</span>(distance)<span class="op">;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> p2 <span class="op">=</span> path<span class="op">.</span><span class="fu">getPointAtLength</span>(<span class="bu">Math</span><span class="op">.</span><span class="fu">min</span>(distance <span class="op">+</span> delta<span class="op">,</span> totalLength))<span class="op">;</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a><span class="co">// Calculate angle in degrees using tangent</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="kw">const</span> angle <span class="op">=</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">atan2</span>(p2<span class="op">.</span><span class="at">y</span> <span class="op">-</span> p1<span class="op">.</span><span class="at">y</span><span class="op">,</span> p2<span class="op">.</span><span class="at">x</span> <span class="op">-</span> p1<span class="op">.</span><span class="at">x</span>) <span class="op">*</span> (<span class="dv">180</span> <span class="op">/</span> <span class="bu">Math</span><span class="op">.</span><span class="cn">PI</span>)<span class="op">;</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a><span class="co">// Apply both translation and rotation</span></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>targetElement<span class="op">.</span><span class="fu">setAttribute</span>(<span class="st">&#39;transform&#39;</span><span class="op">,</span> <span class="vs">`translate(</span><span class="sc">${</span>p1<span class="op">.</span><span class="at">x</span><span class="sc">}</span><span class="vs">, </span><span class="sc">${</span>p1<span class="op">.</span><span class="at">y</span><span class="sc">}</span><span class="vs">) rotate(</span><span class="sc">${</span>angle<span class="sc">}</span><span class="vs">)`</span>)<span class="op">;</span></span></code></pre></div>
+<h2 id="practical-applications">Practical Applications</h2>
+<ul>
+<li><strong>Path Animations:</strong> By updating the distance input
+inside a <code>requestAnimationFrame</code> loop, developers can create
+smooth, custom animations for DOM or SVG elements along intricate
+trajectories.</li>
+<li><strong>Responsive Data Visualizations:</strong> Markers, tooltips,
+and labels can be automatically pinned to specific points on complex
+line charts without manual coordinate tracking.</li>
+<li><strong>Cross-Element Positioning:</strong> HTML elements outside
+the SVG container can be synchronized with SVG vectors by converting the
+returned <code>SVGPoint</code> using the SVG matrix transformations
+(<code>getScreenCTM()</code>).</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

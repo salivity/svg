@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG vs HTML5: Self-Closing Tags Explained - svg</title>
+    <meta name="description" content="Understanding the distinction between self-closing tags in XML-based SVG syntax and HTML5 is essential for modern web development. In standalone XML-based SVG documents, strict XML parsing rules apply, requiring empty elements to use explicit self-closin">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-vs-html5-self-closing-tags-explained">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG vs HTML5: Self-Closing Tags Explained - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-vs-html5-self-closing-tags-explained" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="Understanding the distinction between self-closing tags in XML-based SVG syntax and HTML5 is essential for modern web development. In standalone XML-based SVG documents, strict XML parsing rules apply, requiring empty elements to use explicit self-closin" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-vs-html5-self-closing-tags-explained">SVG vs HTML5:
+Self-Closing Tags Explained</h1>
+<p>Understanding the distinction between self-closing tags in XML-based
+SVG syntax and HTML5 is essential for modern web development. In
+standalone XML-based SVG documents, strict XML parsing rules apply,
+requiring empty elements to use explicit self-closing syntax or matching
+end tags to avoid fatal parsing errors. Conversely, HTML5 employs a
+flexible parser with distinct rules for void elements, standard HTML
+elements, and embedded foreign elements like inline SVG.</p>
+<h2 id="xml-and-standalone-svg-syntax">XML and Standalone SVG
+Syntax</h2>
+<p>Standalone SVG files (served with the <code>image/svg+xml</code> MIME
+type) are parsed using a strict XML parser. Under XML
+specifications:</p>
+<ul>
+<li><strong>Strict Syntax Enforcement:</strong> Every opening tag must
+have a corresponding closing tag or be explicitly self-closing (e.g.,
+<code>&lt;path d="..." /&gt;</code> or
+<code>&lt;path d="..."&gt;&lt;/path&gt;</code>).</li>
+<li><strong>Fatal Parsing Errors:</strong> If an empty element lacks a
+closing slash, the XML parser encounters a "well-formedness" error,
+instantly halting document rendering.</li>
+<li><strong>Universal Application:</strong> In XML, any element without
+child nodes can use the self-closing slash syntax (<code>/&gt;</code>),
+regardless of the element type.</li>
+</ul>
+<h2 id="html5-parsing-and-foreign-elements">HTML5 Parsing and Foreign
+Elements</h2>
+<p>HTML5 (served as <code>text/html</code>) does not use an XML parser;
+it uses custom parsing rules defined by the HTML5 specification. HTML5
+categorizes elements into distinct groups:</p>
+<ul>
+<li><strong>Void Elements:</strong> Tags like <code>&lt;img&gt;</code>,
+<code>&lt;br&gt;</code>, and <code>&lt;input&gt;</code> cannot contain
+content. The trailing slash in <code>&lt;img /&gt;</code> is completely
+optional and ignored by the HTML parser.</li>
+<li><strong>Non-Void Elements:</strong> Standard elements like
+<code>&lt;div&gt;</code> or <code>&lt;span&gt;</code> cannot be
+self-closed. Writing <code>&lt;div /&gt;</code> in HTML5 is parsed as an
+unclosed <code>&lt;div&gt;</code>, causing subsequent elements to be
+nested inside it.</li>
+<li><strong>Foreign Elements:</strong> Inline SVG and MathML are
+classified as foreign content. The HTML5 parser switches parsing modes
+when it encounters an <code>&lt;svg&gt;</code> tag, enabling XML-like
+behavior for elements within that namespace.</li>
+</ul>
+<h2 id="the-significance-of-self-closing-tags-in-inline-svg">The
+Significance of Self-Closing Tags in Inline SVG</h2>
+<p>When embedding SVG directly into an HTML5 document, the self-closing
+tag plays a crucial role in DOM tree construction:</p>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode html"><code class="sourceCode html"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Inside HTML5 --&gt;</span></span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">svg</span><span class="ot"> viewBox</span><span class="op">=</span><span class="st">&quot;0 0 100 100&quot;</span><span class="dt">&gt;</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">circle</span><span class="ot"> cx</span><span class="op">=</span><span class="st">&quot;50&quot;</span><span class="ot"> cy</span><span class="op">=</span><span class="st">&quot;50&quot;</span><span class="ot"> r</span><span class="op">=</span><span class="st">&quot;40&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">rect</span><span class="ot"> x</span><span class="op">=</span><span class="st">&quot;10&quot;</span><span class="ot"> y</span><span class="op">=</span><span class="st">&quot;10&quot;</span><span class="ot"> width</span><span class="op">=</span><span class="st">&quot;20&quot;</span><span class="ot"> height</span><span class="op">=</span><span class="st">&quot;20&quot;</span><span class="ot"> </span><span class="dt">/&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">svg</span><span class="dt">&gt;</span></span></code></pre></div>
+<ol type="1">
+<li><strong>Foreign Content Recognition:</strong> Because
+<code>&lt;circle&gt;</code> and <code>&lt;rect&gt;</code> are recognized
+as foreign elements inside the SVG namespace, the HTML5 parser respects
+the trailing slash (<code>/&gt;</code>).</li>
+<li><strong>Proper DOM Nesting:</strong> The self-closing slash signals
+to the HTML5 parser that the element is immediately closed. Without the
+slash or an explicit closing tag (e.g.,
+<code>&lt;circle cx="50" cy="50" r="40"&gt;</code>), the parser would
+treat subsequent SVG elements as child nodes of the
+<code>&lt;circle&gt;</code>, breaking the visual rendering and DOM
+hierarchy.</li>
+</ol>
+<h2 id="summary-of-differences">Summary of Differences</h2>
+<ul>
+<li><strong>Strictness:</strong> XML fails completely on unclosed tags,
+whereas HTML5 recovers based on predefined parsing states.</li>
+<li><strong>Slash Interpretation:</strong> A trailing slash is
+syntactically mandatory for empty tags in standalone XML SVG, optional
+and ignored on void HTML5 elements, and functionally active on foreign
+SVG elements within HTML5.</li>
+<li><strong>Portability:</strong> Writing valid, self-closing SVG tags
+ensures the markup remains compatible whether the graphic is saved as a
+standalone <code>.svg</code> file or embedded directly within an HTML5
+page.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

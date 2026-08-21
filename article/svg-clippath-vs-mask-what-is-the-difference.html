@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG clipPath vs Mask: What Is the Difference? - svg</title>
+    <meta name="description" content="While both SVG <clipPath> and <mask> are used to control the visibility of graphic elements, they operate on fundamentally different principles. A clipPath is a binary, vector-based boundary that creates a sharp, all-or-nothing cutoff, whereas a mask use">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-clippath-vs-mask-what-is-the-difference">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG clipPath vs Mask: What Is the Difference? - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-clippath-vs-mask-what-is-the-difference" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="While both SVG <clipPath> and <mask> are used to control the visibility of graphic elements, they operate on fundamentally different principles. A clipPath is a binary, vector-based boundary that creates a sharp, all-or-nothing cutoff, whereas a mask use" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-clippath-vs-mask-what-is-the-difference">SVG clipPath vs
+Mask: What Is the Difference?</h1>
+<p>While both SVG <code>&lt;clipPath&gt;</code> and
+<code>&lt;mask&gt;</code> are used to control the visibility of graphic
+elements, they operate on fundamentally different principles. A
+<code>clipPath</code> is a binary, vector-based boundary that creates a
+sharp, all-or-nothing cutoff, whereas a <code>mask</code> uses luminance
+and alpha values to allow varying levels of transparency, gradients, and
+soft-feathered edges. Understanding how each processes opacity and
+geometry will help you choose the right tool for rendering vector
+graphics and UI elements efficiently.</p>
+<h2 id="how-svg-clippath-works">How SVG clipPath Works</h2>
+<p>The <code>&lt;clipPath&gt;</code> element defines a clipping region
+using vector shapes such as <code>&lt;path&gt;</code>,
+<code>&lt;rect&gt;</code>, <code>&lt;circle&gt;</code>, or
+<code>&lt;text&gt;</code>.</p>
+<ul>
+<li><strong>Binary Visibility:</strong> Clipping works on a strict 1-bit
+logic: any part of the target element inside the defined path is 100%
+visible, and any part outside is 100% hidden.</li>
+<li><strong>No Partial Transparency:</strong> A <code>clipPath</code>
+ignores fill colors, opacity, and gradients inside the clipping
+definition. It only evaluates the geometric outline.</li>
+<li><strong>Sharp Vector Edges:</strong> Edges remain crisp and clean at
+any resolution because the browser renders them strictly as vector
+boundaries.</li>
+<li><strong>Performance:</strong> Because clipping relies purely on
+geometric calculations rather than pixel-by-pixel color evaluations,
+<code>clipPath</code> is significantly faster and less
+resource-intensive to render.</li>
+</ul>
+<h3 id="common-use-cases-for-clippath">Common Use Cases for
+clipPath</h3>
+<ul>
+<li>Cropping an image or background to a specific geometric shape (e.g.,
+a circle, polygon, or custom vector silhouette).</li>
+<li>Creating crisp transition reveals and shape-morphing
+animations.</li>
+<li>Restricting text or graphics to stay within a defined bounding
+area.</li>
+</ul>
+<hr />
+<h2 id="how-svg-mask-works">How SVG Mask Works</h2>
+<p>The <code>&lt;mask&gt;</code> element calculates visibility based on
+the pixel data—specifically luminance (brightness) and alpha
+(opacity)—of the elements placed inside it.</p>
+<ul>
+<li><strong>Luminance and Alpha Values:</strong> By default, SVG masks
+use luminance to determine visibility:
+<ul>
+<li><strong>White (<code>#FFFFFF</code>):</strong> Fully visible (100%
+opacity).</li>
+<li><strong>Black (<code>#000000</code>):</strong> Fully hidden (0%
+opacity).</li>
+<li><strong>Grays and Colors:</strong> Translated to intermediate levels
+of semi-transparency depending on their brightness.</li>
+</ul></li>
+<li><strong>Rich Visual Elements:</strong> A <code>&lt;mask&gt;</code>
+can contain complex SVG elements, including linear and radial gradients,
+blurred shapes, patterns, and embedded raster images.</li>
+<li><strong>Soft and Feathered Edges:</strong> Because masks support
+gradual transitions from white to black, they can create smooth fades,
+vignettes, and feathered edges.</li>
+<li><strong>Performance Cost:</strong> Masking requires the rendering
+engine to calculate color and alpha compositing on a per-pixel level,
+making it more computationally demanding than clipping.</li>
+</ul>
+<h3 id="common-use-cases-for-mask">Common Use Cases for Mask</h3>
+<ul>
+<li>Creating smooth gradient fade-outs on text, images, or interface
+components.</li>
+<li>Applying textured, grunge, or patterned cutouts to shapes.</li>
+<li>Creating soft, blurred, or feathered reveals and complex visual
+effects.</li>
+</ul>
+<hr />
+<h2 id="key-differences-at-a-glance">Key Differences at a Glance</h2>
+<table>
+<thead>
+<tr>
+<th style="text-align: left;">Feature</th>
+<th style="text-align: left;">SVG <code>&lt;clipPath&gt;</code></th>
+<th style="text-align: left;">SVG <code>&lt;mask&gt;</code></th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align: left;"><strong>Logic</strong></td>
+<td style="text-align: left;">Vector-based (inside/outside
+geometry)</td>
+<td style="text-align: left;">Pixel-based (luminance and alpha
+channels)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Transparency</strong></td>
+<td style="text-align: left;">Binary (100% visible or 100% hidden)</td>
+<td style="text-align: left;">Continuous (0% to 100%
+semi-transparency)</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Content Allowed</strong></td>
+<td style="text-align: left;">Basic shapes, paths, and text</td>
+<td style="text-align: left;">Shapes, text, gradients, patterns, and
+images</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Edge Quality</strong></td>
+<td style="text-align: left;">Crisp vector edges</td>
+<td style="text-align: left;">Sharp, soft, blurred, or feathered
+edges</td>
+</tr>
+<tr>
+<td style="text-align: left;"><strong>Performance</strong></td>
+<td style="text-align: left;">High (hardware-accelerated, low
+overhead)</td>
+<td style="text-align: left;">Moderate to heavy (requires pixel
+compositing)</td>
+</tr>
+</tbody>
+</table>
+<h2 id="summary">Summary</h2>
+<p>Choose <code>&lt;clipPath&gt;</code> when you need clean, hard-edged
+geometric cropping with minimal performance impact. Choose
+<code>&lt;mask&gt;</code> when your design requires gradients, soft
+edges, semi-transparent layers, or complex multi-tone compositing.</p></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>

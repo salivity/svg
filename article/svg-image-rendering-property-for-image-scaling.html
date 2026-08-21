@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-R4Y4YXFHZS"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+
+        function gtag(){
+            dataLayer.push(arguments);
+        }
+
+        gtag('js', new Date());
+
+        gtag('config', 'G-R4Y4YXFHZS');
+    </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SVG image-rendering Property for Image Scaling - svg</title>
+    <meta name="description" content="The image-rendering property in CSS and SVG allows developers to define the interpolation algorithm browsers use when scaling embedded raster images within an SVG document. By applying this property to an SVG <image> element or its parent container, you">
+    <link rel="canonical" href="https://salivity.github.io/svg/article/svg-image-rendering-property-for-image-scaling">
+    <link rel="icon" href="/svg/favicon.ico">
+    <link rel="stylesheet" href="/svg/css/style.css">
+    <link media="print" rel="stylesheet" href="/svg/css/print.css">
+    <script src="/svg/js/fuse.min.js"></script>
+    <script src="/svg/js/script.js"></script>
+    <script id="MathJax-script" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/4.1.3/tex-chtml.min.js" defer></script>
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="SVG image-rendering Property for Image Scaling - svg" />
+    <meta property="og:url" content="https://salivity.github.io/svg/article/svg-image-rendering-property-for-image-scaling" />
+    <meta property="og:image:url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:secure_url" content="https://salivity.github.io/svg/images/open-graph/default.webp" />
+    <meta property="og:image:width" content="1120" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:description" content="The image-rendering property in CSS and SVG allows developers to define the interpolation algorithm browsers use when scaling embedded raster images within an SVG document. By applying this property to an SVG <image> element or its parent container, you" />
+    <link rel="manifest" href="/svg/pwa/manifest.json" />
+</head>
+<body>
+    <header>
+        <a href="/svg/" aria-label="Go To Home Page" title="Go To Home Page" id="logo">
+            <span>salivity.github.io/</span><span>svg</span>
+        </a>
+        <nav>
+            <ul class="header-links">
+                <li><a href="https://github.com/salivity" title="Github" aria-label="Go To Github Profile Page"><svg class="svg-icon" focusable="false" aria-hidden="true" viewBox="0 0 24 24"><path d="M12 1.27a11 11 0 00-3.48 21.46c.55.09.73-.28.73-.55v-1.84c-3.03.64-3.67-1.46-3.67-1.46-.55-1.29-1.28-1.65-1.28-1.65-.92-.65.1-.65.1-.65 1.1 0 1.73 1.1 1.73 1.1.92 1.65 2.57 1.2 3.21.92a2 2 0 01.64-1.47c-2.47-.27-5.04-1.19-5.04-5.5 0-1.1.46-2.1 1.2-2.84a3.76 3.76 0 010-2.93s.91-.28 3.11 1.1c1.8-.49 3.7-.49 5.5 0 2.1-1.38 3.02-1.1 3.02-1.1a3.76 3.76 0 010 2.93c.83.74 1.2 1.74 1.2 2.94 0 4.21-2.57 5.13-5.04 5.4.45.37.82.92.82 2.02v3.03c0 .27.1.64.73.55A11 11 0 0012 1.27"></path></svg></a></li>
+                <li><a href="/svg/search" title="Search" aria-label="Go To Search Page"><svg class="svg-icon" aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14"></path></svg></a></li>
+                <li><a id="theme-toggle" title="Theme" href="javascript:void(0);" aria-label="Toggle Website Theme"></a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <article><h1 id="svg-image-rendering-property-for-image-scaling">SVG
+image-rendering Property for Image Scaling</h1>
+<p>The <code>image-rendering</code> property in CSS and SVG allows
+developers to define the interpolation algorithm browsers use when
+scaling embedded raster images within an SVG document. By applying this
+property to an SVG <code>&lt;image&gt;</code> element or its parent
+container, you can control whether the browser renders scaled bitmaps
+using smooth anti-aliased filtering or sharp, nearest-neighbor pixel
+preservation. This article explains how scaling interpolation functions
+within SVG, the available property values, and how to apply them for
+different visual requirements.</p>
+<h2 id="how-interpolation-works-in-svg">How Interpolation Works in
+SVG</h2>
+<p>When an SVG contains an embedded raster graphic (such as a PNG, JPEG,
+or WebP) via the <code>&lt;image&gt;</code> tag, the raster content does
+not scale natively like vector paths. Instead, when the SVG viewport
+resizes or when the <code>&lt;image&gt;</code> dimensions differ from
+the source file's intrinsic dimensions, the rendering engine must
+recalculate the pixel values.</p>
+<p>The <code>image-rendering</code> property instructs the graphics
+engine on which mathematical algorithm to apply during this resampling
+process.</p>
+<h2 id="supported-values-and-interpolation-behaviors">Supported Values
+and Interpolation Behaviors</h2>
+<p>The <code>image-rendering</code> property accepts several values that
+alter the scaling algorithm:</p>
+<ul>
+<li><strong><code>auto</code></strong>: The default setting. The browser
+uses a standard algorithm—typically bilinear or bicubic interpolation—to
+balance quality and performance. This smooths color transitions, making
+it ideal for standard photography and natural imagery, though it
+produces a blurred appearance on low-resolution graphics when
+enlarged.</li>
+<li><strong><code>pixelated</code></strong>: Instructs the browser to
+scale the image using nearest-neighbor interpolation (or a similar
+pixel-preserving algorithm). When enlarged, the original pixels are
+scaled as distinct blocks without smoothing, preventing blurriness. This
+is standard for pixel art, retro gaming assets, and QR codes.</li>
+<li><strong><code>crisp-edges</code></strong>: An algorithm aimed at
+preserving contrast and sharp lines without smoothing colors or
+introducing blur. In most modern browser engines,
+<code>crisp-edges</code> produces a result similar to
+<code>pixelated</code>, though specification-wise it is designed to
+retain sharp geometric edges.</li>
+<li><strong><code>optimizeSpeed</code> and
+<code>optimizeQuality</code></strong> <em>(SVG 1.1 legacy)</em>:
+Originally specified in SVG 1.1, <code>optimizeSpeed</code> favored
+faster, lower-quality rendering (often nearest-neighbor), while
+<code>optimizeQuality</code> prioritized high-quality smoothing. Modern
+specifications map these values to <code>pixelated</code> and
+<code>smooth</code>/<code>auto</code> respectively.</li>
+</ul>
+<h2 id="syntax-and-application">Syntax and Application</h2>
+<p>The <code>image-rendering</code> property can be applied inside an
+SVG either as an SVG presentation attribute or through standard CSS.</p>
+<h3 id="using-the-svg-presentation-attribute">Using the SVG Presentation
+Attribute</h3>
+<div class="sourceCode" id="cb1"><pre
+class="sourceCode xml"><code class="sourceCode xml"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>&lt;<span class="kw">svg</span> <span class="ot">viewBox=</span><span class="st">&quot;0 0 200 200&quot;</span> <span class="ot">xmlns=</span><span class="st">&quot;http://www.w3.org/2000/svg&quot;</span>&gt;</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  &lt;<span class="kw">image</span> <span class="ot">href=</span><span class="st">&quot;icon.png&quot;</span> <span class="ot">width=</span><span class="st">&quot;200&quot;</span> <span class="ot">height=</span><span class="st">&quot;200&quot;</span> <span class="ot">image-rendering=</span><span class="st">&quot;pixelated&quot;</span> /&gt;</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>&lt;/<span class="kw">svg</span>&gt;</span></code></pre></div>
+<h3 id="using-css-styling">Using CSS Styling</h3>
+<div class="sourceCode" id="cb2"><pre
+class="sourceCode css"><code class="sourceCode css"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>svg image<span class="fu">.sharp-render</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">image-rendering</span><span class="ch">:</span> <span class="dv">pixelated</span><span class="op">;</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>svg image<span class="fu">.photo-render</span> {</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>  <span class="kw">image-rendering</span><span class="ch">:</span> <span class="bu">auto</span><span class="op">;</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span></code></pre></div>
+<p>Because <code>image-rendering</code> is an inherited property,
+applying it to a <code>&lt;g&gt;</code> (group) tag or the root
+<code>&lt;svg&gt;</code> element applies that interpolation method to
+all nested <code>&lt;image&gt;</code> elements automatically.</p>
+<h2 id="practical-use-cases">Practical Use Cases</h2>
+<ul>
+<li><strong>Pixel Art and Game Sprites:</strong> Setting
+<code>image-rendering: pixelated</code> ensures that small raster
+sprites embedded within a vector environment remain crisp when zoomed
+in, avoiding unwanted blur.</li>
+<li><strong>Technical Diagrams and Barcodes:</strong> Barcodes, QR
+codes, and schematic diagrams rely on precise, high-contrast edges.
+Using <code>crisp-edges</code> or <code>pixelated</code> prevents fuzzy
+boundaries that can hinder scanning or readability.</li>
+<li><strong>Continuous-Tone Images:</strong> For standard photos or
+gradients embedded within an SVG illustration, leaving the property set
+to <code>auto</code> ensures smooth transitions between pixels when the
+graphic is stretched or shrunk.</li>
+</ul></article>
+        <div id=comments-container></div>
+
+        <script>
+            const utterancesScript = document.createElement('script');
+            
+            utterancesScript.setAttribute('src', 'https://utteranc.es/client.js');
+            utterancesScript.setAttribute('repo', 'salivity/svg'); 
+            utterancesScript.setAttribute('issue-term', 'pathname'); 
+            utterancesScript.setAttribute('theme', localStorage.getItem('theme') === 'dark' ? 'github-dark' : 'github-light'); 
+            utterancesScript.setAttribute('crossorigin', 'anonymous');
+            utterancesScript.async = true;
+
+            document.getElementById('comments-container').appendChild(utterancesScript);
+        </script>
+    
+    </main>
+    <footer>
+        <nav>
+            <ul class="footer-links">
+                <li><a href="/svg/privacy-policy">Privacy Policy</a></li>
+                <li><a href="/svg/terms-and-conditions">Terms and Conditions</a></li>
+            </ul>
+        </nav>
+        <div class="copyright">
+            Copyright &copy; <span id="current-year"></span>
+        </div>
+    </footer>
+</body>
+</html>
